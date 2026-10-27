@@ -1,40 +1,71 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  /* Strict Phase 2 Color System Tokens */
-  --color-primary: #16324F;
-  --color-primary-hover: #214768;
-  --color-secondary: #245B82;
-  --color-background: #F5F7FA;
+  /* Premium Academic Design System Tokens (Light Mode) */
+  --color-background: #F5F8FC;
   --color-surface: #FFFFFF;
-  --color-surface-muted: #EEF2F6;
-  --color-text: #172B3A;
-  --color-text-muted: #64748B;
+  --color-surface-secondary: #F8FAFC;
+  --color-surface-elevated: #FFFFFF;
+  --color-input: #FFFFFF;
+  --color-primary: #2563EB;
+  --color-primary-hover: #1D4ED8;
+  --color-primary-light: #EFF6FF;
+  --color-text: #0F172A;
+  --color-text-secondary: #64748B;
+  --color-text-muted: #94A3B8;
   --color-border: #E2E8F0;
-  --color-success: #16803C;
-  --color-warning: #B7791F;
-  --color-danger: #C0392B;
-  --color-focus: #80B4DB;
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+  --color-info: #0EA5E9;
+  --color-focus: #3B82F6;
 
   /* Aliases */
-  --navy: var(--color-primary);
-  --blue: var(--color-secondary);
-  --blue-hover: var(--color-primary-hover);
   --bg-main: var(--color-background);
   --card-bg: var(--color-surface);
   --text-primary: var(--color-text);
-  --text-secondary: var(--color-text-muted);
+  --text-secondary: var(--color-text-secondary);
   --border-color: var(--color-border);
-  --success: var(--color-success);
-  --warning: var(--color-warning);
-  --error: var(--color-danger);
-  --focus-ring: var(--color-focus);
+}
+
+.dark, [data-theme="dark"] {
+  /* Premium Academic Design System Tokens (Dark Navy Theme) */
+  --color-background: #071426;
+  --color-surface: #0F2036;
+  --color-surface-secondary: #12243C;
+  --color-surface-elevated: #162B45;
+  --color-input: #11263E;
+  --color-primary: #3B82F6;
+  --color-primary-hover: #2563EB;
+  --color-primary-light: #1E3A5F;
+  --color-text: #F1F5F9;
+  --color-text-secondary: #A8B8CC;
+  --color-text-muted: #8193AA;
+  --color-border: #263B55;
+  --color-success: #34D399;
+  --color-warning: #FBBF24;
+  --color-error: #F87171;
+  --color-info: #38BDF8;
+  --color-focus: #60A5FA;
+
+  /* Aliases */
+  --bg-main: var(--color-background);
+  --card-bg: var(--color-surface);
+  --text-primary: var(--color-text);
+  --text-secondary: var(--color-text-secondary);
+  --border-color: var(--color-border);
+}
+
+html {
+  transition: background-color 150ms ease, color 150ms ease;
 }
 
 body {
   background-color: var(--color-background);
   color: var(--color-text);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Inter", Arial, sans-serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   min-height: 100vh;
   margin: 0;
   padding: 0;
@@ -55,36 +86,37 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 3px;
+  background: rgba(148, 163, 184, 0.4);
+  border-radius: 9999px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(168, 184, 204, 0.25);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: rgba(148, 163, 184, 0.7);
 }
 
-/* Print styles for official examination admission pass */
+/* Printing styles for official pass */
 @media print {
   body {
-    background-color: #ffffff !important;
-    color: #000000 !important;
+    background: #fff !important;
+    color: #000 !important;
   }
 
-  header, footer, nav, .no-print, button {
+  .no-print {
     display: none !important;
   }
 
-  .print-only {
-    display: block !important;
-  }
-
   .print-card {
-    border: 1px solid #000 !important;
     box-shadow: none !important;
-    padding: 20px !important;
+    border: 1px solid #ccc !important;
+    max-width: 100% !important;
+    padding: 0 !important;
   }
 }

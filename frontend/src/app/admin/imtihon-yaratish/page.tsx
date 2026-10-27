@@ -77,31 +77,31 @@ export default function AdminExamCreatePage() {
     <div className="max-w-4xl mx-auto space-y-6">
       <Link
         href="/admin"
-        className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#245B82] hover:underline"
+        className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] dark:text-[#3B82F6] hover:underline"
       >
         <ArrowLeft className="w-3.5 h-3.5" />
         Boshqaruv paneliga qaytish
       </Link>
 
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 sm:p-8 space-y-6">
-        <div className="border-b border-slate-100 pb-4">
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight">
+      <div className="bg-white dark:bg-[#0F2036] rounded-2xl border border-slate-200 dark:border-[#263B55] shadow-sm p-6 sm:p-8 space-y-6">
+        <div className="border-b border-slate-100 dark:border-[#263B55] pb-4">
+          <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
             Imtihon yaratish
           </h1>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
             Yangi attestatsiya yoki malakaviy imtihon sinovini sozlash va e&apos;lon qilish
           </p>
         </div>
 
         {errorMsg && (
-          <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg flex items-start gap-2">
+          <div className="p-3 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-xs rounded-xl flex items-start gap-2">
             <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
             <div>{errorMsg}</div>
           </div>
         )}
 
         {successMsg && (
-          <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs rounded-lg flex items-start gap-2">
+          <div className="p-3 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 text-xs rounded-xl flex items-start gap-2">
             <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
             <div>{successMsg}</div>
           </div>
@@ -110,7 +110,7 @@ export default function AdminExamCreatePage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {/* Sarlavha (title) */}
           <div className="md:col-span-2">
-            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
               Imtihon nomi (O&apos;zbek lotin) <span className="text-red-500">*</span>
             </label>
             <input
@@ -119,13 +119,13 @@ export default function AdminExamCreatePage() {
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               placeholder="Masalan: Ingliz tili bo'yicha malakaviy imtihon"
-              className="w-full text-sm bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-800 outline-none focus:border-[#245B82]"
+              className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] text-slate-800 dark:text-slate-100 rounded-xl px-3 py-2 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
             />
           </div>
 
           {/* Sarlavha (Kirill) */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
               Imtihon nomi (Ўзбек кирилл)
             </label>
             <input
@@ -133,13 +133,13 @@ export default function AdminExamCreatePage() {
               value={formData.title_oz}
               onChange={(e) => setFormData({ ...formData, title_oz: e.target.value })}
               placeholder="Инглиз тили бўйича малакавий имтиҳон"
-              className="w-full text-sm bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-800 outline-none focus:border-[#245B82]"
+              className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] text-slate-800 dark:text-slate-100 rounded-xl px-3 py-2 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
             />
           </div>
 
           {/* Sarlavha (Rus) */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
               Imtihon nomi (Русский)
             </label>
             <input
@@ -147,32 +147,32 @@ export default function AdminExamCreatePage() {
               value={formData.title_ru}
               onChange={(e) => setFormData({ ...formData, title_ru: e.target.value })}
               placeholder="Квалификационный экзамен по английскому языку"
-              className="w-full text-sm bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-800 outline-none focus:border-[#245B82]"
+              className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] text-slate-800 dark:text-slate-100 rounded-xl px-3 py-2 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
             />
           </div>
 
           {/* Kategoriya */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
               Kategoriya
             </label>
             <input
               type="text"
               value={formData.category}
               onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-              className="w-full text-sm bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-800 outline-none focus:border-[#245B82]"
+              className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] text-slate-800 dark:text-slate-100 rounded-xl px-3 py-2 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
             />
           </div>
 
           {/* Imtihon tili */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
               Imtihon tili
             </label>
             <select
               value={formData.language}
               onChange={(e) => setFormData({ ...formData, language: e.target.value })}
-              className="w-full text-sm bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-800 outline-none focus:border-[#245B82]"
+              className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] text-slate-800 dark:text-slate-100 rounded-xl px-3 py-2 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
             >
               <option value="en">Ingliz tili</option>
               <option value="de">Nemis tili</option>
@@ -183,7 +183,7 @@ export default function AdminExamCreatePage() {
 
           {/* Ro'yxatdan o'tish boshlanishi */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
               Ro&apos;yxatdan o&apos;tish boshlanishi <span className="text-red-500">*</span>
             </label>
             <input
@@ -191,13 +191,13 @@ export default function AdminExamCreatePage() {
               required
               value={formData.registration_start}
               onChange={(e) => setFormData({ ...formData, registration_start: e.target.value })}
-              className="w-full text-sm bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-800 outline-none focus:border-[#245B82]"
+              className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] text-slate-800 dark:text-slate-100 rounded-xl px-3 py-2 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
             />
           </div>
 
           {/* Ro'yxatdan o'tish tugashi */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
               Ro&apos;yxatdan o&apos;tish tugashi <span className="text-red-500">*</span>
             </label>
             <input
@@ -205,70 +205,70 @@ export default function AdminExamCreatePage() {
               required
               value={formData.registration_end}
               onChange={(e) => setFormData({ ...formData, registration_end: e.target.value })}
-              className="w-full text-sm bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-800 outline-none focus:border-[#245B82]"
+              className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] text-slate-800 dark:text-slate-100 rounded-xl px-3 py-2 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
             />
           </div>
 
           {/* Imtihon o'tkazilish sanasi */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
               Imtihon o&apos;tkazilish sanasi
             </label>
             <input
               type="datetime-local"
               value={formData.exam_date}
               onChange={(e) => setFormData({ ...formData, exam_date: e.target.value })}
-              className="w-full text-sm bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-800 outline-none focus:border-[#245B82]"
+              className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] text-slate-800 dark:text-slate-100 rounded-xl px-3 py-2 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
             />
           </div>
 
           {/* Sig'im */}
           <div>
-            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
               Imtihon sig&apos;imi (Qabul soni)
             </label>
             <input
               type="number"
               value={formData.capacity}
               onChange={(e) => setFormData({ ...formData, capacity: Number(e.target.value) })}
-              className="w-full text-sm bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-800 outline-none focus:border-[#245B82]"
+              className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] text-slate-800 dark:text-slate-100 rounded-xl px-3 py-2 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
             />
           </div>
 
           {/* Manzil */}
           <div className="md:col-span-2">
-            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
               O&apos;tkazilish joyi (Bino / Auditoriya)
             </label>
             <input
               type="text"
               value={formData.location}
               onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-              className="w-full text-sm bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-800 outline-none focus:border-[#245B82]"
+              className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] text-slate-800 dark:text-slate-100 rounded-xl px-3 py-2 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
             />
           </div>
 
           {/* Chet tili (6 ta hujjat qoidasi) */}
-          <div className="md:col-span-2 p-3 bg-blue-50/70 border border-blue-200 rounded-lg space-y-1">
+          <div className="md:col-span-2 p-4 bg-blue-50/70 dark:bg-[#162B45]/50 border border-blue-200 dark:border-[#263B55] rounded-xl space-y-1">
             <label className="flex items-center gap-2.5 cursor-pointer">
               <input
                 type="checkbox"
                 checked={formData.is_foreign_language}
                 onChange={(e) => setFormData({ ...formData, is_foreign_language: e.target.checked })}
-                className="w-4 h-4 text-[#245B82] rounded"
+                className="w-4 h-4 text-[#2563EB] rounded"
               />
-              <span className="text-xs sm:text-sm font-semibold text-slate-800">
+              <span className="text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-100">
                 Chet tili malakaviy imtihoni (6 ta standart hujjat toifasini biriktirish)
               </span>
             </label>
-            <p className="text-[11px] text-slate-500 pl-6">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400 pl-6">
               Avtomatik ravishda 6 ta hujjat talab qilinadi. 6-hujjat (Aloqa xati) faqat boshqa OTM talabgorlari uchun shartli etib belgilanadi.
             </p>
           </div>
 
           {/* Tavsif */}
           <div className="md:col-span-2">
-            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">
               Imtihon tavsifi va ko&apos;rsatmalari
             </label>
             <textarea
@@ -276,18 +276,18 @@ export default function AdminExamCreatePage() {
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               placeholder="Talabgorlar uchun imtihon qoidalari va batafsil ko'rsatmalar..."
-              className="w-full text-sm bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-800 outline-none focus:border-[#245B82]"
+              className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] text-slate-800 dark:text-slate-100 rounded-xl px-3 py-2 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
             />
           </div>
         </div>
 
         {/* Buttons */}
-        <div className="flex items-center justify-end gap-3 pt-6 border-t border-slate-100">
+        <div className="flex items-center justify-end gap-3 pt-6 border-t border-slate-100 dark:border-[#263B55]">
           <button
             type="button"
             disabled={loading}
             onClick={() => handleSubmit(false)}
-            className="px-5 py-2.5 rounded-lg text-xs font-semibold text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition"
+            className="px-5 py-2.5 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 bg-white dark:bg-[#162B45] border border-slate-300 dark:border-[#263B55] hover:bg-slate-50 dark:hover:bg-[#1f385a] transition"
           >
             Qoralama sifatida saqlash
           </button>
@@ -296,7 +296,7 @@ export default function AdminExamCreatePage() {
             type="button"
             disabled={loading}
             onClick={() => handleSubmit(true)}
-            className="px-6 py-2.5 rounded-lg text-xs font-bold bg-[#245B82] hover:bg-[#1c4969] text-white transition shadow-sm flex items-center gap-2 disabled:opacity-50"
+            className="px-6 py-2.5 rounded-xl text-xs font-bold bg-[#2563EB] hover:bg-[#1D4ED8] text-white transition shadow-sm flex items-center gap-2 disabled:opacity-50"
           >
             <Send className="w-4 h-4" />
             {loading ? "Saqlanmoqda..." : "Imtihonni nashr etish"}

@@ -39,16 +39,16 @@ export default function ExaminationsPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
           {t.nav.examinations}
         </h1>
-        <p className="text-xs sm:text-sm text-slate-500 mt-1">
+        <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
           Barcha e&apos;lon qilingan va ro&apos;yxatdan o&apos;tish ochiq bo&apos;lgan imtihonlar ro&apos;yxati
         </p>
       </div>
 
       {/* Filters & Search */}
-      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="bg-white dark:bg-[#0F2036] p-4 rounded-2xl border border-slate-200 dark:border-[#263B55] shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="relative w-full sm:w-80">
           <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
           <input
@@ -56,17 +56,17 @@ export default function ExaminationsPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Imtihon nomi bo'yicha qidirish..."
-            className="w-full text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-lg pl-9 pr-3 py-2 outline-none focus:border-[#245B82]"
+            className="w-full text-xs sm:text-sm bg-slate-50 dark:bg-[#11263E] border border-slate-200 dark:border-[#263B55] text-slate-800 dark:text-slate-100 placeholder-slate-400 rounded-xl pl-9 pr-3 py-2 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
           />
         </div>
 
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <Filter className="w-4 h-4 text-slate-400" />
-          <span className="text-xs text-slate-500 font-medium">Til:</span>
+          <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">Til:</span>
           <select
             value={selectedLang}
             onChange={(e) => setSelectedLang(e.target.value)}
-            className="text-xs sm:text-sm bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 outline-none focus:border-[#245B82]"
+            className="text-xs sm:text-sm bg-slate-50 dark:bg-[#11263E] border border-slate-200 dark:border-[#263B55] text-slate-800 dark:text-slate-100 rounded-xl px-3 py-1.5 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
           >
             <option value="all">Barcha tillar</option>
             <option value="en">Ingliz tili</option>
@@ -80,7 +80,7 @@ export default function ExaminationsPage() {
       {loading ? (
         <div className="text-center py-12 text-slate-400 text-sm">Yuklanmoqda...</div>
       ) : filtered.length === 0 ? (
-        <div className="bg-white p-10 rounded-xl border border-slate-200 text-center text-slate-500 text-sm">
+        <div className="bg-white dark:bg-[#0F2036] p-10 rounded-2xl border border-slate-200 dark:border-[#263B55] text-center text-slate-500 dark:text-slate-400 text-sm">
           Hech qanday imtihon topilmadi.
         </div>
       ) : (
@@ -88,33 +88,33 @@ export default function ExaminationsPage() {
           {filtered.map((exam) => (
             <div
               key={exam.id}
-              className="bg-white rounded-xl border border-slate-200 shadow-sm p-6 flex flex-col justify-between hover:border-[#80B4DB] transition"
+              className="bg-white dark:bg-[#0F2036] rounded-2xl border border-slate-200 dark:border-[#263B55] shadow-sm p-6 flex flex-col justify-between hover:border-[#2563EB]/40 dark:hover:border-[#3B82F6]/40 transition group"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="px-2.5 py-0.5 rounded text-[11px] font-semibold uppercase bg-blue-50 text-[#245B82] border border-[#245B82]/20">
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold uppercase bg-blue-50 dark:bg-blue-950/50 text-[#2563EB] dark:text-[#3B82F6] border border-[#2563EB]/20">
                     {exam.language === 'en' ? 'Ingliz tili' : exam.language === 'de' ? 'Nemis tili' : exam.language}
                   </span>
                   <span
-                    className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-xs font-medium border ${
+                    className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border ${
                       exam.is_registration_open
-                        ? 'bg-emerald-50 text-[#16803C] border-[#16803C]/30'
-                        : 'bg-slate-100 text-slate-600 border-slate-200'
+                        ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700'
                     }`}
                   >
                     {exam.is_registration_open ? "Ro'yxatga olish ochiq" : "Ro'yxatga olish yopilgan"}
                   </span>
                 </div>
 
-                <h3 className="text-lg font-bold text-slate-900 leading-snug">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white leading-snug group-hover:text-[#2563EB] dark:group-hover:text-[#3B82F6] transition">
                   {exam.title}
                 </h3>
 
-                <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
+                <p className="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
                   {exam.description || "Oliy ta'limdan keyingi ta'lim malakaviy imtihoni."}
                 </p>
 
-                <div className="space-y-1.5 pt-2 text-xs text-slate-500">
+                <div className="space-y-1.5 pt-2 text-xs text-slate-500 dark:text-slate-400">
                   <div className="flex items-center gap-2">
                     <Calendar className="w-3.5 h-3.5 text-slate-400" />
                     <span>
@@ -130,10 +130,10 @@ export default function ExaminationsPage() {
                 </div>
               </div>
 
-              <div className="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between gap-3">
+              <div className="pt-6 mt-6 border-t border-slate-100 dark:border-[#263B55] flex items-center justify-between gap-3">
                 <Link
                   href={`/imtihonlar/${exam.id}`}
-                  className="px-4 py-2 rounded-lg text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 transition"
+                  className="px-4 py-2 rounded-xl text-xs font-medium text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-[#162B45] hover:bg-slate-200 dark:hover:bg-[#1f385a] transition"
                 >
                   Batafsil ma&apos;lumot
                 </Link>
@@ -141,7 +141,7 @@ export default function ExaminationsPage() {
                 {exam.is_registration_open ? (
                   <Link
                     href={`/ariza/yangi?exam=${exam.id}`}
-                    className="px-5 py-2 rounded-lg text-xs font-semibold bg-[#245B82] hover:bg-[#1c4969] text-white transition shadow-sm"
+                    className="px-5 py-2 rounded-xl text-xs font-semibold bg-[#2563EB] hover:bg-[#1D4ED8] text-white transition shadow-sm"
                   >
                     Ro&apos;yxatdan o&apos;tish
                   </Link>

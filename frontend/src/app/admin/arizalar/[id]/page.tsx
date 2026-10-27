@@ -118,55 +118,55 @@ function AdminApplicationReviewContent() {
   return (
     <div className="max-w-5xl mx-auto space-y-8">
       {/* Back button & Title */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-[#263B55] pb-4">
         <div>
           <Link
             href="/admin/arizalar"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#245B82] hover:underline mb-1"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#2563EB] dark:text-[#3B82F6] hover:underline mb-1"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             Arizalar ro&apos;yxatiga qaytish
           </Link>
           <div className="flex items-center gap-3 mt-1">
-            <h1 className="text-2xl font-black text-slate-900 tracking-tight">
+            <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
               Ariza: {application.reference_number}
             </h1>
             <ApplicationStatusBadge status={application.status} />
           </div>
         </div>
 
-        <div className="text-xs text-slate-500">
+        <div className="text-xs text-slate-500 dark:text-slate-400">
           Topshirilgan: {application.submitted_at ? new Date(application.submitted_at).toLocaleString() : 'Topshirilmagan'}
         </div>
       </div>
 
       {/* Snapshot Information Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2.5 text-xs">
-          <h3 className="font-bold text-slate-900 text-sm uppercase tracking-wider mb-2 border-b pb-2">
+        <div className="bg-white dark:bg-[#0F2036] p-6 rounded-2xl border border-slate-200 dark:border-[#263B55] shadow-sm space-y-3 text-xs">
+          <h3 className="font-bold text-slate-900 dark:text-white text-sm uppercase tracking-wider mb-2 border-b border-slate-100 dark:border-[#263B55] pb-2">
             Talabgor ma&apos;lumotlari
           </h3>
-          <div><span className="text-slate-500">To&apos;liq ism:</span> <strong className="text-slate-900">{snap.last_name} {snap.first_name} {snap.middle_name}</strong></div>
-          <div><span className="text-slate-500">Telefon:</span> {snap.phone || '-'}</div>
-          <div><span className="text-slate-500">Email:</span> {snap.email || application.applicant_email || '-'}</div>
-          <div><span className="text-slate-500">JSHR:</span> {snap.jshr || '-'}</div>
-          <div><span className="text-slate-500">Jinsi:</span> {snap.gender === 'male' ? 'Erkak' : 'Ayol'}</div>
+          <div><span className="text-slate-500 dark:text-slate-400">To&apos;liq ism:</span> <strong className="text-slate-900 dark:text-white">{snap.last_name} {snap.first_name} {snap.middle_name}</strong></div>
+          <div><span className="text-slate-500 dark:text-slate-400">Telefon:</span> <span className="text-slate-800 dark:text-slate-200">{snap.phone || '-'}</span></div>
+          <div><span className="text-slate-500 dark:text-slate-400">Email:</span> <span className="text-slate-800 dark:text-slate-200">{snap.email || application.applicant_email || '-'}</span></div>
+          <div><span className="text-slate-500 dark:text-slate-400">JSHR:</span> <span className="text-slate-800 dark:text-slate-200">{snap.jshr || '-'}</span></div>
+          <div><span className="text-slate-500 dark:text-slate-400">Jinsi:</span> <span className="text-slate-800 dark:text-slate-200">{snap.gender === 'male' ? 'Erkak' : 'Ayol'}</span></div>
         </div>
 
-        <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-2.5 text-xs">
-          <h3 className="font-bold text-slate-900 text-sm uppercase tracking-wider mb-2 border-b pb-2">
+        <div className="bg-white dark:bg-[#0F2036] p-6 rounded-2xl border border-slate-200 dark:border-[#263B55] shadow-sm space-y-3 text-xs">
+          <h3 className="font-bold text-slate-900 dark:text-white text-sm uppercase tracking-wider mb-2 border-b border-slate-100 dark:border-[#263B55] pb-2">
             Ilmiy ma&apos;lumotlar
           </h3>
-          <div><span className="text-slate-500">OTM / ITM:</span> <strong className="text-slate-900">{snap.current_institution || '-'}</strong></div>
-          <div><span className="text-slate-500">Ta&apos;lim shakli:</span> {snap.education_form || '-'}</div>
-          <div><span className="text-slate-500">Ixtisoslik shifri:</span> {snap.specialty_code || '-'}</div>
-          <div><span className="text-slate-500">Fan tarmog&apos;i:</span> {snap.scientific_field || '-'}</div>
-          <div><span className="text-slate-500">Ilmiy rahbar:</span> {snap.scientific_supervisor || '-'}</div>
-          <div><span className="text-slate-500">Ish joyi:</span> {snap.workplace || '-'}</div>
-          <div><span className="text-slate-500">Dissertatsiya mavzusi:</span> {snap.dissertation_topic || '-'}</div>
+          <div><span className="text-slate-500 dark:text-slate-400">OTM / ITM:</span> <strong className="text-slate-900 dark:text-white">{snap.current_institution || '-'}</strong></div>
+          <div><span className="text-slate-500 dark:text-slate-400">Ta&apos;lim shakli:</span> <span className="text-slate-800 dark:text-slate-200">{snap.education_form || '-'}</span></div>
+          <div><span className="text-slate-500 dark:text-slate-400">Ixtisoslik shifri:</span> <span className="text-slate-800 dark:text-slate-200">{snap.specialty_code || '-'}</span></div>
+          <div><span className="text-slate-500 dark:text-slate-400">Fan tarmog&apos;i:</span> <span className="text-slate-800 dark:text-slate-200">{snap.scientific_field || '-'}</span></div>
+          <div><span className="text-slate-500 dark:text-slate-400">Ilmiy rahbar:</span> <span className="text-slate-800 dark:text-slate-200">{snap.scientific_supervisor || '-'}</span></div>
+          <div><span className="text-slate-500 dark:text-slate-400">Ish joyi:</span> <span className="text-slate-800 dark:text-slate-200">{snap.workplace || '-'}</span></div>
+          <div><span className="text-slate-500 dark:text-slate-400">Dissertatsiya mavzusi:</span> <span className="text-slate-800 dark:text-slate-200">{snap.dissertation_topic || '-'}</span></div>
           <div>
-            <span className="text-slate-500">Boshqa OTMdan:</span>{' '}
-            <strong className={snap.is_from_another_institution ? 'text-amber-700' : 'text-slate-700'}>
+            <span className="text-slate-500 dark:text-slate-400">Boshqa OTMdan:</span>{' '}
+            <strong className={snap.is_from_another_institution ? 'text-amber-600 dark:text-amber-400' : 'text-slate-700 dark:text-slate-300'}>
               {snap.is_from_another_institution ? 'HA (Aloqa xati talab etiladi)' : 'YO\'Q (AQXI talabgori)'}
             </strong>
           </div>
@@ -174,8 +174,8 @@ function AdminApplicationReviewContent() {
       </div>
 
       {/* Uploaded Documents Verification */}
-      <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
-        <h3 className="font-bold text-slate-900 text-base border-b pb-3">
+      <div className="bg-white dark:bg-[#0F2036] p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-[#263B55] shadow-sm space-y-4">
+        <h3 className="font-bold text-slate-900 dark:text-white text-base border-b border-slate-100 dark:border-[#263B55] pb-3">
           Yuklangan hujjatlarni tekshirish ({application.documents?.length || 0} ta)
         </h3>
 
@@ -186,12 +186,12 @@ function AdminApplicationReviewContent() {
             {application.documents?.map((doc) => (
               <div
                 key={doc.id}
-                className="p-4 rounded-lg border border-slate-200 bg-slate-50/50 space-y-3"
+                className="p-4 rounded-xl border border-slate-200 dark:border-[#263B55] bg-slate-50/50 dark:bg-[#11263E]/40 space-y-3"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-[#245B82] shrink-0" />
-                    <span className="font-semibold text-slate-900 text-sm">
+                    <FileText className="w-4 h-4 text-[#2563EB] dark:text-[#3B82F6] shrink-0" />
+                    <span className="font-semibold text-slate-900 dark:text-white text-sm">
                       {doc.document_type_name || doc.document_type?.name_uz}
                     </span>
                     <span className="text-xs text-slate-400">
@@ -201,12 +201,12 @@ function AdminApplicationReviewContent() {
 
                   <div className="flex items-center gap-2">
                     <span
-                      className={`text-xs px-2.5 py-0.5 rounded font-medium ${
+                      className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${
                         doc.status === 'approved'
-                          ? 'bg-emerald-100 text-emerald-800'
+                          ? 'bg-emerald-100 dark:bg-emerald-950/50 text-emerald-800 dark:text-emerald-300'
                           : doc.status === 'correction_required'
-                          ? 'bg-amber-100 text-amber-800'
-                          : 'bg-blue-100 text-blue-800'
+                          ? 'bg-amber-100 dark:bg-amber-950/50 text-amber-800 dark:text-amber-300'
+                          : 'bg-blue-100 dark:bg-blue-950/50 text-blue-800 dark:text-blue-300'
                       }`}
                     >
                       {doc.status === 'approved' ? 'Tasdiqlangan' : doc.status === 'correction_required' ? 'Tuzatish kerak' : 'Tekshirilmoqda'}
@@ -216,7 +216,7 @@ function AdminApplicationReviewContent() {
                       href={doc.download_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold bg-white border border-slate-300 hover:bg-slate-100 rounded text-slate-700 transition"
+                      className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold bg-white dark:bg-[#162B45] border border-slate-300 dark:border-[#263B55] hover:bg-slate-100 dark:hover:bg-[#1f385a] rounded-lg text-slate-700 dark:text-slate-200 transition"
                     >
                       <Download className="w-3.5 h-3.5" />
                       Faylni ko&apos;rish
@@ -225,19 +225,19 @@ function AdminApplicationReviewContent() {
                 </div>
 
                 {/* Document review controls */}
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-2 border-t border-slate-200/60">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 pt-2 border-t border-slate-200/60 dark:border-[#263B55]/60">
                   <input
                     type="text"
                     placeholder="Tuzatish bo'yicha talabgorga izoh..."
                     value={docReviewNotes[doc.id] || ''}
                     onChange={(e) => setDocReviewNotes({ ...docReviewNotes, [doc.id]: e.target.value })}
-                    className="flex-1 text-xs bg-white border border-slate-200 rounded px-2.5 py-1.5 outline-none focus:border-[#245B82]"
+                    className="flex-1 text-xs bg-white dark:bg-[#11263E] border border-slate-200 dark:border-[#263B55] text-slate-800 dark:text-slate-100 rounded-lg px-3 py-1.5 outline-none focus:border-[#2563EB]"
                   />
                   <div className="flex gap-2">
                     <button
                       type="button"
                       onClick={() => handleDocumentReview(doc.id, 'approved')}
-                      className="px-3 py-1.5 rounded text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white transition flex items-center gap-1"
+                      className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-600 hover:bg-emerald-700 text-white transition flex items-center gap-1 shadow-sm"
                     >
                       <CheckCircle2 className="w-3.5 h-3.5" />
                       Tasdiqlash
@@ -245,7 +245,7 @@ function AdminApplicationReviewContent() {
                     <button
                       type="button"
                       onClick={() => handleDocumentReview(doc.id, 'correction_required')}
-                      className="px-3 py-1.5 rounded text-xs font-semibold bg-amber-600 hover:bg-amber-700 text-white transition flex items-center gap-1"
+                      className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-600 hover:bg-amber-700 text-white transition flex items-center gap-1 shadow-sm"
                     >
                       <AlertCircle className="w-3.5 h-3.5" />
                       Tuzatish so&apos;rash
@@ -259,13 +259,13 @@ function AdminApplicationReviewContent() {
       </div>
 
       {/* Overall Review & Decision Section */}
-      <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
-        <h3 className="font-bold text-slate-900 text-base border-b pb-3">
+      <div className="bg-white dark:bg-[#0F2036] p-6 sm:p-8 rounded-2xl border border-slate-200 dark:border-[#263B55] shadow-sm space-y-4">
+        <h3 className="font-bold text-slate-900 dark:text-white text-base border-b border-slate-100 dark:border-[#263B55] pb-3">
           Ariza bo&apos;yicha yakuniy qaror qabul qilish
         </h3>
 
         {actionError && (
-          <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs rounded-lg">
+          <div className="p-3 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-xs rounded-xl">
             {actionError}
           </div>
         )}
@@ -274,10 +274,10 @@ function AdminApplicationReviewContent() {
           <button
             type="button"
             onClick={() => setReviewAction('approve')}
-            className={`px-4 py-2 rounded-lg text-xs font-bold transition flex items-center gap-1.5 ${
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
               reviewAction === 'approve'
                 ? 'bg-emerald-700 text-white shadow-sm'
-                : 'bg-emerald-50 text-emerald-700 border border-emerald-300 hover:bg-emerald-100'
+                : 'bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 hover:bg-emerald-100'
             }`}
           >
             <CheckCircle2 className="w-4 h-4" />
@@ -287,10 +287,10 @@ function AdminApplicationReviewContent() {
           <button
             type="button"
             onClick={() => setReviewAction('request_corrections')}
-            className={`px-4 py-2 rounded-lg text-xs font-bold transition flex items-center gap-1.5 ${
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
               reviewAction === 'request_corrections'
                 ? 'bg-amber-700 text-white shadow-sm'
-                : 'bg-amber-50 text-amber-800 border border-amber-300 hover:bg-amber-100'
+                : 'bg-amber-50 dark:bg-amber-950/30 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-800 hover:bg-amber-100'
             }`}
           >
             <AlertCircle className="w-4 h-4" />
@@ -300,10 +300,10 @@ function AdminApplicationReviewContent() {
           <button
             type="button"
             onClick={() => setReviewAction('reject')}
-            className={`px-4 py-2 rounded-lg text-xs font-bold transition flex items-center gap-1.5 ${
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
               reviewAction === 'reject'
                 ? 'bg-red-700 text-white shadow-sm'
-                : 'bg-red-50 text-red-700 border border-red-300 hover:bg-red-100'
+                : 'bg-red-50 dark:bg-red-950/30 text-red-700 dark:text-red-300 border border-red-300 dark:border-red-800 hover:bg-red-100'
             }`}
           >
             <XCircle className="w-4 h-4" />
@@ -312,9 +312,9 @@ function AdminApplicationReviewContent() {
         </div>
 
         {reviewAction && (
-          <div className="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-3">
+          <div className="p-4 bg-slate-50 dark:bg-[#11263E]/60 rounded-xl border border-slate-200 dark:border-[#263B55] space-y-3">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                 Abituriyentga ko&apos;rinadigan rasmiy izoh / sabab{' '}
                 {(reviewAction === 'request_corrections' || reviewAction === 'reject') && (
                   <span className="text-red-500">* (Majburiy)</span>
@@ -325,12 +325,12 @@ function AdminApplicationReviewContent() {
                 value={reviewNotes}
                 onChange={(e) => setReviewNotes(e.target.value)}
                 placeholder="Abituriyentga yuboriladigan xabar matni..."
-                className="w-full text-xs bg-white border border-slate-300 rounded p-2.5 outline-none focus:border-[#245B82]"
+                className="w-full text-xs bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] text-slate-800 dark:text-slate-100 rounded-xl p-2.5 outline-none focus:border-[#2563EB]"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-500 mb-1">
+              <label className="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-1">
                 Ichki komissiya eslatmasi (Abituriyentga ko&apos;rinmaydi)
               </label>
               <input
@@ -338,7 +338,7 @@ function AdminApplicationReviewContent() {
                 value={internalNotes}
                 onChange={(e) => setInternalNotes(e.target.value)}
                 placeholder="Faqat mas'ul xodimlar uchun eslatma..."
-                className="w-full text-xs bg-white border border-slate-300 rounded px-2.5 py-1.5 outline-none"
+                className="w-full text-xs bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] text-slate-800 dark:text-slate-100 rounded-xl px-3 py-2 outline-none focus:border-[#2563EB]"
               />
             </div>
 
@@ -346,7 +346,7 @@ function AdminApplicationReviewContent() {
               <button
                 type="button"
                 onClick={() => setReviewAction('')}
-                className="px-3 py-1.5 rounded text-xs font-medium text-slate-600 bg-white border border-slate-300"
+                className="px-3.5 py-2 rounded-xl text-xs font-medium text-slate-600 dark:text-slate-300 bg-white dark:bg-[#162B45] border border-slate-300 dark:border-[#263B55] hover:bg-slate-50 dark:hover:bg-[#1f385a]"
               >
                 Bekor qilish
               </button>
@@ -354,7 +354,7 @@ function AdminApplicationReviewContent() {
                 type="button"
                 onClick={handleOverallReview}
                 disabled={actionLoading}
-                className="px-5 py-1.5 rounded text-xs font-bold bg-[#16324F] hover:bg-[#0f2035] text-white transition disabled:opacity-50"
+                className="px-5 py-2 rounded-xl text-xs font-bold bg-[#2563EB] hover:bg-[#1D4ED8] text-white transition shadow-sm disabled:opacity-50"
               >
                 {actionLoading ? 'Saqlanmoqda...' : 'Qarorni tasdiqlash'}
               </button>

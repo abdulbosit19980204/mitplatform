@@ -4,6 +4,7 @@ import React, { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/AuthContext';
+import { ThemeSwitcher } from '@/components/ThemeSwitcher';
 import {
   LayoutDashboard,
   FileText,
@@ -196,15 +197,15 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
         </div>
       </aside>
 
-      {/* 2. Main Content + Top Bar (Mockup 04 style) */}
+      {/* 2. Main Content + Top Bar (Mockup 04 & 08 style) */}
       <div className="flex-1 min-w-0 flex flex-col min-h-screen">
         {/* Top bar inside Admin */}
-        <header className="h-16 bg-white/80 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30">
+        <header className="h-16 bg-white/90 dark:bg-[#0F2036]/90 backdrop-blur-md border-b border-slate-200/80 dark:border-[#263B55] px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30 transition-colors">
           <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={() => setSidebarOpen(true)}
-              className="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100"
+              className="lg:hidden p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#162B45]"
             >
               <Menu className="w-5 h-5" />
             </button>
@@ -215,29 +216,31 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
               <input
                 type="text"
                 placeholder="Qidiruv..."
-                className="w-full pl-9 pr-4 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-xs focus:outline-none focus:ring-1 focus:ring-[#80B4DB]"
+                className="w-full pl-9 pr-4 py-1.5 rounded-xl bg-slate-50 dark:bg-[#11263E] border border-slate-200 dark:border-[#263B55] text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-[#2563EB]"
               />
             </div>
           </div>
 
-          {/* Right: Notification Bell + Admin Avatar (Mockup 04) */}
-          <div className="flex items-center gap-4">
+          {/* Right: Theme Switcher, Notification Bell + Admin Avatar (Mockup 04 & 08) */}
+          <div className="flex items-center gap-3 sm:gap-4">
+            <ThemeSwitcher />
+
             <button
               type="button"
-              className="p-2 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 relative"
+              className="p-2 rounded-xl text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-[#162B45] relative"
               title="Bildirishnomalar"
             >
               <Bell className="w-4 h-4" />
               <span className="w-2 h-2 rounded-full bg-amber-500 absolute top-1.5 right-1.5" />
             </button>
 
-            <div className="flex items-center gap-2.5 pl-3 border-l border-slate-200">
+            <div className="flex items-center gap-2.5 pl-3 border-l border-slate-200 dark:border-[#263B55]">
               <div className="w-8 h-8 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center font-bold text-xs uppercase shadow-sm">
                 {user.full_name?.charAt(0) || 'A'}
               </div>
               <div className="hidden sm:flex flex-col text-left leading-tight">
-                <span className="text-xs font-bold text-slate-900">{user.full_name}</span>
-                <span className="text-[10px] text-amber-700 font-semibold uppercase">
+                <span className="text-xs font-bold text-slate-900 dark:text-white">{user.full_name}</span>
+                <span className="text-[10px] text-amber-600 dark:text-amber-400 font-semibold uppercase">
                   {user.role === 'admin' ? 'Administrator' : 'Komissiya a\'zosi'}
                 </span>
               </div>

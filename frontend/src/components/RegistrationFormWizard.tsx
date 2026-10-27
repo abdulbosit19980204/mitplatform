@@ -301,12 +301,12 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
     <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6">
       {/* Auth Notice Banner if user is not authenticated */}
       {!user && (
-        <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl text-xs sm:text-sm flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
+        <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 rounded-2xl text-xs sm:text-sm flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
           <div className="flex items-start gap-2.5">
-            <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+            <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
             <div>
-              <strong className="text-slate-900">Diqqat: Siz tizimga kirmagansiz!</strong>
-              <p className="text-slate-600 mt-0.5">
+              <strong className="text-slate-900 dark:text-amber-200">Diqqat: Siz tizimga kirmagansiz!</strong>
+              <p className="text-slate-600 dark:text-amber-300/80 mt-0.5">
                 Hujjatlarni yuklash va arizangizni saqlash uchun avval shaxsiy kabinetingizga kiring yoki ro&apos;yxatdan o&apos;ting.
               </p>
             </div>
@@ -316,14 +316,14 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
               type="button"
               onClick={handleQuickDemoLogin}
               disabled={loading}
-              className="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#16324F] hover:bg-[#0f2035] text-white transition shadow-sm flex items-center gap-1.5"
+              className="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#2563EB] hover:bg-[#1D4ED8] text-white transition shadow-sm flex items-center gap-1.5"
             >
               <LogIn className="w-3.5 h-3.5" />
               Talabgor sifatida kirish (Demo)
             </button>
             <Link
               href="/kirish"
-              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 transition"
+              className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-[#162B45] border border-slate-300 dark:border-[#263B55] hover:bg-slate-50 dark:hover:bg-[#1c3554] text-slate-700 dark:text-slate-200 transition"
             >
               Kirish
             </Link>
@@ -345,17 +345,17 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
                   <div
                     className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs transition ${
                       isCompleted
-                        ? 'bg-[#16803C] text-white'
+                        ? 'bg-emerald-600 text-white'
                         : isCurrent
-                        ? 'bg-[#16324F] text-white shadow-md ring-4 ring-[#80B4DB]/40'
-                        : 'bg-slate-200 text-slate-600'
+                        ? 'bg-[#2563EB] text-white shadow-md ring-4 ring-[#2563EB]/20 dark:ring-[#3B82F6]/30'
+                        : 'bg-slate-200 dark:bg-[#162B45] text-slate-600 dark:text-slate-400'
                     }`}
                   >
                     {isCompleted ? <CheckCircle2 className="w-5 h-5" /> : <Icon className="w-4 h-4" />}
                   </div>
                   <span
                     className={`hidden sm:inline text-xs font-semibold ${
-                      isCurrent ? 'text-[#16324F]' : isCompleted ? 'text-slate-800' : 'text-slate-400'
+                      isCurrent ? 'text-[#2563EB] dark:text-[#3B82F6]' : isCompleted ? 'text-slate-800 dark:text-slate-200' : 'text-slate-400 dark:text-slate-500'
                     }`}
                   >
                     {s.title}
@@ -364,7 +364,7 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
                 {idx < steps.length - 1 && (
                   <div
                     className={`flex-1 h-0.5 mx-2 transition ${
-                      currentStep > s.num ? 'bg-[#16803C]' : 'bg-slate-200'
+                      currentStep > s.num ? 'bg-emerald-600' : 'bg-slate-200 dark:bg-[#263B55]'
                     }`}
                   />
                 )}
@@ -376,31 +376,31 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
 
       {/* Global Error Banner */}
       {errorMsg && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm flex items-start gap-2 shadow-sm whitespace-pre-line">
-          <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+        <div className="mb-6 p-4 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-xl text-red-700 dark:text-red-300 text-sm flex items-start gap-2 shadow-sm whitespace-pre-line">
+          <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
           <div className="flex-1">{errorMsg}</div>
         </div>
       )}
 
       {/* STEP 1: Form Fields (Exact replica of user's form screenshot) */}
       {currentStep === 1 && (
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-8">
-          <div className="border-b border-slate-100 pb-4 mb-6">
-            <h2 className="text-xl font-bold text-slate-900 tracking-tight">Form</h2>
-            <p className="text-xs text-slate-500 mt-1">
+        <div className="bg-white dark:bg-[#0F2036] rounded-2xl shadow-sm border border-slate-200 dark:border-[#263B55] p-6 sm:p-8">
+          <div className="border-b border-slate-100 dark:border-[#263B55] pb-4 mb-6">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Form</h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
               Imtihonga ro&apos;yxatdan o&apos;tish uchun shaxsiy va ilmiy ma&apos;lumotlaringizni to&apos;ldiring. OTM va ixtisosliklar davlat ochiq ma&apos;lumotlar bazasidan avtomatik olinadi.
             </p>
           </div>
 
           {/* Imtihon tanlash */}
-          <div className="mb-6 p-4 bg-slate-50 rounded-lg border border-slate-200">
-            <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">
+          <div className="mb-6 p-4 bg-slate-50 dark:bg-[#11263E]/60 rounded-xl border border-slate-200 dark:border-[#263B55]">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
               Ro&apos;yxatdan o&apos;tish uchun imtihonni tanlang
             </label>
             <select
               value={selectedExamId}
               onChange={(e) => handleExamChange(Number(e.target.value))}
-              className="w-full text-sm bg-white border border-slate-300 rounded-lg px-3 py-2.5 text-slate-800 focus:border-[#245B82] focus:ring-1 focus:ring-[#245B82] outline-none"
+              className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] rounded-xl px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:border-[#2563EB] dark:focus:border-[#3B82F6] outline-none"
             >
               {examinations.map((exam) => (
                 <option key={exam.id} value={exam.id}>
@@ -413,14 +413,14 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* 1. Ta'lim shakli */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 {t.form.educationForm} <span className="text-red-500">*</span>
               </label>
               <select
                 value={formData.education_form}
                 onChange={(e) => setFormData({ ...formData, education_form: e.target.value })}
-                className={`w-full text-sm bg-white border rounded-lg px-3 py-2 text-slate-800 outline-none transition ${
-                  fieldErrors.education_form ? 'border-red-400 bg-red-50/20' : 'border-slate-300 focus:border-[#245B82]'
+                className={`w-full text-sm bg-white dark:bg-[#11263E] border rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none transition ${
+                  fieldErrors.education_form ? 'border-red-400 bg-red-50/20 dark:bg-red-950/20' : 'border-slate-300 dark:border-[#263B55] focus:border-[#2563EB] dark:focus:border-[#3B82F6]'
                 }`}
               >
                 <option value="">tanlang</option>
@@ -437,7 +437,7 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
 
             {/* 2. OTM yoki ITM nomi */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 {t.form.otmName} <span className="text-red-500">*</span>
               </label>
               <select
@@ -451,8 +451,8 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
                     is_from_another_institution: isAnother,
                   });
                 }}
-                className={`w-full text-sm bg-white border rounded-lg px-3 py-2 text-slate-800 outline-none transition ${
-                  fieldErrors.current_institution ? 'border-red-400 bg-red-50/20' : 'border-slate-300 focus:border-[#245B82]'
+                className={`w-full text-sm bg-white dark:bg-[#11263E] border rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none transition ${
+                  fieldErrors.current_institution ? 'border-red-400 bg-red-50/20 dark:bg-red-950/20' : 'border-slate-300 dark:border-[#263B55] focus:border-[#2563EB] dark:focus:border-[#3B82F6]'
                 }`}
               >
                 <option value="">tanlang</option>
@@ -469,7 +469,7 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
 
             {/* 3. Ixtisoslik shifri */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 {t.form.specialtyCode} <span className="text-red-500">*</span>
               </label>
               <select
@@ -482,8 +482,8 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
                     scientific_field: selected?.field || formData.scientific_field,
                   });
                 }}
-                className={`w-full text-sm bg-white border rounded-lg px-3 py-2 text-slate-800 outline-none transition ${
-                  fieldErrors.specialty_code ? 'border-red-400 bg-red-50/20' : 'border-slate-300 focus:border-[#245B82]'
+                className={`w-full text-sm bg-white dark:bg-[#11263E] border rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none transition ${
+                  fieldErrors.specialty_code ? 'border-red-400 bg-red-50/20 dark:bg-red-950/20' : 'border-slate-300 dark:border-[#263B55] focus:border-[#2563EB] dark:focus:border-[#3B82F6]'
                 }`}
               >
                 <option value="">tanlang</option>
@@ -500,13 +500,13 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
 
             {/* 4. Ilmiy daraja beradigan fan tarmog'i */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 {t.form.scientificField}
               </label>
               <select
                 value={formData.scientific_field}
                 onChange={(e) => setFormData({ ...formData, scientific_field: e.target.value })}
-                className="w-full text-sm bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-800 outline-none focus:border-[#245B82]"
+                className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
               >
                 <option value="">tanlang</option>
                 {refOptions?.scientific_fields.map((field) => (
@@ -519,13 +519,13 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
 
             {/* 5. Malakaviy imtihon turi */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 {t.form.qualificationExamType}
               </label>
               <select
                 value={formData.qualification_exam_type}
                 onChange={(e) => setFormData({ ...formData, qualification_exam_type: e.target.value })}
-                className="w-full text-sm bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-800 outline-none focus:border-[#245B82]"
+                className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
               >
                 <option value="">tanlang</option>
                 {refOptions?.exam_types.map((item) => (
@@ -538,7 +538,7 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
 
             {/* 6. Ism */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 {t.form.firstName} <span className="text-red-500">*</span>
               </label>
               <input
@@ -546,8 +546,8 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
                 value={formData.first_name}
                 onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
                 placeholder="Ismingizni kiriting"
-                className={`w-full text-sm bg-white border rounded-lg px-3 py-2 text-slate-800 outline-none transition ${
-                  fieldErrors.first_name ? 'border-red-400 bg-red-50/20' : 'border-slate-300 focus:border-[#245B82]'
+                className={`w-full text-sm bg-white dark:bg-[#11263E] border rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none transition ${
+                  fieldErrors.first_name ? 'border-red-400 bg-red-50/20 dark:bg-red-950/20' : 'border-slate-300 dark:border-[#263B55] focus:border-[#2563EB] dark:focus:border-[#3B82F6]'
                 }`}
               />
               {fieldErrors.first_name && (
@@ -557,7 +557,7 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
 
             {/* 7. Familya */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 {t.form.lastName} <span className="text-red-500">*</span>
               </label>
               <input
@@ -565,8 +565,8 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
                 value={formData.last_name}
                 onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
                 placeholder="Familiyangizni kiriting"
-                className={`w-full text-sm bg-white border rounded-lg px-3 py-2 text-slate-800 outline-none transition ${
-                  fieldErrors.last_name ? 'border-red-400 bg-red-50/20' : 'border-slate-300 focus:border-[#245B82]'
+                className={`w-full text-sm bg-white dark:bg-[#11263E] border rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none transition ${
+                  fieldErrors.last_name ? 'border-red-400 bg-red-50/20 dark:bg-red-950/20' : 'border-slate-300 dark:border-[#263B55] focus:border-[#2563EB] dark:focus:border-[#3B82F6]'
                 }`}
               />
               {fieldErrors.last_name && (
@@ -576,7 +576,7 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
 
             {/* 8. Sharif(Otchestvo) */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 {t.form.middleName}
               </label>
               <input
@@ -584,19 +584,19 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
                 value={formData.middle_name}
                 onChange={(e) => setFormData({ ...formData, middle_name: e.target.value })}
                 placeholder="Otangizning ismi"
-                className="w-full text-sm bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-800 outline-none focus:border-[#245B82]"
+                className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
               />
             </div>
 
             {/* 9. Jins */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 {t.form.gender}
               </label>
               <select
                 value={formData.gender}
                 onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                className="w-full text-sm bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-800 outline-none focus:border-[#245B82]"
+                className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
               >
                 <option value="male">Erkak</option>
                 <option value="female">Ayol</option>
@@ -605,7 +605,7 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
 
             {/* 10. Jshr */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 {t.form.jshr}
               </label>
               <input
@@ -614,13 +614,13 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
                 value={formData.jshr}
                 onChange={(e) => setFormData({ ...formData, jshr: e.target.value.replace(/\D/g, '') })}
                 placeholder="14 xonali JSHSHIR raqami"
-                className="w-full text-sm bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-800 outline-none focus:border-[#245B82]"
+                className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
               />
             </div>
 
             {/* 11. Telefon raqami */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 {t.form.phone} <span className="text-red-500">*</span>
               </label>
               <input
@@ -628,8 +628,8 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 placeholder="+998 90 123 45 67"
-                className={`w-full text-sm bg-white border rounded-lg px-3 py-2 text-slate-800 outline-none transition ${
-                  fieldErrors.phone ? 'border-red-400 bg-red-50/20' : 'border-slate-300 focus:border-[#245B82]'
+                className={`w-full text-sm bg-white dark:bg-[#11263E] border rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none transition ${
+                  fieldErrors.phone ? 'border-red-400 bg-red-50/20 dark:bg-red-950/20' : 'border-slate-300 dark:border-[#263B55] focus:border-[#2563EB] dark:focus:border-[#3B82F6]'
                 }`}
               />
               {fieldErrors.phone && (
@@ -639,7 +639,7 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
 
             {/* 12. Ilmiy rahbar */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 {t.form.supervisor}
               </label>
               <input
@@ -647,13 +647,13 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
                 value={formData.scientific_supervisor}
                 onChange={(e) => setFormData({ ...formData, scientific_supervisor: e.target.value })}
                 placeholder="F.I.SH va ilmiy darajasi"
-                className="w-full text-sm bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-800 outline-none focus:border-[#245B82]"
+                className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
               />
             </div>
 
             {/* 13. Ish bajarayotgan tashkilot */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 {t.form.workplace}
               </label>
               <input
@@ -661,31 +661,31 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
                 value={formData.workplace}
                 onChange={(e) => setFormData({ ...formData, workplace: e.target.value })}
                 placeholder="Ish yoki o'qish joyi"
-                className="w-full text-sm bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-800 outline-none focus:border-[#245B82]"
+                className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
               />
             </div>
 
             {/* 14. Boshqa OTMdan qatnashish (Conditional Document 6 Trigger) */}
-            <div className="md:col-span-2 p-3 bg-blue-50/60 rounded-lg border border-blue-200">
+            <div className="md:col-span-2 p-4 bg-blue-50/60 dark:bg-[#162B45]/50 rounded-xl border border-blue-200 dark:border-[#263B55]">
               <label className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={formData.is_from_another_institution}
                   onChange={(e) => setFormData({ ...formData, is_from_another_institution: e.target.checked })}
-                  className="w-4 h-4 text-[#245B82] rounded border-slate-300 focus:ring-[#245B82]"
+                  className="w-4 h-4 text-[#2563EB] rounded border-slate-300 dark:border-[#263B55] focus:ring-[#2563EB]"
                 />
-                <span className="text-sm font-medium text-slate-800">
+                <span className="text-sm font-medium text-slate-800 dark:text-slate-100">
                   {t.form.isFromAnother}
                 </span>
               </label>
-              <p className="text-xs text-slate-500 mt-1 pl-7">
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 pl-7">
                 Belgilansa: O&apos;z muassasangiz tomonidan berilgan <strong>&quot;Aloqa xati&quot; (6-hujjat)</strong> yuklash majburiy bo&apos;ladi.
               </p>
             </div>
 
             {/* 15. Disertatsiya mavzusi */}
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-slate-700 mb-1">
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
                 {t.form.dissertationTopic}
               </label>
               <textarea
@@ -693,18 +693,18 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
                 value={formData.dissertation_topic}
                 onChange={(e) => setFormData({ ...formData, dissertation_topic: e.target.value })}
                 placeholder="Tasdiqlangan dissertatsiya mavzusining to'liq nomi"
-                className="w-full text-sm bg-white border border-slate-300 rounded-lg px-3 py-2 text-slate-800 outline-none focus:border-[#245B82]"
+                className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
               />
             </div>
           </div>
 
           {/* Action buttons */}
-          <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-end gap-3">
+          <div className="mt-8 pt-6 border-t border-slate-100 dark:border-[#263B55] flex items-center justify-end gap-3">
             <button
               type="button"
               onClick={handleProceedToStep2}
               disabled={loading}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-semibold bg-[#245B82] hover:bg-[#1c4969] text-white transition shadow-sm disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold bg-[#2563EB] hover:bg-[#1D4ED8] text-white transition shadow-sm disabled:opacity-50"
             >
               {t.form.next}: Hujjatlar (6 ta toifa)
               <ChevronRight className="w-4 h-4" />
@@ -716,25 +716,25 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
       {/* STEP 2: Required Documents Upload */}
       {currentStep === 2 && (
         <div className="space-y-6">
-          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-3">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+          <div className="bg-white dark:bg-[#0F2036] rounded-2xl shadow-sm border border-slate-200 dark:border-[#263B55] p-6 space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-[#263B55] pb-3">
               <div>
-                <h2 className="text-lg font-bold text-slate-900 tracking-tight">
+                <h2 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">
                   {t.documents.mandatory6}
                 </h2>
-                <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">
                   Belgilangan tartibga muvofiq quyidagi 6 ta hujjat toifasining sifatli nusxasini PDF formatda biriktiring.
                 </p>
               </div>
 
               {/* Progress counter pill */}
-              <div className="self-start sm:self-auto px-3 py-1.5 rounded-lg text-xs font-bold border shrink-0 bg-slate-50 border-slate-300">
-                Yuklandi: <span className="text-[#245B82]">{uploadedMandatoryCount}</span> / {mandatoryDocs.length} ta majburiy
+              <div className="self-start sm:self-auto px-3.5 py-1.5 rounded-xl text-xs font-bold border shrink-0 bg-slate-50 dark:bg-[#11263E] border-slate-300 dark:border-[#263B55] text-slate-700 dark:text-slate-200">
+                Yuklandi: <span className="text-[#2563EB] dark:text-[#3B82F6]">{uploadedMandatoryCount}</span> / {mandatoryDocs.length} ta majburiy
               </div>
             </div>
 
             {/* Document 6 conditional notice */}
-            <div className="p-3 bg-blue-50 border border-blue-200 rounded text-xs text-blue-900">
+            <div className="p-3 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/50 rounded-xl text-xs text-blue-900 dark:text-blue-300">
               {formData.is_from_another_institution ? (
                 <span>
                   ✓ Siz boshqa muassasadan qatnashayotganingiz sababli, <strong>6-hujjat (Aloqa xati)</strong> majburiydir.
@@ -773,7 +773,7 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
             <button
               type="button"
               onClick={() => setCurrentStep(1)}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition"
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-[#162B45] border border-slate-300 dark:border-[#263B55] hover:bg-slate-50 dark:hover:bg-[#1c3554] transition"
             >
               <ChevronLeft className="w-4 h-4" />
               {t.form.prev}
@@ -782,7 +782,7 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
             <button
               type="button"
               onClick={() => setCurrentStep(3)}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg text-sm font-semibold bg-[#245B82] hover:bg-[#1c4969] text-white transition shadow-sm"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold bg-[#2563EB] hover:bg-[#1D4ED8] text-white transition shadow-sm"
             >
               {t.form.next}: Ko&apos;rib chiqish
               <ChevronRight className="w-4 h-4" />
@@ -793,28 +793,28 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
 
       {/* STEP 3: Review & Submit */}
       {currentStep === 3 && (
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 sm:p-8 space-y-6">
-          <div className="border-b border-slate-100 pb-4">
-            <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+        <div className="bg-white dark:bg-[#0F2036] rounded-2xl shadow-sm border border-slate-200 dark:border-[#263B55] p-6 sm:p-8 space-y-6">
+          <div className="border-b border-slate-100 dark:border-[#263B55] pb-4">
+            <h2 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
               Arizani ko&apos;rib chiqish va tasdiqlash
             </h2>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
               Topshirishdan oldin barcha ma&apos;lumotlarning to&apos;g&apos;riligini va hujjatlar to&apos;liqligini tekshiring.
             </p>
           </div>
 
           {/* Missing documents warning if not all uploaded */}
           {!allMandatoryUploaded && (
-            <div className="p-4 bg-amber-50 border border-amber-300 rounded-xl text-amber-900 text-xs sm:text-sm space-y-2">
+            <div className="p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-800 rounded-xl text-amber-900 dark:text-amber-200 text-xs sm:text-sm space-y-2">
               <div className="font-bold flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 text-amber-700" />
+                <AlertCircle className="w-4 h-4 text-amber-700 dark:text-amber-400" />
                 Diqqat! Arizani topshirish uchun quyidagi majburiy hujjatlar yuklanishi shart:
               </div>
               <ul className="list-disc pl-6 space-y-1">
                 {mandatoryDocs
                   .filter((d) => !uploadedDocTypeIds.has(d.documentType.id))
                   .map((d) => (
-                    <li key={d.documentType.id} className="font-semibold text-red-700">
+                    <li key={d.documentType.id} className="font-semibold text-red-700 dark:text-red-400">
                       {d.documentType.sort_order}. {d.documentType.name_uz}
                     </li>
                   ))}
@@ -834,38 +834,38 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
 
           {/* Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
-            <div className="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-2">
-              <h4 className="font-semibold text-slate-800 text-xs uppercase tracking-wider mb-2">
+            <div className="p-4 bg-slate-50 dark:bg-[#11263E]/60 rounded-xl border border-slate-200 dark:border-[#263B55] space-y-2">
+              <h4 className="font-semibold text-slate-800 dark:text-slate-200 text-xs uppercase tracking-wider mb-2">
                 Shaxsiy ma&apos;lumotlar
               </h4>
-              <div><span className="text-slate-500">F.I.SH:</span> <strong className="text-slate-900">{formData.last_name} {formData.first_name} {formData.middle_name}</strong></div>
-              <div><span className="text-slate-500">Jinsi:</span> {formData.gender === 'male' ? 'Erkak' : 'Ayol'}</div>
-              <div><span className="text-slate-500">JSHR:</span> {formData.jshr || '-'}</div>
-              <div><span className="text-slate-500">Telefon:</span> {formData.phone}</div>
+              <div><span className="text-slate-500 dark:text-slate-400">F.I.SH:</span> <strong className="text-slate-900 dark:text-white">{formData.last_name} {formData.first_name} {formData.middle_name}</strong></div>
+              <div><span className="text-slate-500 dark:text-slate-400">Jinsi:</span> {formData.gender === 'male' ? 'Erkak' : 'Ayol'}</div>
+              <div><span className="text-slate-500 dark:text-slate-400">JSHR:</span> {formData.jshr || '-'}</div>
+              <div><span className="text-slate-500 dark:text-slate-400">Telefon:</span> {formData.phone}</div>
             </div>
 
-            <div className="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-2">
-              <h4 className="font-semibold text-slate-800 text-xs uppercase tracking-wider mb-2">
+            <div className="p-4 bg-slate-50 dark:bg-[#11263E]/60 rounded-xl border border-slate-200 dark:border-[#263B55] space-y-2">
+              <h4 className="font-semibold text-slate-800 dark:text-slate-200 text-xs uppercase tracking-wider mb-2">
                 Ilmiy ma&apos;lumotlar
               </h4>
-              <div><span className="text-slate-500">OTM / ITM:</span> <strong>{formData.current_institution}</strong></div>
-              <div><span className="text-slate-500">Ta&apos;lim shakli:</span> {formData.education_form}</div>
-              <div><span className="text-slate-500">Ixtisoslik:</span> {formData.specialty_code}</div>
-              <div><span className="text-slate-500">Fan tarmog&apos;i:</span> {formData.scientific_field || '-'}</div>
-              <div><span className="text-slate-500">Ilmiy rahbar:</span> {formData.scientific_supervisor || '-'}</div>
+              <div><span className="text-slate-500 dark:text-slate-400">OTM / ITM:</span> <strong className="text-slate-900 dark:text-white">{formData.current_institution}</strong></div>
+              <div><span className="text-slate-500 dark:text-slate-400">Ta&apos;lim shakli:</span> {formData.education_form}</div>
+              <div><span className="text-slate-500 dark:text-slate-400">Ixtisoslik:</span> {formData.specialty_code}</div>
+              <div><span className="text-slate-500 dark:text-slate-400">Fan tarmog&apos;i:</span> {formData.scientific_field || '-'}</div>
+              <div><span className="text-slate-500 dark:text-slate-400">Ilmiy rahbar:</span> {formData.scientific_supervisor || '-'}</div>
             </div>
           </div>
 
           {/* Uploaded Documents Status Checklist */}
-          <div className="p-4 bg-slate-50 rounded-lg border border-slate-200">
-            <div className="flex items-center justify-between mb-3 border-b border-slate-200 pb-2">
-              <h4 className="font-semibold text-slate-800 text-xs uppercase tracking-wider">
+          <div className="p-4 bg-slate-50 dark:bg-[#11263E]/60 rounded-xl border border-slate-200 dark:border-[#263B55]">
+            <div className="flex items-center justify-between mb-3 border-b border-slate-200 dark:border-[#263B55] pb-2">
+              <h4 className="font-semibold text-slate-800 dark:text-slate-200 text-xs uppercase tracking-wider">
                 Yuklangan 6 ta hujjat holati
               </h4>
               <button
                 type="button"
                 onClick={() => setCurrentStep(2)}
-                className="text-xs font-semibold text-[#245B82] hover:underline"
+                className="text-xs font-semibold text-[#2563EB] dark:text-[#3B82F6] hover:underline"
               >
                 Tahrirlash / Yuklash
               </button>
@@ -877,21 +877,21 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
                 const uploaded = application?.documents?.find((d) => d.document_type.id === dt.id);
 
                 return (
-                  <div key={dt.id} className="flex items-center justify-between py-1.5 border-b border-slate-200/60 last:border-0 text-xs">
-                    <span className="text-slate-700 font-medium">
+                  <div key={dt.id} className="flex items-center justify-between py-1.5 border-b border-slate-200/60 dark:border-[#263B55]/60 last:border-0 text-xs">
+                    <span className="text-slate-700 dark:text-slate-300 font-medium">
                       {dt.sort_order}. {dt.name_uz}
                     </span>
                     {uploaded ? (
-                      <span className="text-emerald-700 font-semibold flex items-center gap-1">
+                      <span className="text-emerald-700 dark:text-emerald-400 font-semibold flex items-center gap-1">
                         <CheckCircle2 className="w-3.5 h-3.5" />
                         Yuklangan ({uploaded.original_filename})
                       </span>
                     ) : docItem.isRequired ? (
-                      <span className="text-red-600 font-bold bg-red-50 px-2 py-0.5 rounded border border-red-200">
+                      <span className="text-red-600 dark:text-red-400 font-bold bg-red-50 dark:bg-red-950/30 px-2 py-0.5 rounded border border-red-200 dark:border-red-900">
                         Yuklanmagan (Majburiy)
                       </span>
                     ) : (
-                      <span className="text-slate-400">
+                      <span className="text-slate-400 dark:text-slate-500">
                         Talab etilmaydi
                       </span>
                     )}
@@ -902,21 +902,21 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
           </div>
 
           {/* Consent Checkbox */}
-          <div className="p-4 bg-blue-50/50 rounded-lg border border-blue-200/80">
+          <div className="p-4 bg-blue-50/50 dark:bg-[#162B45]/50 rounded-xl border border-blue-200/80 dark:border-[#263B55]">
             <label className="flex items-start gap-3 cursor-pointer">
-              <input type="checkbox" defaultChecked className="w-4 h-4 text-[#245B82] rounded mt-0.5" />
-              <span className="text-xs text-slate-700 leading-relaxed">
+              <input type="checkbox" defaultChecked className="w-4 h-4 text-[#2563EB] rounded mt-0.5" />
+              <span className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
                 Men taqdim etilgan barcha ma&apos;lumotlar va hujjatlarning haqiqiyligini tasdiqlayman. Qasddan noto&apos;g&apos;ri ma&apos;lumot berish arizaning bekor qilinishiga sabab bo&apos;lishi to&apos;g&apos;risida ogohlantirildim.
               </span>
             </label>
           </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+          <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-[#263B55]">
             <button
               type="button"
               onClick={() => setCurrentStep(2)}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition"
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-[#162B45] border border-slate-300 dark:border-[#263B55] hover:bg-slate-50 dark:hover:bg-[#1c3554] transition"
             >
               <ChevronLeft className="w-4 h-4" />
               {t.form.prev}
@@ -926,10 +926,10 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
               type="button"
               onClick={handleSubmitApplication}
               disabled={loading || !allMandatoryUploaded}
-              className={`inline-flex items-center gap-2 px-8 py-3 rounded-lg text-sm font-bold transition shadow-md ${
+              className={`inline-flex items-center gap-2 px-8 py-3 rounded-xl text-sm font-bold transition shadow-md ${
                 allMandatoryUploaded
-                  ? 'bg-[#16803C] hover:bg-[#126b32] text-white'
-                  : 'bg-slate-300 text-slate-600 cursor-not-allowed'
+                  ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                  : 'bg-slate-300 dark:bg-slate-700 text-slate-600 dark:text-slate-400 cursor-not-allowed'
               }`}
             >
               <Send className="w-4 h-4" />
@@ -941,29 +941,29 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
 
       {/* STEP 4: Confirmation Page */}
       {currentStep === 4 && application && (
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8 text-center space-y-6">
-          <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto">
+        <div className="bg-white dark:bg-[#0F2036] rounded-2xl shadow-sm border border-slate-200 dark:border-[#263B55] p-8 text-center space-y-6">
+          <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 flex items-center justify-center mx-auto">
             <CheckCircle2 className="w-10 h-10" />
           </div>
 
           <div className="space-y-2">
-            <h2 className="text-2xl font-bold text-slate-900 tracking-tight">
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
               Arizangiz muvaffaqiyatli qabul qilindi!
             </h2>
-            <p className="text-sm text-slate-600 max-w-lg mx-auto">
+            <p className="text-sm text-slate-600 dark:text-slate-400 max-w-lg mx-auto">
               Sizning ro&apos;yxatdan o&apos;tish arizangiz komissiya tekshiruviga yuborildi. Holatni shaxsiy kabinetingiz orqali kuzatib borishingiz mumkin.
             </p>
           </div>
 
           {/* Reference number box */}
-          <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 max-w-sm mx-auto">
-            <div className="text-xs uppercase tracking-wider text-slate-500 font-semibold">
+          <div className="p-4 bg-slate-50 dark:bg-[#11263E] rounded-xl border border-slate-200 dark:border-[#263B55] max-w-sm mx-auto">
+            <div className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">
               Ariza raqami
             </div>
-            <div className="text-2xl font-black text-[#16324F] tracking-wider mt-1">
+            <div className="text-2xl font-black text-[#2563EB] dark:text-[#3B82F6] tracking-wider mt-1">
               {application.reference_number}
             </div>
-            <div className="text-xs text-slate-400 mt-1">
+            <div className="text-xs text-slate-400 dark:text-slate-500 mt-1">
               Topshirilgan vaqti: {application.submitted_at ? new Date(application.submitted_at).toLocaleString() : 'Muvaffaqiyatli topshirildi'}
             </div>
           </div>
@@ -973,14 +973,14 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
             <button
               type="button"
               onClick={() => router.push('/kabinet')}
-              className="w-full sm:w-auto px-6 py-2.5 rounded-lg text-sm font-semibold bg-[#245B82] hover:bg-[#1c4969] text-white transition shadow-sm"
+              className="w-full sm:w-auto px-6 py-2.5 rounded-xl text-sm font-semibold bg-[#2563EB] hover:bg-[#1D4ED8] text-white transition shadow-sm"
             >
               Shaxsiy kabinetga o&apos;tish
             </button>
             <button
               type="button"
               onClick={() => window.print()}
-              className="w-full sm:w-auto px-6 py-2.5 rounded-lg text-sm font-medium text-slate-700 bg-white border border-slate-300 hover:bg-slate-50 transition"
+              className="w-full sm:w-auto px-6 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-[#162B45] border border-slate-300 dark:border-[#263B55] hover:bg-slate-50 dark:hover:bg-[#1c3554] transition"
             >
               Arizani chop etish
             </button>
