@@ -189,3 +189,126 @@ export interface ReferenceOptions {
   exam_types: { value: string; label_uz: string; label_oz: string; label_ru: string }[];
   scientific_fields: string[];
 }
+
+export interface SiteSettings {
+  id: number;
+  site_name_uz: string;
+  site_name_oz?: string;
+  site_name_ru?: string;
+  motto_uz?: string;
+  motto_oz?: string;
+  motto_ru?: string;
+  logo_url?: string;
+  contact_email: string;
+  contact_phone: string;
+  contact_phone_secondary?: string;
+  contact_address_uz: string;
+  contact_address_oz?: string;
+  contact_address_ru?: string;
+  work_hours?: string;
+  telegram_channel?: string;
+  youtube_channel?: string;
+  official_website?: string;
+  application_reference_prefix: string;
+  max_upload_size_mb: number;
+  allowed_upload_formats: string;
+  enabled_languages: string;
+  default_language: string;
+  footer_copyright_uz: string;
+  updated_at?: string;
+}
+
+export interface NavigationItem {
+  id: number;
+  title_uz: string;
+  title_oz?: string;
+  title_ru?: string;
+  url: string;
+  location: 'header' | 'footer_quick' | 'footer_legal';
+  sort_order: number;
+  is_external: boolean;
+  is_active: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface HomepageSection {
+  id: number;
+  section_key: string;
+  title_uz: string;
+  title_oz?: string;
+  title_ru?: string;
+  subtitle_uz?: string;
+  subtitle_oz?: string;
+  subtitle_ru?: string;
+  content_uz?: string;
+  content_oz?: string;
+  content_ru?: string;
+  button_text_uz?: string;
+  button_text_oz?: string;
+  button_text_ru?: string;
+  button_url?: string;
+  secondary_button_text_uz?: string;
+  secondary_button_text_oz?: string;
+  secondary_button_text_ru?: string;
+  secondary_button_url?: string;
+  badge_text_uz?: string;
+  badge_text_oz?: string;
+  badge_text_ru?: string;
+  image_url?: string;
+  icon_name?: string;
+  sort_order: number;
+  is_active: boolean;
+  updated_at?: string;
+}
+
+export interface FAQItem {
+  id: number;
+  category: 'registration' | 'documents' | 'exams' | 'results' | 'general';
+  question_uz: string;
+  question_oz?: string;
+  question_ru?: string;
+  answer_uz: string;
+  answer_oz?: string;
+  answer_ru?: string;
+  sort_order: number;
+  is_published: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface Announcement {
+  id: number;
+  title_uz: string;
+  title_oz?: string;
+  title_ru?: string;
+  content_uz: string;
+  content_oz?: string;
+  content_ru?: string;
+  category: 'important' | 'deadline' | 'exam_schedule' | 'general';
+  badge_type: 'info' | 'warning' | 'success' | 'danger';
+  is_pinned: boolean;
+  is_published: boolean;
+  is_active?: boolean;
+  published_at: string;
+  expires_at?: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface ContentPage {
+  id: number;
+  slug: string;
+  title_uz: string;
+  title_oz?: string;
+  title_ru?: string;
+  lead_uz?: string;
+  lead_oz?: string;
+  lead_ru?: string;
+  body_html_uz: string;
+  body_html_oz?: string;
+  body_html_ru?: string;
+  is_published: boolean;
+  created_at?: string;
+  updated_at?: string;
+}

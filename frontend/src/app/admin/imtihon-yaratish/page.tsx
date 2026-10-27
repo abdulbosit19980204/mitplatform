@@ -74,7 +74,7 @@ export default function AdminExamCreatePage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 space-y-6">
+    <div className="max-w-4xl mx-auto space-y-6">
       <Link
         href="/admin"
         className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#245B82] hover:underline"
