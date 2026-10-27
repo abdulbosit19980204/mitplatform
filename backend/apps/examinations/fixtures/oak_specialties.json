@@ -1,0 +1,122 @@
+[
+  {
+    "model": "examinations.uzbekistanspecialty",
+    "pk": 1,
+    "fields": {
+      "code": "06.01.05",
+      "name_uz": "Seleksiya va urug'chilik",
+      "name_oz": "Селекция ва уруғчилик",
+      "name_ru": "Селекция и семеноводство",
+      "field": "Qishloq xo'jaligi fanlari",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanspecialty",
+    "pk": 2,
+    "fields": {
+      "code": "06.01.01",
+      "name_uz": "Umumiy dehqonchilik. Melioratsiya",
+      "name_oz": "Умумий деҳқончилик. Мелиорация",
+      "name_ru": "Общее земледелие. Мелиорация",
+      "field": "Qishloq xo'jaligi fanlari",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanspecialty",
+    "pk": 3,
+    "fields": {
+      "code": "06.01.02",
+      "name_uz": "Melioratsiya va sug'orma dehqonchilik",
+      "name_oz": "Мелиорация ва суғорма деҳқончилик",
+      "name_ru": "Мелиорация и орошаемое земледелие",
+      "field": "Qishloq xo'jaligi fanlari",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanspecialty",
+    "pk": 4,
+    "fields": {
+      "code": "06.01.08",
+      "name_uz": "O'simlikshunoslik",
+      "name_oz": "Ўсимликшунослик",
+      "name_ru": "Растениеводство",
+      "field": "Qishloq xo'jaligi fanlari",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanspecialty",
+    "pk": 5,
+    "fields": {
+      "code": "06.01.09",
+      "name_uz": "O'simliklarni himoya qilish",
+      "name_oz": "Ўсимликларни ҳимоя қилиш",
+      "name_ru": "Защита растений",
+      "field": "Qishloq xo'jaligi fanlari",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanspecialty",
+    "pk": 6,
+    "fields": {
+      "code": "05.20.01",
+      "name_uz": "Qishloq xo'jaligi va melioratsiya mashinalari texnologiyalari va vositalari",
+      "name_oz": "Қишлоқ хўжалиги ва мелиорация машиналари технологиялари ва воситалари",
+      "name_ru": "Технологии и средства механизации сельского хозяйства",
+      "field": "Texnika fanlari",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanspecialty",
+    "pk": 7,
+    "fields": {
+      "code": "05.01.01",
+      "name_uz": "Muhandislik geometriyasi va kompyuter grafikasi. Audio-video texnologiyalar",
+      "name_oz": "Муҳандислик геометрияси ва компьютер графикаси",
+      "name_ru": "Инженерная геометрия и компьютерная графика",
+      "field": "Texnika fanlari",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanspecialty",
+    "pk": 8,
+    "fields": {
+      "code": "08.00.04",
+      "name_uz": "Qishloq xo'jaligi iqtisodiyoti",
+      "name_oz": "Қишлоқ хўжалиги иқтисодиёти",
+      "name_ru": "Экономика сельского хозяйства",
+      "field": "Iqtisodiyot fanlari",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanspecialty",
+    "pk": 9,
+    "fields": {
+      "code": "03.00.05",
+      "name_uz": "Botanika",
+      "name_oz": "Ботаника",
+      "name_ru": "Ботаника",
+      "field": "Biologiya fanlari",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanspecialty",
+    "pk": 10,
+    "fields": {
+      "code": "10.02.20",
+      "name_uz": "Qiyosiy-tarixiy, tipologik va chog'ishtirma tilshunoslik. Tarjimashunoslik",
+      "name_oz": "Қиёсий-тарихий, типологик ва чоғиштирма тилшунослик. Таржимашунослик",
+      "name_ru": "Сравнительно-историческое, типологическое и сопоставительное языкознание",
+      "field": "Filologiya fanlari",
+      "is_active": true
+    }
+  }
+]

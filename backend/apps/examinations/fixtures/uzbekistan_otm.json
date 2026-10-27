@@ -1,0 +1,242 @@
+[
+  {
+    "model": "examinations.uzbekistanotm",
+    "pk": 1,
+    "fields": {
+      "code": "AQXI",
+      "name_uz": "Andijon qishloq xo'jaligi va agrotexnologiyalar instituti",
+      "name_oz": "Андижон қишлоқ хўжалиги ва агротехнологиялар институти",
+      "name_ru": "Андижанский институт сельского хозяйства и агротехнологий",
+      "region": "Andijon",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanotm",
+    "pk": 2,
+    "fields": {
+      "code": "ADU",
+      "name_uz": "Andijon davlat universiteti",
+      "name_oz": "Андижон давлат университети",
+      "name_ru": "Андижанский государственный университет",
+      "region": "Andijon",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanotm",
+    "pk": 3,
+    "fields": {
+      "code": "ADTI",
+      "name_uz": "Andijon davlat tibbiyot instituti",
+      "name_oz": "Андижон давлат тиббиёт институти",
+      "name_ru": "Андижанский государственный медицинский институт",
+      "region": "Andijon",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanotm",
+    "pk": 4,
+    "fields": {
+      "code": "ADCHTI",
+      "name_uz": "Andijon davlat chet tillari instituti",
+      "name_oz": "Андижон давлат чет тиллари институти",
+      "name_ru": "Андижанский государственный институт иностранных языков",
+      "region": "Andijon",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanotm",
+    "pk": 5,
+    "fields": {
+      "code": "APTI",
+      "name_uz": "Andijon mashinasozlik instituti",
+      "name_oz": "Андижон машинасозлик институти",
+      "name_ru": "Андижанский машиностроительный институт",
+      "region": "Andijon",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanotm",
+    "pk": 6,
+    "fields": {
+      "code": "O'ZMU",
+      "name_uz": "O'zbekiston Milliy universiteti",
+      "name_oz": "Ўзбекистон Миллий университети",
+      "name_ru": "Национальный университет Узбекистана",
+      "region": "Toshkent shahri",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanotm",
+    "pk": 7,
+    "fields": {
+      "code": "TDTU",
+      "name_uz": "Toshkent davlat texnika universiteti",
+      "name_oz": "Тошкент давлат техника университети",
+      "name_ru": "Ташкентский государственный технический университет",
+      "region": "Toshkent shahri",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanotm",
+    "pk": 8,
+    "fields": {
+      "code": "TDAU",
+      "name_uz": "Toshkent davlat agrar universiteti",
+      "name_oz": "Тошкент давлат аграр университети",
+      "name_ru": "Ташкентский государственный аграрный университет",
+      "region": "Toshkent",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanotm",
+    "pk": 9,
+    "fields": {
+      "code": "TDIU",
+      "name_uz": "Toshkent davlat iqtisodiyot universiteti",
+      "name_oz": "Тошкент давлат иқтисодиёт университети",
+      "name_ru": "Ташкентский государственный экономический университет",
+      "region": "Toshkent shahri",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanotm",
+    "pk": 10,
+    "fields": {
+      "code": "TATU",
+      "name_uz": "Toshkent axborot texnologiyalari universiteti",
+      "name_oz": "Тошкент ахборот технологиялари университети",
+      "name_ru": "Ташкентский университет информационных технологий",
+      "region": "Toshkent shahri",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanotm",
+    "pk": 11,
+    "fields": {
+      "code": "TTA",
+      "name_uz": "Toshkent tibbiyot akademiyasi",
+      "name_oz": "Тошкент тиббиёт академияси",
+      "name_ru": "Ташкентская медицинская академия",
+      "region": "Toshkent shahri",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanotm",
+    "pk": 12,
+    "fields": {
+      "code": "O'ZDJTU",
+      "name_uz": "O'zbekiston davlat jahon tillari universiteti",
+      "name_oz": "Ўзбекистон давлат жаҳон тиллари университети",
+      "name_ru": "Узбекский государственный университет мировых языков",
+      "region": "Toshkent shahri",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanotm",
+    "pk": 13,
+    "fields": {
+      "code": "SAMDU",
+      "name_uz": "Samarqand davlat universiteti",
+      "name_oz": "Самарқанд давлат университети",
+      "name_ru": "Самаркандский государственный университет",
+      "region": "Samarqand",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanotm",
+    "pk": 14,
+    "fields": {
+      "code": "FARDU",
+      "name_uz": "Farg'ona davlat universiteti",
+      "name_oz": "Фарғона давлат университети",
+      "name_ru": "Ферганский государственный университет",
+      "region": "Farg'ona",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanotm",
+    "pk": 15,
+    "fields": {
+      "code": "NAMDU",
+      "name_uz": "Namangan davlat universiteti",
+      "name_oz": "Наманган давлат университети",
+      "name_ru": "Наманганский государственный университет",
+      "region": "Namangan",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanotm",
+    "pk": 16,
+    "fields": {
+      "code": "NAMMTI",
+      "name_uz": "Namangan muhandislik-texnologiya instituti",
+      "name_oz": "Наманган муҳандислик-технология институти",
+      "name_ru": "Наманганский инженерно-технологический институт",
+      "region": "Namangan",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanotm",
+    "pk": 17,
+    "fields": {
+      "code": "FARPI",
+      "name_uz": "Farg'ona politexnika instituti",
+      "name_oz": "Фарғона политехника институти",
+      "name_ru": "Ферганский политехнический институт",
+      "region": "Farg'ona",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanotm",
+    "pk": 18,
+    "fields": {
+      "code": "QDXAI",
+      "name_uz": "Qarshi muhandislik-iqtisodiyot instituti",
+      "name_oz": "Қарши муҳандислик-иқтисодиёт институти",
+      "name_ru": "Каршинский инженерно-экономический институт",
+      "region": "Qashqadaryo",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanotm",
+    "pk": 19,
+    "fields": {
+      "code": "BUXDU",
+      "name_uz": "Buxoro davlat universiteti",
+      "name_oz": "Бухоро давлат университети",
+      "name_ru": "Бухарский государственный университет",
+      "region": "Buxoro",
+      "is_active": true
+    }
+  },
+  {
+    "model": "examinations.uzbekistanotm",
+    "pk": 20,
+    "fields": {
+      "code": "URDU",
+      "name_uz": "Urganch davlat universiteti",
+      "name_oz": "Урганч давлат университети",
+      "name_ru": "Ургенчский государственный университет",
+      "region": "Xorazm",
+      "is_active": true
+    }
+  }
+]

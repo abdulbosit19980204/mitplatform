@@ -1,0 +1,86 @@
+[
+  {
+    "model": "examinations.requireddocumenttype",
+    "pk": 1,
+    "fields": {
+      "code": "rector_letter",
+      "name_uz": "Rektor nomiga ariza",
+      "name_oz": "Ректор номига ариза",
+      "name_ru": "Заявление на имя ректора",
+      "description_uz": "Institut rektori nomiga yozilgan rasmiy ariza nusxasi (PDF formatda).",
+      "accepted_formats": "pdf",
+      "max_size_mb": 10,
+      "sort_order": 1
+    }
+  },
+  {
+    "model": "examinations.requireddocumenttype",
+    "pk": 2,
+    "fields": {
+      "code": "passport_copy",
+      "name_uz": "Pasport nusxasi",
+      "name_oz": "Паспорт нусхаси",
+      "name_ru": "Копия паспорта / ID-карты",
+      "description_uz": "Fuqarolik pasporti yoki ID-karta nusxasi (PDF, JPG, PNG).",
+      "accepted_formats": "pdf,jpg,jpeg,png",
+      "max_size_mb": 10,
+      "sort_order": 2
+    }
+  },
+  {
+    "model": "examinations.requireddocumenttype",
+    "pk": 3,
+    "fields": {
+      "code": "reference_objective",
+      "name_uz": "Ma'lumotnoma (obyektivka)",
+      "name_oz": "Маълумотнома (объективка)",
+      "name_ru": "Справка-объективка",
+      "description_uz": "Belgilangan shakldagi ma'lumotnoma (obyektivka) (PDF formatda).",
+      "accepted_formats": "pdf",
+      "max_size_mb": 10,
+      "sort_order": 3
+    }
+  },
+  {
+    "model": "examinations.requireddocumenttype",
+    "pk": 4,
+    "fields": {
+      "code": "diploma_copy",
+      "name_uz": "Diplom nusxasi",
+      "name_oz": "Диплом нусхаси",
+      "name_ru": "Копия диплома",
+      "description_uz": "Oliy ma'lumot to'g'risidagi diplom va ilovasi nusxasi (PDF formatda).",
+      "accepted_formats": "pdf",
+      "max_size_mb": 10,
+      "sort_order": 4
+    }
+  },
+  {
+    "model": "examinations.requireddocumenttype",
+    "pk": 5,
+    "fields": {
+      "code": "topic_confirmation",
+      "name_uz": "Mavzu tasdiqlanganligi haqidagi OTM ilmiy kengash bayonnomasidan ko'chirma yoki OAK byulletenida chop etilgan bo'lsa, uning nusxasi",
+      "name_oz": "Мавзу тасдиқланганлиги ҳақидаги ОТМ илмий кенгаш баённомасидан кўчирма ёки ОАК бюллетенида чоп этилган бўлса, унинг нусхаси",
+      "name_ru": "Выписка из протокола ученого совета вуза об утверждении темы или копия публикации в бюллетене ВАК",
+      "description_uz": "Talabgorning dissertatsiya mavzusi tasdiqlanganligi to'g'risidagi OTM ilmiy kengash bayonnomasi yoki OAK byulleteni nusxasi (PDF formatda).",
+      "accepted_formats": "pdf",
+      "max_size_mb": 10,
+      "sort_order": 5
+    }
+  },
+  {
+    "model": "examinations.requireddocumenttype",
+    "pk": 6,
+    "fields": {
+      "code": "liaison_letter",
+      "name_uz": "Aloqa xati — talabgor mazkur institutdan boshqa OTMdan qatnashsa",
+      "name_oz": "Алоқа хати — талабгор мазкур институтдан бошқа ОТМдан қатнашса",
+      "name_ru": "Письмо-ходатайство — если соискатель участвует из другого вуза",
+      "description_uz": "Talabgor mazkur institutdan boshqa OTM yoki ITMdan qatnashayotgan bo'lsa, o'z muassasasi tomonidan berilgan rasmiy aloqa xati (PDF formatda).",
+      "accepted_formats": "pdf",
+      "max_size_mb": 10,
+      "sort_order": 6
+    }
+  }
+]
