@@ -130,7 +130,7 @@ class ExaminationRequiredDocument(models.Model):
 class UzbekistanOTM(models.Model):
     """Uzbekistan Higher Education Institutions - for autocomplete dropdowns."""
 
-    code = models.CharField(max_length=20, unique=True)
+    code = models.CharField(max_length=20, unique=True, db_index=True)
     name_uz = models.CharField(max_length=500)
     name_oz = models.CharField(max_length=500, blank=True)
     name_ru = models.CharField(max_length=500, blank=True)
@@ -149,7 +149,7 @@ class UzbekistanOTM(models.Model):
 class UzbekistanSpecialty(models.Model):
     """OAK PhD/DSc specialty codes for academic degrees."""
 
-    code = models.CharField(max_length=20, unique=True)
+    code = models.CharField(max_length=20, unique=True, db_index=True)
     name_uz = models.CharField(max_length=500)
     name_oz = models.CharField(max_length=500, blank=True)
     name_ru = models.CharField(max_length=500, blank=True)
@@ -163,3 +163,193 @@ class UzbekistanSpecialty(models.Model):
 
     def __str__(self):
         return f'{self.code} - {self.name_uz}'
+
+
+# ============================================================================
+# ARCHITECTURAL ENTERPRISE MODELS (OAK & INSTITUTIONS REGISTRY)
+# ============================================================================
+
+class EducationType(models.TextChoices):
+    """Ta'lim va ilmiy muassasa turlari klassifikatori."""
+    OTM = 'otm', "Oliy ta'lim muassasasi (OTM)"
+    ITM = 'itm', "Ilmiy-tadqiqot muassasasi (ITM)"
+    CENTER = 'center', "Ilmiy markaz / Texnopark"
+    OTHER = 'other', "Boshqa tashkilot"
+
+
+class Institution(models.Model):
+    """
+    Respublikadagi barcha OTM, ITM va ilmiy markazlar reestri.
+    HEMIS va data.egov.uz orqali avtomatik sinxronizatsiya qilinadi.
+    """
+    institution_type = models.CharField(
+        max_length=20,
+        choices=EducationType.choices,
+        default=EducationType.OTM,
+        db_index=True,
+        verbose_name="Muassasa turi",
+    )
+    code = models.CharField(
+        max_length=30,
+        unique=True,
+        db_index=True,
+        verbose_name="Muassasa kodi (HEMIS/Reyestr)",
+    )
+    stir = models.CharField(
+        max_length=20,
+        blank=True,
+        db_index=True,
+        verbose_name="STIR / TIN soliq to'lovchi kodi",
+    )
+    name_uz = models.CharField(
+        max_length=500,
+        verbose_name="Muassasa nomi (O'zbekcha)",
+    )
+    name_ru = models.CharField(
+        max_length=500,
+        blank=True,
+        verbose_name="Muassasa nomi (Ruscha)",
+    )
+    name_en = models.CharField(
+        max_length=500,
+        blank=True,
+        verbose_name="Muassasa nomi (Inglizcha)",
+    )
+    region = models.CharField(
+        max_length=150,
+        blank=True,
+        db_index=True,
+        verbose_name="Viloyat / Hudud",
+    )
+    website = models.URLField(
+        max_length=300,
+        blank=True,
+        verbose_name="Rasmiy veb-sayti",
+    )
+    is_active = models.BooleanField(
+        default=True,
+        db_index=True,
+        verbose_name="Faol holatda",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Ta'lim muassasasi"
+        verbose_name_plural = "Ta'lim muassasalari"
+        ordering = ['name_uz']
+        indexes = [
+            models.Index(fields=['code']),
+            models.Index(fields=['institution_type', 'is_active']),
+            models.Index(fields=['region', 'is_active']),
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.code} - {self.name_uz} ({self.get_institution_type_display()})"
+
+
+class ScienceBranch(models.Model):
+    """
+    OAK tomonidan tasdiqlangan Fan tarmoqlari klassifikatori.
+    Masalan: 05.00.00 - Texnika fanlari, 06.00.00 - Qishloq xo'jaligi fanlari.
+    """
+    code = models.CharField(
+        max_length=20,
+        unique=True,
+        db_index=True,
+        verbose_name="Fan tarmog'i shifri (masalan: 05.00.00)",
+    )
+    name_uz = models.CharField(
+        max_length=500,
+        verbose_name="Fan tarmog'i nomi (O'zbekcha)",
+    )
+    name_ru = models.CharField(
+        max_length=500,
+        blank=True,
+        verbose_name="Fan tarmog'i nomi (Ruscha)",
+    )
+    name_en = models.CharField(
+        max_length=500,
+        blank=True,
+        verbose_name="Fan tarmog'i nomi (Inglizcha)",
+    )
+    is_active = models.BooleanField(
+        default=True,
+        db_index=True,
+        verbose_name="Faol",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "Fan tarmog'i"
+        verbose_name_plural = "Fan tarmoqlari"
+        ordering = ['code']
+        indexes = [
+            models.Index(fields=['code']),
+            models.Index(fields=['is_active']),
+        ]
+
+    def __str__(self) -> str:
+        return f"{self.code} - {self.name_uz}"
+
+
+class Specialty(models.Model):
+    """
+    OAK Ixtisoslik shifrlari reestri (PhD va DSc ilmiy darajalari uchun).
+    Masalan: 05.01.07 - Matematik modellashtirish, sonli usullar va dasturlar majmui.
+    """
+    code = models.CharField(
+        max_length=20,
+        unique=True,
+        db_index=True,
+        verbose_name="Ixtisoslik shifri (masalan: 05.01.07)",
+    )
+    name_uz = models.CharField(
+        max_length=500,
+        verbose_name="Ixtisoslik nomi (O'zbekcha)",
+    )
+    name_ru = models.CharField(
+        max_length=500,
+        blank=True,
+        verbose_name="Ixtisoslik nomi (Ruscha)",
+    )
+    name_en = models.CharField(
+        max_length=500,
+        blank=True,
+        verbose_name="Ixtisoslik nomi (Inglizcha)",
+    )
+    branch = models.ForeignKey(
+        ScienceBranch,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='specialties',
+        verbose_name="Tegishli fan tarmog'i",
+    )
+    has_council = models.BooleanField(
+        default=False,
+        verbose_name="Ixtisoslashgan ilmiy kengash mavjudligi",
+        help_text="Ushbu ixtisoslik bo'yicha institutda himoya ilmiy kengashi bormi?",
+    )
+    is_active = models.BooleanField(
+        default=True,
+        db_index=True,
+        verbose_name="Faol",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = "OAK Ixtisosligi"
+        verbose_name_plural = "OAK Ixtisosliklari"
+        ordering = ['code']
+        indexes = [
+            models.Index(fields=['code']),
+            models.Index(fields=['branch', 'is_active']),
+            models.Index(fields=['has_council', 'is_active']),
+        ]
+
+    def __str__(self) -> str:
+        branch_str = f" [{self.branch.code}]" if self.branch else ""
+        return f"{self.code} - {self.name_uz}{branch_str}"

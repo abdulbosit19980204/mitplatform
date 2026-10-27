@@ -243,3 +243,29 @@ LOGGING = {
         },
     },
 }
+
+# Celery & Celery Beat Schedule
+from celery.schedules import crontab
+
+CELERY_BROKER_URL = config('CELERY_BROKER_URL', default='redis://127.0.0.1:6379/0')
+CELERY_RESULT_BACKEND = config('CELERY_RESULT_BACKEND', default='redis://127.0.0.1:6379/0')
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_ENABLE_UTC = False
+
+CELERY_BEAT_SCHEDULE = {
+    'sync-uzbekistan-institutions-monthly': {
+        'task': 'apps.examinations.tasks.task_sync_institutions',
+        # Har oyning 1-sanasida tunda soat 02:00 da avtomatik ishga tushirish
+        'schedule': crontab(minute=0, hour=2, day_of_month=1),
+        'options': {'queue': 'periodic'},
+    },
+    'sync-oak-specialties-monthly': {
+        'task': 'apps.examinations.tasks.task_sync_oak_specialties',
+        # Har oyning 1-sanasida tunda soat 02:30 da avtomatik ishga tushirish
+        'schedule': crontab(minute=30, hour=2, day_of_month=1),
+        'options': {'queue': 'periodic'},
+    },
+}
