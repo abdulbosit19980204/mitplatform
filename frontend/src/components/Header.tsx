@@ -11,12 +11,12 @@ import {
   Menu,
   X,
   Globe,
+  Search,
   User as UserIcon,
   LogOut,
   GraduationCap,
   ShieldCheck,
-  Phone,
-  FileCheck2,
+  ChevronDown,
 } from 'lucide-react';
 
 function HeaderContent() {
@@ -50,153 +50,120 @@ function HeaderContent() {
     router.push('/');
   };
 
-  // Fallback links if CMS is empty or loading
+  // Default institutional links matching Image 2 mockup
   const defaultLinks = [
-    { href: '/imtihonlar', label: t.nav.examinations },
-    { href: '/hujjatlar', label: t.documents.title },
-    { href: '/faq', label: t.nav.faq },
-    { href: '/aloqa', label: t.nav.contact },
+    { href: '/', label: 'Bosh sahifa' },
+    { href: '/imtihonlar', label: 'Imtihonlar' },
+    { href: '/ariza/yangi', label: "Ro'yxatdan o'tish" },
+    { href: '/hujjatlar', label: 'Hujjatlar' },
+    { href: '/faq', label: 'FAQ' },
+    { href: '/#yangiliklar', label: 'Yangiliklar' },
+    { href: '/aloqa', label: 'Aloqa' },
   ];
 
-  const renderedLinks = navItems.length > 0
-    ? navItems.map((item) => ({
-        href: item.url,
-        label: lang === 'ru' ? (item.title_ru || item.title_uz) : lang === 'oz' ? (item.title_oz || item.title_uz) : item.title_uz,
-        isExternal: item.is_external,
-      }))
-    : defaultLinks.map((d) => ({ href: d.href, label: d.label, isExternal: false }));
-
-  const siteTitle = lang === 'ru'
-    ? (siteSettings?.site_name_ru || "Андижанский институт сельского хозяйства и агротехнологий")
-    : lang === 'oz'
-    ? (siteSettings?.site_name_oz || "Андижон қишлоқ хўжалиги ва агротехнологиялар институти")
-    : (siteSettings?.site_name_uz || "Andijon qishloq xo'jaligi va agrotexnologiyalar instituti");
-
-  const siteMotto = lang === 'ru'
-    ? (siteSettings?.motto_ru || "Портал высшей аттестации и квалификационных экзаменов")
-    : lang === 'oz'
-    ? (siteSettings?.motto_oz || "Олий аттестация ва малакавий имтиҳонлар расмий портали")
-    : (siteSettings?.motto_uz || "Oliy attestatsiya va malakaviy imtihonlar rasmiy portali");
+  const renderedLinks =
+    navItems.length > 0
+      ? navItems.map((item) => ({
+          href: item.url,
+          label:
+            lang === 'ru'
+              ? item.title_ru || item.title_uz
+              : lang === 'oz'
+              ? item.title_oz || item.title_uz
+              : item.title_uz,
+          isExternal: item.is_external,
+        }))
+      : defaultLinks.map((d) => ({ ...d, isExternal: false }));
 
   return (
-    <header className="sticky top-0 z-50 bg-[#16324F] text-white shadow-md border-b border-[#245B82]/40">
-      {/* 1. Top Institutional Editorial Bar (SEA Journal inspired) */}
-      <div className="bg-[#0f2338] text-slate-300 border-b border-white/5 text-[11px] py-1 px-4 sm:px-8">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="font-semibold text-slate-200 uppercase tracking-widest text-[10px]">
-              O&apos;zbekiston Respublikasi Qishloq xo&apos;jaligi vazirligi
-            </span>
-            <span className="hidden sm:inline text-slate-500">|</span>
-            <span className="hidden sm:inline text-slate-400">
-              OAK ro&apos;yxatidagi malakaviy imtihon markazi
-            </span>
-          </div>
-
-          <div className="flex items-center gap-4">
-            {siteSettings?.contact_phone && (
-              <a
-                href={`tel:${siteSettings.contact_phone}`}
-                className="hover:text-white transition flex items-center gap-1.5"
-              >
-                <Phone className="w-3 h-3 text-[#80B4DB]" />
-                <span className="hidden sm:inline">{siteSettings.contact_phone}</span>
-              </a>
-            )}
-            <span className="text-slate-500">|</span>
-            <span className="text-[#80B4DB] font-semibold">2026 Sessiya</span>
-          </div>
-        </div>
-      </div>
-
-      {/* 2. Main Institutional Navigation Bar */}
+    <header className="sticky top-0 z-50 bg-white/85 backdrop-blur-md border-b border-slate-200/70 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.03)] transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          {/* Institutional Crest & Identity */}
-          <Link href="/" className="flex items-center gap-3.5 group">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#245B82] to-[#16324F] border border-[#80B4DB]/30 flex items-center justify-center text-white shadow-md group-hover:border-[#80B4DB] transition">
-              <GraduationCap className="w-7 h-7 text-[#80B4DB]" />
+          {/* 1. Institutional Emblem & Title (Image 2 style) */}
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-11 h-11 rounded-xl bg-[#16324F] text-white flex items-center justify-center shadow-sm group-hover:bg-[#214768] transition">
+              <GraduationCap className="w-6 h-6 text-[#80B4DB]" />
             </div>
-            <div className="max-w-md">
-              <div className="text-[10px] font-bold uppercase tracking-wider text-[#80B4DB] line-clamp-1">
-                {siteMotto}
-              </div>
-              <div className="text-sm sm:text-base font-black text-white tracking-tight leading-tight line-clamp-1">
-                {siteTitle}
-              </div>
+            <div className="flex flex-col leading-tight">
+              <span className="text-sm sm:text-base font-extrabold text-[#16324F] tracking-tight">
+                Andijon Qishloq
+              </span>
+              <span className="text-xs sm:text-sm font-semibold text-slate-700">
+                Xo&apos;jaligi Instituti
+              </span>
             </div>
           </Link>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1">
-            <Link
-              href="/"
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wide transition ${
-                pathname === '/'
-                  ? 'bg-[#245B82] text-white shadow-sm'
-                  : 'text-slate-200 hover:text-white hover:bg-white/10'
-              }`}
-            >
-              {t.nav.home}
-            </Link>
-
+          {/* 2. Desktop Navigation Menu (Horizontal, Centered) */}
+          <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
             {renderedLinks.map((link) => {
-              const isActive = pathname === link.href;
+              const isActive =
+                link.href === '/'
+                  ? pathname === '/'
+                  : pathname.startsWith(link.href.replace('/#', ''));
+
               return (
                 <Link
-                  key={link.href}
+                  key={link.href + link.label}
                   href={link.href}
                   target={link.isExternal ? '_blank' : undefined}
                   rel={link.isExternal ? 'noopener noreferrer' : undefined}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold tracking-wide transition ${
+                  className={`text-xs sm:text-sm font-semibold transition-colors py-1 relative ${
                     isActive
-                      ? 'bg-[#245B82] text-white shadow-sm'
-                      : 'text-slate-200 hover:text-white hover:bg-white/10'
+                      ? 'text-[#245B82] font-bold'
+                      : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
                   {link.label}
+                  {isActive && (
+                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#245B82] rounded-full" />
+                  )}
                 </Link>
               );
             })}
           </nav>
 
-          {/* Right actions: Language switcher + User Auth buttons */}
+          {/* 3. Right Side: Language Switcher, Search Icon, Auth Buttons */}
           <div className="hidden md:flex items-center gap-3">
-            {/* Language Switcher */}
+            {/* Language Selector (Image 2: UZ v) */}
             <div className="relative">
               <button
+                type="button"
                 onClick={() => setLangMenuOpen(!langMenuOpen)}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold bg-white/10 hover:bg-white/15 border border-white/10 transition text-slate-200"
+                className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-100/80 transition border border-transparent"
                 aria-label="Tilni tanlash"
               >
-                <Globe className="w-3.5 h-3.5 text-[#80B4DB]" />
                 <span className="uppercase">{lang}</span>
+                <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
               </button>
 
               {langMenuOpen && (
                 <div
-                  className="absolute right-0 mt-2 w-44 bg-white rounded-lg shadow-xl py-1.5 border border-slate-200 z-50 text-slate-800 text-xs"
+                  className="absolute right-0 mt-2 w-40 bg-white/95 backdrop-blur-md rounded-xl shadow-xl py-1 border border-slate-200/80 z-50 text-slate-800 text-xs"
                   onClick={() => setLangMenuOpen(false)}
                 >
                   <button
+                    type="button"
                     onClick={() => setLang('uz')}
                     className={`w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between ${
                       lang === 'uz' ? 'font-bold text-[#16324F] bg-blue-50/50' : ''
                     }`}
                   >
-                    <span>O&apos;zbekcha (lotin)</span>
+                    <span>O&apos;zbekcha</span>
                     {lang === 'uz' && <span className="text-[#16803C] font-bold">✓</span>}
                   </button>
                   <button
+                    type="button"
                     onClick={() => setLang('oz')}
                     className={`w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between ${
                       lang === 'oz' ? 'font-bold text-[#16324F] bg-blue-50/50' : ''
                     }`}
                   >
-                    <span>Ўзбекча (кирилл)</span>
+                    <span>Ўзбекча</span>
                     {lang === 'oz' && <span className="text-[#16803C] font-bold">✓</span>}
                   </button>
                   <button
+                    type="button"
                     onClick={() => setLang('ru')}
                     className={`w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center justify-between ${
                       lang === 'ru' ? 'font-bold text-[#16324F] bg-blue-50/50' : ''
@@ -209,49 +176,50 @@ function HeaderContent() {
               )}
             </div>
 
+            {/* Search Icon Button */}
+            <Link
+              href="/imtihonlar"
+              className="p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100/80 transition"
+              title="Qidiruv"
+            >
+              <Search className="w-4 h-4" />
+            </Link>
+
             {/* Auth Buttons */}
             {user ? (
-              <div className="flex items-center gap-2 pl-2 border-l border-white/15">
-                {user.role === 'admin' || user.role === 'reviewer' ? (
-                  <Link
-                    href="/admin"
-                    className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-bold bg-amber-500 hover:bg-amber-600 text-slate-950 transition shadow-sm"
-                  >
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    {user.role === 'admin' ? 'Boshqaruv paneli' : 'Ekspert paneli'}
-                  </Link>
-                ) : (
-                  <Link
-                    href="/kabinet"
-                    className="flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-bold bg-[#245B82] hover:bg-[#1f4e70] text-white transition shadow-sm"
-                  >
-                    <UserIcon className="w-3.5 h-3.5 text-[#80B4DB]" />
-                    {t.nav.cabinet}
-                  </Link>
-                )}
+              <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
+                <Link
+                  href={user.role === 'admin' || user.role === 'reviewer' ? '/admin' : '/kabinet'}
+                  className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold bg-[#16324F] hover:bg-[#214768] text-white transition shadow-sm"
+                >
+                  <div className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-[10px] uppercase font-black">
+                    {user.full_name?.charAt(0) || 'U'}
+                  </div>
+                  <span>{user.role === 'admin' ? 'Boshqaruv' : 'Kabinet'}</span>
+                </Link>
 
                 <button
+                  type="button"
                   onClick={handleLogout}
                   title={t.nav.logout}
-                  className="p-2 rounded-lg hover:bg-white/10 text-slate-300 hover:text-white transition"
+                  className="p-2 rounded-xl hover:bg-slate-100 text-slate-400 hover:text-red-600 transition"
                 >
                   <LogOut className="w-4 h-4" />
                 </button>
               </div>
             ) : (
-              <div className="flex items-center gap-2 pl-2 border-l border-white/15">
+              <div className="flex items-center gap-3 pl-2 border-l border-slate-200">
                 <Link
                   href="/kirish"
-                  className="px-3.5 py-1.5 rounded-lg text-xs font-bold border border-white/20 text-white hover:bg-white/10 transition"
+                  className="px-3 py-2 text-xs font-bold text-slate-700 hover:text-slate-900 transition"
                 >
-                  {t.nav.login}
+                  Kirish
                 </Link>
                 <Link
-                  href="/ariza/yangi"
-                  className="px-4 py-1.5 rounded-lg text-xs font-bold bg-[#245B82] hover:bg-[#1c4969] text-white transition shadow-sm flex items-center gap-1.5"
+                  href="/royxatdan-otish"
+                  className="px-4 py-2 rounded-xl text-xs font-bold bg-[#16324F] hover:bg-[#214768] text-white transition shadow-sm"
                 >
-                  <FileCheck2 className="w-3.5 h-3.5 text-[#80B4DB]" />
-                  Ariza topshirish
+                  Ro&apos;yxatdan o&apos;tish
                 </Link>
               </div>
             )}
@@ -260,8 +228,9 @@ function HeaderContent() {
           {/* Mobile hamburger button */}
           <div className="lg:hidden flex items-center gap-2">
             <button
+              type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-lg hover:bg-white/10 text-white border border-white/10"
+              className="p-2 rounded-xl hover:bg-slate-100 text-slate-700 border border-slate-200"
               aria-label="Menyu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -272,47 +241,48 @@ function HeaderContent() {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-white/10 bg-[#16324F] px-4 pt-3 pb-6 space-y-3">
-          <Link
-            href="/"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block px-3 py-2 rounded-lg text-sm font-semibold text-slate-200 hover:text-white hover:bg-white/10"
-          >
-            {t.nav.home}
-          </Link>
-
+        <div className="lg:hidden border-t border-slate-200/80 bg-white/95 backdrop-blur-xl px-4 pt-4 pb-6 space-y-3">
           {renderedLinks.map((link) => (
             <Link
-              key={link.href}
+              key={link.href + link.label}
               href={link.href}
               target={link.isExternal ? '_blank' : undefined}
               rel={link.isExternal ? 'noopener noreferrer' : undefined}
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-lg text-sm font-semibold text-slate-200 hover:text-white hover:bg-white/10"
+              className="block px-3 py-2 rounded-lg text-sm font-semibold text-slate-700 hover:text-[#16324F] hover:bg-slate-50"
             >
               {link.label}
             </Link>
           ))}
 
-          <div className="pt-4 border-t border-white/10 flex flex-col gap-3">
+          <div className="pt-4 border-t border-slate-200 flex flex-col gap-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs text-slate-400 font-semibold">Tilni tanlang:</span>
+              <span className="text-xs text-slate-500 font-semibold">Tilni tanlang:</span>
               <div className="flex gap-1.5">
                 <button
+                  type="button"
                   onClick={() => setLang('uz')}
-                  className={`px-2.5 py-1 text-xs rounded-md font-bold ${lang === 'uz' ? 'bg-[#245B82] text-white' : 'text-slate-300 bg-white/5'}`}
+                  className={`px-2.5 py-1 text-xs rounded-md font-bold ${
+                    lang === 'uz' ? 'bg-[#16324F] text-white' : 'text-slate-600 bg-slate-100'
+                  }`}
                 >
                   UZ
                 </button>
                 <button
+                  type="button"
                   onClick={() => setLang('oz')}
-                  className={`px-2.5 py-1 text-xs rounded-md font-bold ${lang === 'oz' ? 'bg-[#245B82] text-white' : 'text-slate-300 bg-white/5'}`}
+                  className={`px-2.5 py-1 text-xs rounded-md font-bold ${
+                    lang === 'oz' ? 'bg-[#16324F] text-white' : 'text-slate-600 bg-slate-100'
+                  }`}
                 >
                   ЎЗ
                 </button>
                 <button
+                  type="button"
                   onClick={() => setLang('ru')}
-                  className={`px-2.5 py-1 text-xs rounded-md font-bold ${lang === 'ru' ? 'bg-[#245B82] text-white' : 'text-slate-300 bg-white/5'}`}
+                  className={`px-2.5 py-1 text-xs rounded-md font-bold ${
+                    lang === 'ru' ? 'bg-[#16324F] text-white' : 'text-slate-600 bg-slate-100'
+                  }`}
                 >
                   RU
                 </button>
@@ -324,12 +294,16 @@ function HeaderContent() {
                 <Link
                   href={user.role === 'admin' ? '/admin' : '/kabinet'}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="px-4 py-2 rounded-lg text-xs font-bold bg-[#245B82] text-white"
+                  className="px-4 py-2 rounded-lg text-xs font-bold bg-[#16324F] text-white"
                 >
-                  {user.role === 'admin' ? 'Boshqaruv paneli' : t.nav.cabinet}
+                  {user.role === 'admin' ? 'Boshqaruv paneli' : 'Shaxsiy kabinet'}
                 </Link>
-                <button onClick={handleLogout} className="text-xs text-red-300 font-semibold hover:underline">
-                  {t.nav.logout}
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="text-xs text-red-600 font-semibold hover:underline"
+                >
+                  Chiqish
                 </button>
               </div>
             ) : (
@@ -337,16 +311,16 @@ function HeaderContent() {
                 <Link
                   href="/kirish"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="px-3 py-2 text-center text-xs font-bold rounded-lg border border-white/20 text-white"
+                  className="px-3 py-2 text-center text-xs font-bold rounded-lg border border-slate-200 text-slate-800"
                 >
-                  {t.nav.login}
+                  Kirish
                 </Link>
                 <Link
-                  href="/ariza/yangi"
+                  href="/royxatdan-otish"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="px-3 py-2 text-center text-xs font-bold rounded-lg bg-[#245B82] text-white"
+                  className="px-3 py-2 text-center text-xs font-bold rounded-lg bg-[#16324F] text-white"
                 >
-                  Ariza topshirish
+                  Ro&apos;yxatdan o&apos;tish
                 </Link>
               </div>
             )}
@@ -359,7 +333,7 @@ function HeaderContent() {
 
 export const Header: React.FC = () => {
   return (
-    <Suspense fallback={<header className="bg-[#16324F] h-20 text-white" />}>
+    <Suspense fallback={<header className="bg-white/80 backdrop-blur-md h-20 border-b border-slate-200/60" />}>
       <HeaderContent />
     </Suspense>
   );

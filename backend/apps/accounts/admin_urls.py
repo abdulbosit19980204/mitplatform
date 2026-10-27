@@ -4,7 +4,7 @@ Centralized URLs for Admin Panel (/api/v1/admin/...).
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from apps.examinations.views import AdminExaminationViewSet
+from apps.examinations.views import AdminExaminationViewSet, AdminUzbekistanOTMViewSet
 from apps.applications.views import AdminApplicationViewSet
 from apps.documents.views import DocumentReviewView
 from apps.scheduling.views import ExaminationSessionViewSet
@@ -16,6 +16,7 @@ router = DefaultRouter()
 router.register(r'examinations', AdminExaminationViewSet, basename='admin-examinations')
 router.register(r'applications', AdminApplicationViewSet, basename='admin-applications')
 router.register(r'sessions', ExaminationSessionViewSet, basename='admin-sessions')
+router.register(r'otm', AdminUzbekistanOTMViewSet, basename='admin-otm')
 
 urlpatterns = [
     # Dashboard & Stats

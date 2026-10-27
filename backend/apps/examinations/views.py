@@ -216,3 +216,13 @@ class AdminExaminationViewSet(viewsets.ModelViewSet):
             request=request,
         )
         return Response({'status': 'archived', 'message': "Imtihon arxivlandi."})
+
+
+class AdminUzbekistanOTMViewSet(viewsets.ModelViewSet):
+    """Admin CRUD for Uzbekistan OTMs."""
+    queryset = UzbekistanOTM.objects.all().order_by('name_uz')
+    serializer_class = UzbekistanOTMSerializer
+    permission_classes = [permissions.IsAuthenticated, IsAdministrator]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['code', 'name_uz', 'name_oz', 'name_ru', 'region']
+
