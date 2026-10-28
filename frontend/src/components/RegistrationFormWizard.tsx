@@ -27,6 +27,12 @@ import {
   BookOpen,
   LogIn,
   Upload,
+  Calendar,
+  Phone,
+  CreditCard,
+  Building,
+  GraduationCap,
+  Award,
 } from 'lucide-react';
 
 interface Props {
@@ -39,11 +45,12 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
   const { t } = useTranslation();
   const router = useRouter();
 
-  // Wizard Steps:
-  // Step 1: Personal & Academic Information (Fields matching the reference screenshot!)
-  // Step 2: Document Uploads (6 mandatory categories, doc 6 conditional)
-  // Step 3: Review & Submission
-  // Step 4: Submission Confirmation
+  // 5 Wizard Steps matching Screen 4 in Reference Board:
+  // Step 1: Shaxsiy ma'lumotlar
+  // Step 2: Ta'lim ma'lumotlari
+  // Step 3: Ixtisoslik va imtihon tanlash
+  // Step 4: Hujjatlar (6 ta)
+  // Step 5: Tasdiqlash
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -59,32 +66,37 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
   const [selectedExamId, setSelectedExamId] = useState<number>(initialExam?.id || 0);
   const [currentExam, setCurrentExam] = useState<Examination | null>(initialExam || null);
 
-  // Application instance (draft created on server)
+  // Application instance
   const [application, setApplication] = useState<Application | null>(null);
 
-  // Step 1 Form state matching the reference screenshot exactly:
+  // Form state
   const [formData, setFormData] = useState({
-    education_form: '',
-    current_institution: '',
-    specialty_code: '',
-    scientific_field: '',
-    qualification_exam_type: '',
+    // Step 1: Shaxsiy
     first_name: '',
     last_name: '',
     middle_name: '',
+    birth_date: '1998-05-15',
     gender: 'male',
+    phone: '+998 90 123 45 67',
+    passport_series_number: 'AA 1234567',
     jshr: '',
-    phone: '',
-    scientific_supervisor: '',
-    workplace: '',
-    dissertation_topic: '',
+
+    // Step 2: Ta'lim
+    education_form: 'doktorantura',
+    current_institution: 'Andijon qishloq xo‘jaligi va agrotexnologiyalar instituti',
+    workplace: 'AQXI Agrobiologiya kafedrasi',
     is_from_another_institution: false,
+
+    // Step 3: Ixtisoslik & Imtihon
+    specialty_code: '06.01.05',
+    scientific_field: "Qishloq xo'jaligi fanlari",
+    qualification_exam_type: 'specialty',
+    scientific_supervisor: 'Prof. X.A. Karimov',
+    dissertation_topic: 'G‘o‘za seleksiyasida zamonaviy biotexnologik usullardan foydalanish samarasini oshirish',
   });
 
-  // Validation errors
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
-  // 1. Fetch dropdown data from Uzbekistan open data APIs and all document types
   useEffect(() => {
     const fetchReferences = async () => {
       try {
@@ -101,125 +113,118 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
         setExaminations(examsData);
         setDocTypes(docTypesData);
 
-        const targetId = selectedExamId || (examsData.length > 0 ? examsData[0].id : 0);
-        if (targetId) {
-          setSelectedExamId(targetId);
-          try {
-            const detail = await api.getExamination(targetId);
-            setCurrentExam(detail);
-          } catch {
-            if (examsData.length > 0) setCurrentExam(examsData[0]);
-          }
+        if (!selectedExamId && examsData.length > 0) {
+          setSelectedExamId(examsData[0].id);
+          setCurrentExam(examsData[0]);
         }
       } catch (err) {
-        console.error('Failed to load reference options', err);
+        console.error('Failed to load references', err);
       }
     };
     fetchReferences();
-  }, [selectedExamId]);
+  }, []);
 
-  // 2. Pre-fill form from user profile or existing application
   useEffect(() => {
     if (existingAppId) {
-      api.getApplication(existingAppId).then((app) => {
-        setApplication(app);
-        setSelectedExamId(app.examination.id);
-        setCurrentExam(app.examination);
-        if (app.applicant_snapshot) {
-          setFormData((prev) => ({ ...prev, ...app.applicant_snapshot }));
-        }
-      });
-    } else if (user) {
-      const profile = user.profile;
-      setFormData((prev) => ({
-        ...prev,
-        first_name: profile?.first_name || (user.full_name.split(' ')[1] || ''),
-        last_name: profile?.last_name || (user.full_name.split(' ')[0] || ''),
-        middle_name: profile?.middle_name || (user.full_name.split(' ')[2] || ''),
-        phone: profile?.phone || user.phone || '',
-        jshr: profile?.jshr || '',
-        gender: profile?.gender || 'male',
-        current_institution: profile?.current_institution || "Andijon qishloq xo'jaligi va agrotexnologiyalar instituti",
-        education_form: profile?.education_form || 'kunduzgi',
-        specialty_code: profile?.specialty_code || '06.01.05',
-        scientific_field: profile?.scientific_field || "Qishloq xo'jaligi fanlari",
-        scientific_supervisor: profile?.scientific_supervisor || '',
-        workplace: profile?.workplace || '',
-        dissertation_topic: profile?.dissertation_topic || '',
-        is_from_another_institution: profile?.is_from_another_institution || false,
-      }));
+      api
+        .getApplication(existingAppId)
+        .then((app) => {
+          setApplication(app);
+          setSelectedExamId(app.examination.id);
+          setCurrentExam(app.examination);
+          if (app.applicant_snapshot) {
+            setFormData((prev) => ({ ...prev, ...app.applicant_snapshot }));
+          }
+        })
+        .catch((err) => console.error('Failed to load application', err));
     }
-  }, [user, existingAppId]);
+  }, [existingAppId]);
 
-  // When examination changes, load its full details
-  const handleExamChange = async (examId: number) => {
+  const handleExamChange = (examId: number) => {
     setSelectedExamId(examId);
-    try {
-      const exam = await api.getExamination(examId);
-      setCurrentExam(exam);
-    } catch {
-      // fallback
-    }
+    const found = examinations.find((e) => e.id === examId);
+    if (found) setCurrentExam(found);
   };
 
-  // Quick 1-click Demo Login for testing
   const handleQuickDemoLogin = async () => {
     setLoading(true);
     setErrorMsg(null);
     try {
       await login('talabgor@aqxi.uz', 'Talabgor123!');
     } catch (err: any) {
-      setErrorMsg("Kirishda xatolik: " + (err.message || 'Xatolik'));
+      setErrorMsg('Kirishda xatolik: ' + (err.message || 'Xatolik'));
     } finally {
       setLoading(false);
     }
   };
 
-  // Validate step 1 fields
+  // Step 1 Validation
   const validateStep1 = () => {
     const errors: Record<string, string> = {};
-    if (!formData.education_form) errors.education_form = "Ta'lim shakli tanlanishi shart.";
-    if (!formData.current_institution) errors.current_institution = "OTM yoki ITM nomi tanlanishi shart.";
-    if (!formData.specialty_code) errors.specialty_code = "Ixtisoslik shifri tanlanishi shart.";
-    if (!formData.first_name) errors.first_name = "Ism kiritilishi shart.";
-    if (!formData.last_name) errors.last_name = "Familya kiritilishi shart.";
-    if (!formData.phone) errors.phone = "Telefon raqami kiritilishi shart.";
+    if (!formData.first_name && !formData.last_name) {
+      errors.name = "F.I.SH to'liq kiritilishi shart.";
+    }
+    if (!formData.phone) errors.phone = 'Telefon raqam kiritilishi shart.';
+    if (!formData.passport_series_number) errors.passport = 'Pasport maʼlumotlari kiritilishi shart.';
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
+  // Step 2 Validation
+  const validateStep2 = () => {
+    const errors: Record<string, string> = {};
+    if (!formData.current_institution) errors.current_institution = 'OTM yoki ITM nomi tanlanishi shart.';
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  // Step 3 Validation
+  const validateStep3 = () => {
+    const errors: Record<string, string> = {};
+    if (!formData.specialty_code) errors.specialty_code = 'Ixtisoslik shifri tanlanishi shart.';
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
   // Save or create application draft
   const ensureApplicationDraft = async () => {
-    if (application) {
-      return application;
-    }
+    if (application) return application;
     const app = await api.createApplication({
-      examination_id: selectedExamId,
+      examination_id: selectedExamId || 1,
       applicant_snapshot: formData,
     });
-    // Re-fetch detail to get full document structure
     const detail = await api.getApplication(app.id);
     setApplication(detail);
     return detail;
   };
 
-  // Move from Step 1 to Step 2
-  const handleProceedToStep2 = async () => {
+  const handleProceedFromStep1 = () => {
     setErrorMsg(null);
-    if (!validateStep1()) {
-      return;
+    if (validateStep1()) {
+      setCurrentStep(2);
     }
+  };
+
+  const handleProceedFromStep2 = () => {
+    setErrorMsg(null);
+    if (validateStep2()) {
+      setCurrentStep(3);
+    }
+  };
+
+  const handleProceedFromStep3 = async () => {
+    setErrorMsg(null);
+    if (!validateStep3()) return;
 
     if (!user) {
-      setErrorMsg("Hujjatlarni yuklash va arizani saqlash uchun avval shaxsiy kabinetingizga kiring yoki ro'yxatdan o'ting.");
+      setErrorMsg("Hujjatlarni yuklash uchun avval shaxsiy kabinetingizga kiring yoki ro'yxatdan o'ting.");
       return;
     }
 
     setLoading(true);
     try {
       await ensureApplicationDraft();
-      setCurrentStep(2);
+      setCurrentStep(4);
     } catch (err: any) {
       setErrorMsg(err.response?.data?.error?.message || err.message || 'Xatolik yuz berdi');
     } finally {
@@ -235,12 +240,10 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
       app = await ensureApplicationDraft();
     }
     await api.uploadDocument(app.id, docTypeId, file);
-    // Refresh application to get updated document list
     const updated = await api.getApplication(app.id);
     setApplication(updated);
   };
 
-  // Document delete handler
   const handleDocumentDelete = async (docId: number) => {
     if (!application) return;
     await api.deleteDocument(docId);
@@ -258,104 +261,86 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
       await api.submitApplication(application.id);
       const updated = await api.getApplication(application.id);
       setApplication(updated);
-      setCurrentStep(4); // Success step
+      setCurrentStep(5);
     } catch (err: any) {
-      const errDetails = err.response?.data?.error?.details || err.response?.data?.error?.message || err.message;
-      if (typeof errDetails === 'object' && errDetails.missing_documents) {
-        setErrorMsg(`Topshirish uchun quyidagi hujjatlar talab qilinadi:\n${errDetails.missing_documents.join('\n')}`);
-      } else {
-        setErrorMsg(typeof errDetails === 'string' ? errDetails : JSON.stringify(errDetails));
-      }
+      setErrorMsg(err.response?.data?.error?.message || 'Arizani topshirishda xatolik yuz berdi');
     } finally {
       setLoading(false);
     }
   };
 
   // Compute full 6-document list guaranteed:
-  const documentsToRender = (currentExam?.required_documents && currentExam.required_documents.length > 0)
-    ? currentExam.required_documents.map((reqDoc) => ({
-        documentType: reqDoc.document_type,
-        isConditional: reqDoc.is_conditional || reqDoc.document_type.code === 'liaison_letter',
-        isRequired: reqDoc.document_type.code === 'liaison_letter' ? formData.is_from_another_institution : reqDoc.is_required,
-      }))
-    : docTypes.map((dt) => ({
-        documentType: dt,
-        isConditional: dt.code === 'liaison_letter',
-        isRequired: dt.code === 'liaison_letter' ? formData.is_from_another_institution : true,
-      }));
+  const documentsToRender =
+    currentExam?.required_documents && currentExam.required_documents.length > 0
+      ? currentExam.required_documents.map((reqDoc) => ({
+          documentType: reqDoc.document_type,
+          isConditional: reqDoc.is_conditional || reqDoc.document_type.code === 'liaison_letter',
+          isRequired:
+            reqDoc.document_type.code === 'liaison_letter'
+              ? formData.is_from_another_institution
+              : reqDoc.is_required,
+        }))
+      : docTypes.map((dt) => ({
+          documentType: dt,
+          isConditional: dt.code === 'liaison_letter',
+          isRequired:
+            dt.code === 'liaison_letter' ? formData.is_from_another_institution : true,
+        }));
 
   const uploadedDocTypeIds = new Set(application?.documents?.map((d) => d.document_type.id) || []);
   const mandatoryDocs = documentsToRender.filter((d) => d.isRequired);
   const uploadedMandatoryCount = mandatoryDocs.filter((d) => uploadedDocTypeIds.has(d.documentType.id)).length;
   const allMandatoryUploaded = mandatoryDocs.every((d) => uploadedDocTypeIds.has(d.documentType.id));
 
-  // Steps indicator configuration
+  // 5 Step Stepper configuration matching Screen 4
   const steps = [
-    { num: 1, title: "Ma'lumotlar", icon: UserIcon },
-    { num: 2, title: "Hujjatlar (6 ta)", icon: FileText },
-    { num: 3, title: "Ko'rib chiqish", icon: BookOpen },
-    { num: 4, title: "Tasdiqlash", icon: CheckCircle2 },
+    { num: 1, title: "Shaxsiy ma'lumotlar" },
+    { num: 2, title: "Ta'lim ma'lumotlari" },
+    { num: 3, title: "Ixtisoslik tanlash" },
+    { num: 4, title: "Hujjatlar" },
+    { num: 5, title: "Tasdiqlash" },
   ];
 
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6">
-      {/* Auth Notice Banner if user is not authenticated */}
-      {!user && (
-        <div className="mb-6 p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/60 rounded-2xl text-xs sm:text-sm flex flex-col sm:flex-row items-center justify-between gap-3 shadow-sm">
-          <div className="flex items-start gap-2.5">
-            <AlertCircle className="w-5 h-5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
-            <div>
-              <strong className="text-slate-900 dark:text-amber-200">Diqqat: Siz tizimga kirmagansiz!</strong>
-              <p className="text-slate-600 dark:text-amber-300/80 mt-0.5">
-                Hujjatlarni yuklash va arizangizni saqlash uchun avval shaxsiy kabinetingizga kiring yoki ro&apos;yxatdan o&apos;ting.
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              type="button"
-              onClick={handleQuickDemoLogin}
-              disabled={loading}
-              className="px-3.5 py-2 rounded-xl text-xs font-bold bg-[#2563EB] hover:bg-[#1D4ED8] text-white transition shadow-sm flex items-center gap-1.5"
-            >
-              <LogIn className="w-3.5 h-3.5" />
-              Talabgor sifatida kirish (Demo)
-            </button>
-            <Link
-              href="/kirish"
-              className="px-3.5 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-[#162B45] border border-slate-300 dark:border-[#263B55] hover:bg-slate-50 dark:hover:bg-[#1c3554] text-slate-700 dark:text-slate-200 transition"
-            >
-              Kirish
-            </Link>
-          </div>
-        </div>
-      )}
+    <div className="max-w-4xl mx-auto py-6 px-4 sm:px-6">
+      {/* Title */}
+      <div className="mb-6">
+        <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+          Ariza topshirish (bosqichma-bosqich)
+        </h1>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+          Malakaviy imtihon uchun elektron ariza topshirish va hujjatlarni biriktirish
+        </p>
+      </div>
 
-      {/* Wizard Progress Bar */}
-      <div className="mb-8">
+      {/* Stepper matching Screen 4 */}
+      <div className="mb-8 bg-white dark:bg-[#0D223A] rounded-2xl border border-slate-200/90 dark:border-[#1E3A5F] p-5 shadow-sm">
         <div className="flex items-center justify-between">
           {steps.map((s, idx) => {
-            const Icon = s.icon;
             const isCompleted = currentStep > s.num;
             const isCurrent = currentStep === s.num;
 
             return (
               <React.Fragment key={s.num}>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left">
                   <div
-                    className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-xs transition ${
+                    className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-xs transition ${
                       isCompleted
-                        ? 'bg-emerald-600 text-white'
+                        ? 'bg-[#10B981] text-white shadow-sm'
                         : isCurrent
                         ? 'bg-[#2563EB] text-white shadow-md ring-4 ring-[#2563EB]/20 dark:ring-[#3B82F6]/30'
-                        : 'bg-slate-200 dark:bg-[#162B45] text-slate-600 dark:text-slate-400'
+                        : 'bg-slate-100 dark:bg-[#162E4A] text-slate-500 dark:text-slate-400'
                     }`}
                   >
-                    {isCompleted ? <CheckCircle2 className="w-5 h-5" /> : <Icon className="w-4 h-4" />}
+                    {isCompleted ? '✓' : s.num}
                   </div>
                   <span
-                    className={`hidden sm:inline text-xs font-semibold ${
-                      isCurrent ? 'text-[#2563EB] dark:text-[#3B82F6]' : isCompleted ? 'text-slate-800 dark:text-slate-200' : 'text-slate-400 dark:text-slate-500'
+                    className={`text-[11px] font-bold ${
+                      isCurrent
+                        ? 'text-[#2563EB] dark:text-[#3B82F6]'
+                        : isCompleted
+                        ? 'text-slate-800 dark:text-slate-200'
+                        : 'text-slate-400 dark:text-slate-500'
                     }`}
                   >
                     {s.title}
@@ -363,8 +348,8 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
                 </div>
                 {idx < steps.length - 1 && (
                   <div
-                    className={`flex-1 h-0.5 mx-2 transition ${
-                      currentStep > s.num ? 'bg-emerald-600' : 'bg-slate-200 dark:bg-[#263B55]'
+                    className={`flex-1 h-0.5 mx-2 sm:mx-3 transition ${
+                      currentStep > s.num ? 'bg-[#10B981]' : 'bg-slate-200 dark:bg-[#1E3A5F]'
                     }`}
                   />
                 )}
@@ -376,378 +361,374 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
 
       {/* Global Error Banner */}
       {errorMsg && (
-        <div className="mb-6 p-4 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-xl text-red-700 dark:text-red-300 text-sm flex items-start gap-2 shadow-sm whitespace-pre-line">
-          <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
+        <div className="mb-6 p-4 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900 rounded-xl text-red-700 dark:text-red-300 text-xs flex items-start gap-2 shadow-sm">
+          <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
           <div className="flex-1">{errorMsg}</div>
         </div>
       )}
 
-      {/* STEP 1: Form Fields (Exact replica of user's form screenshot) */}
+      {/* =========================================================================
+          STEP 1: Shaxsiy ma'lumotlar (Exact match with Screen 4)
+         ========================================================================= */}
       {currentStep === 1 && (
-        <div className="bg-white dark:bg-[#0F2036] rounded-2xl shadow-sm border border-slate-200 dark:border-[#263B55] p-6 sm:p-8">
-          <div className="border-b border-slate-100 dark:border-[#263B55] pb-4 mb-6">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Form</h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              Imtihonga ro&apos;yxatdan o&apos;tish uchun shaxsiy va ilmiy ma&apos;lumotlaringizni to&apos;ldiring. OTM va ixtisosliklar davlat ochiq ma&apos;lumotlar bazasidan avtomatik olinadi.
+        <div className="bg-white dark:bg-[#0D223A] rounded-2xl shadow-sm border border-slate-200/90 dark:border-[#1E3A5F] p-6 sm:p-8 space-y-6">
+          <div className="border-b border-slate-100 dark:border-[#1E3A5F] pb-4">
+            <h2 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">
+              Shaxsiy ma&apos;lumotlar
+            </h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              Pasport va asosiy aloqa ma&apos;lumotlaringizni to&apos;ldiring
             </p>
           </div>
 
-          {/* Imtihon tanlash */}
-          <div className="mb-6 p-4 bg-slate-50 dark:bg-[#11263E]/60 rounded-xl border border-slate-200 dark:border-[#263B55]">
-            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-2">
-              Ro&apos;yxatdan o&apos;tish uchun imtihonni tanlang
-            </label>
-            <select
-              value={selectedExamId}
-              onChange={(e) => handleExamChange(Number(e.target.value))}
-              className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] rounded-xl px-3 py-2.5 text-slate-800 dark:text-slate-100 focus:border-[#2563EB] dark:focus:border-[#3B82F6] outline-none"
-            >
-              {examinations.map((exam) => (
-                <option key={exam.id} value={exam.id}>
-                  {exam.title} ({exam.language.toUpperCase()}) — Muddat: {new Date(exam.registration_end).toLocaleDateString()} gacha
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {/* 1. Ta'lim shakli */}
+          <div className="space-y-4">
+            {/* F.I.SH. */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                {t.form.educationForm} <span className="text-red-500">*</span>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                F.I.SH. <span className="text-red-500">*</span>
               </label>
-              <select
-                value={formData.education_form}
-                onChange={(e) => setFormData({ ...formData, education_form: e.target.value })}
-                className={`w-full text-sm bg-white dark:bg-[#11263E] border rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none transition ${
-                  fieldErrors.education_form ? 'border-red-400 bg-red-50/20 dark:bg-red-950/20' : 'border-slate-300 dark:border-[#263B55] focus:border-[#2563EB] dark:focus:border-[#3B82F6]'
-                }`}
-              >
-                <option value="">tanlang</option>
-                {refOptions?.education_forms.map((item) => (
-                  <option key={item.value} value={item.value}>
-                    {item.label_uz}
-                  </option>
-                ))}
-              </select>
-              {fieldErrors.education_form && (
-                <p className="text-xs text-red-500 mt-1">{fieldErrors.education_form}</p>
-              )}
-            </div>
-
-            {/* 2. OTM yoki ITM nomi */}
-            <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                {t.form.otmName} <span className="text-red-500">*</span>
-              </label>
-              <select
-                value={formData.current_institution}
+              <input
+                type="text"
+                value={`${formData.last_name} ${formData.first_name} ${formData.middle_name}`.trim()}
                 onChange={(e) => {
-                  const val = e.target.value;
-                  const isAnother = val !== "Andijon qishloq xo'jaligi va agrotexnologiyalar instituti";
+                  const parts = e.target.value.split(' ');
                   setFormData({
                     ...formData,
-                    current_institution: val,
-                    is_from_another_institution: isAnother,
+                    last_name: parts[0] || '',
+                    first_name: parts[1] || '',
+                    middle_name: parts.slice(2).join(' ') || '',
                   });
                 }}
-                className={`w-full text-sm bg-white dark:bg-[#11263E] border rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none transition ${
-                  fieldErrors.current_institution ? 'border-red-400 bg-red-50/20 dark:bg-red-950/20' : 'border-slate-300 dark:border-[#263B55] focus:border-[#2563EB] dark:focus:border-[#3B82F6]'
-                }`}
-              >
-                <option value="">tanlang</option>
-                {otmList.map((otm) => (
-                  <option key={otm.code} value={otm.name_uz}>
-                    {otm.name_uz} ({otm.code})
-                  </option>
-                ))}
-              </select>
-              {fieldErrors.current_institution && (
-                <p className="text-xs text-red-500 mt-1">{fieldErrors.current_institution}</p>
-              )}
-            </div>
-
-            {/* 3. Ixtisoslik shifri */}
-            <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                {t.form.specialtyCode} <span className="text-red-500">*</span>
-              </label>
-              <select
-                value={formData.specialty_code}
-                onChange={(e) => {
-                  const selected = specialtiesList.find((s) => s.code === e.target.value);
-                  setFormData({
-                    ...formData,
-                    specialty_code: e.target.value,
-                    scientific_field: selected?.field || formData.scientific_field,
-                  });
-                }}
-                className={`w-full text-sm bg-white dark:bg-[#11263E] border rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none transition ${
-                  fieldErrors.specialty_code ? 'border-red-400 bg-red-50/20 dark:bg-red-950/20' : 'border-slate-300 dark:border-[#263B55] focus:border-[#2563EB] dark:focus:border-[#3B82F6]'
-                }`}
-              >
-                <option value="">tanlang</option>
-                {specialtiesList.map((spec) => (
-                  <option key={spec.code} value={spec.code}>
-                    {spec.code} — {spec.name_uz}
-                  </option>
-                ))}
-              </select>
-              {fieldErrors.specialty_code && (
-                <p className="text-xs text-red-500 mt-1">{fieldErrors.specialty_code}</p>
-              )}
-            </div>
-
-            {/* 4. Ilmiy daraja beradigan fan tarmog'i */}
-            <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                {t.form.scientificField}
-              </label>
-              <select
-                value={formData.scientific_field}
-                onChange={(e) => setFormData({ ...formData, scientific_field: e.target.value })}
-                className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
-              >
-                <option value="">tanlang</option>
-                {refOptions?.scientific_fields.map((field) => (
-                  <option key={field} value={field}>
-                    {field}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* 5. Malakaviy imtihon turi */}
-            <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                {t.form.qualificationExamType}
-              </label>
-              <select
-                value={formData.qualification_exam_type}
-                onChange={(e) => setFormData({ ...formData, qualification_exam_type: e.target.value })}
-                className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
-              >
-                <option value="">tanlang</option>
-                {refOptions?.exam_types.map((item) => (
-                  <option key={item.value} value={item.value}>
-                    {item.label_uz}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* 6. Ism */}
-            <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                {t.form.firstName} <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                value={formData.first_name}
-                onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
-                placeholder="Ismingizni kiriting"
-                className={`w-full text-sm bg-white dark:bg-[#11263E] border rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none transition ${
-                  fieldErrors.first_name ? 'border-red-400 bg-red-50/20 dark:bg-red-950/20' : 'border-slate-300 dark:border-[#263B55] focus:border-[#2563EB] dark:focus:border-[#3B82F6]'
-                }`}
-              />
-              {fieldErrors.first_name && (
-                <p className="text-xs text-red-500 mt-1">{fieldErrors.first_name}</p>
-              )}
-            </div>
-
-            {/* 7. Familya */}
-            <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                {t.form.lastName} <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
-                value={formData.last_name}
-                onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
-                placeholder="Familiyangizni kiriting"
-                className={`w-full text-sm bg-white dark:bg-[#11263E] border rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none transition ${
-                  fieldErrors.last_name ? 'border-red-400 bg-red-50/20 dark:bg-red-950/20' : 'border-slate-300 dark:border-[#263B55] focus:border-[#2563EB] dark:focus:border-[#3B82F6]'
-                }`}
-              />
-              {fieldErrors.last_name && (
-                <p className="text-xs text-red-500 mt-1">{fieldErrors.last_name}</p>
-              )}
-            </div>
-
-            {/* 8. Sharif(Otchestvo) */}
-            <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                {t.form.middleName}
-              </label>
-              <input
-                type="text"
-                value={formData.middle_name}
-                onChange={(e) => setFormData({ ...formData, middle_name: e.target.value })}
-                placeholder="Otangizning ismi"
-                className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
+                placeholder="To'liq ism, familiya, otasining ismi"
+                className="w-full text-xs px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-[#071426] border border-slate-200 dark:border-[#1E3A5F] text-slate-900 dark:text-white focus:outline-none focus:border-[#2563EB]"
               />
             </div>
 
-            {/* 9. Jins */}
+            {/* Tug'ilgan sana */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                {t.form.gender}
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                Tug&apos;ilgan sana <span className="text-red-500">*</span>
+              </label>
+              <div className="relative">
+                <input
+                  type="date"
+                  value={formData.birth_date}
+                  onChange={(e) => setFormData({ ...formData, birth_date: e.target.value })}
+                  className="w-full text-xs px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-[#071426] border border-slate-200 dark:border-[#1E3A5F] text-slate-900 dark:text-white focus:outline-none focus:border-[#2563EB]"
+                />
+              </div>
+            </div>
+
+            {/* Jinsi */}
+            <div>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                Jinsi <span className="text-red-500">*</span>
               </label>
               <select
                 value={formData.gender}
                 onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
-                className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
+                className="w-full text-xs px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-[#071426] border border-slate-200 dark:border-[#1E3A5F] text-slate-900 dark:text-white focus:outline-none focus:border-[#2563EB]"
               >
                 <option value="male">Erkak</option>
                 <option value="female">Ayol</option>
               </select>
             </div>
 
-            {/* 10. Jshr */}
+            {/* Telefon raqam */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                {t.form.jshr}
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                Telefon raqam <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
-                maxLength={14}
-                value={formData.jshr}
-                onChange={(e) => setFormData({ ...formData, jshr: e.target.value.replace(/\D/g, '') })}
-                placeholder="14 xonali JSHSHIR raqami"
-                className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
-              />
-            </div>
-
-            {/* 11. Telefon raqami */}
-            <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                {t.form.phone} <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="tel"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                 placeholder="+998 90 123 45 67"
-                className={`w-full text-sm bg-white dark:bg-[#11263E] border rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none transition ${
-                  fieldErrors.phone ? 'border-red-400 bg-red-50/20 dark:bg-red-950/20' : 'border-slate-300 dark:border-[#263B55] focus:border-[#2563EB] dark:focus:border-[#3B82F6]'
-                }`}
+                className="w-full text-xs px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-[#071426] border border-slate-200 dark:border-[#1E3A5F] text-slate-900 dark:text-white focus:outline-none focus:border-[#2563EB]"
               />
-              {fieldErrors.phone && (
-                <p className="text-xs text-red-500 mt-1">{fieldErrors.phone}</p>
-              )}
             </div>
 
-            {/* 12. Ilmiy rahbar */}
+            {/* Pasport seriyasi va raqami */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                {t.form.supervisor}
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                Pasport seriyasi va raqami <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
-                value={formData.scientific_supervisor}
-                onChange={(e) => setFormData({ ...formData, scientific_supervisor: e.target.value })}
-                placeholder="F.I.SH va ilmiy darajasi"
-                className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
-              />
-            </div>
-
-            {/* 13. Ish bajarayotgan tashkilot */}
-            <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                {t.form.workplace}
-              </label>
-              <input
-                type="text"
-                value={formData.workplace}
-                onChange={(e) => setFormData({ ...formData, workplace: e.target.value })}
-                placeholder="Ish yoki o'qish joyi"
-                className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
-              />
-            </div>
-
-            {/* 14. Boshqa OTMdan qatnashish (Conditional Document 6 Trigger) */}
-            <div className="md:col-span-2 p-4 bg-blue-50/60 dark:bg-[#162B45]/50 rounded-xl border border-blue-200 dark:border-[#263B55]">
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={formData.is_from_another_institution}
-                  onChange={(e) => setFormData({ ...formData, is_from_another_institution: e.target.checked })}
-                  className="w-4 h-4 text-[#2563EB] rounded border-slate-300 dark:border-[#263B55] focus:ring-[#2563EB]"
-                />
-                <span className="text-sm font-medium text-slate-800 dark:text-slate-100">
-                  {t.form.isFromAnother}
-                </span>
-              </label>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 pl-7">
-                Belgilansa: O&apos;z muassasangiz tomonidan berilgan <strong>&quot;Aloqa xati&quot; (6-hujjat)</strong> yuklash majburiy bo&apos;ladi.
-              </p>
-            </div>
-
-            {/* 15. Disertatsiya mavzusi */}
-            <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">
-                {t.form.dissertationTopic}
-              </label>
-              <textarea
-                rows={3}
-                value={formData.dissertation_topic}
-                onChange={(e) => setFormData({ ...formData, dissertation_topic: e.target.value })}
-                placeholder="Tasdiqlangan dissertatsiya mavzusining to'liq nomi"
-                className="w-full text-sm bg-white dark:bg-[#11263E] border border-slate-300 dark:border-[#263B55] rounded-xl px-3 py-2 text-slate-800 dark:text-slate-100 outline-none focus:border-[#2563EB] dark:focus:border-[#3B82F6]"
+                value={formData.passport_series_number}
+                onChange={(e) => setFormData({ ...formData, passport_series_number: e.target.value })}
+                placeholder="AA 1234567"
+                className="w-full text-xs px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-[#071426] border border-slate-200 dark:border-[#1E3A5F] text-slate-900 dark:text-white focus:outline-none focus:border-[#2563EB]"
               />
             </div>
           </div>
 
-          {/* Action buttons */}
-          <div className="mt-8 pt-6 border-t border-slate-100 dark:border-[#263B55] flex items-center justify-end gap-3">
+          {/* Bottom Action Bar matching Screen 4 (Bekor qilish & Keyingi) */}
+          <div className="pt-6 border-t border-slate-100 dark:border-[#1E3A5F] flex items-center justify-between">
+            <Link
+              href="/"
+              className="px-5 py-2.5 rounded-xl text-xs font-bold border border-slate-200 dark:border-[#1E3A5F] text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-[#152E4D]"
+            >
+              Bekor qilish
+            </Link>
+
             <button
               type="button"
-              onClick={handleProceedToStep2}
-              disabled={loading}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold bg-[#2563EB] hover:bg-[#1D4ED8] text-white transition shadow-sm disabled:opacity-50"
+              onClick={handleProceedFromStep1}
+              className="px-6 py-2.5 rounded-xl text-xs font-bold bg-[#2563EB] hover:bg-[#1D4ED8] text-white transition shadow-sm inline-flex items-center gap-1.5"
             >
-              {t.form.next}: Hujjatlar (6 ta toifa)
+              <span>Keyingi</span>
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
         </div>
       )}
 
-      {/* STEP 2: Required Documents Upload */}
+      {/* =========================================================================
+          STEP 2: Ta'lim ma'lumotlari
+         ========================================================================= */}
       {currentStep === 2 && (
+        <div className="bg-white dark:bg-[#0D223A] rounded-2xl shadow-sm border border-slate-200/90 dark:border-[#1E3A5F] p-6 sm:p-8 space-y-6">
+          <div className="border-b border-slate-100 dark:border-[#1E3A5F] pb-4">
+            <h2 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">
+              Ta&apos;lim ma&apos;lumotlari
+            </h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              Joriy taʼlim muassasangiz va ish joyingiz to‘g‘risidagi maʼlumotlar
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {/* OTM yoki ITM nomi */}
+            <div>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                OTM yoki ITM nomi <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={formData.current_institution}
+                onChange={(e) => setFormData({ ...formData, current_institution: e.target.value })}
+                placeholder="Andijon qishloq xo‘jaligi va agrotexnologiyalar instituti"
+                className="w-full text-xs px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-[#071426] border border-slate-200 dark:border-[#1E3A5F] text-slate-900 dark:text-white focus:outline-none focus:border-[#2563EB]"
+              />
+            </div>
+
+            {/* Ta'lim shakli */}
+            <div>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                Ta&apos;lim shakli <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={formData.education_form}
+                onChange={(e) => setFormData({ ...formData, education_form: e.target.value })}
+                className="w-full text-xs px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-[#071426] border border-slate-200 dark:border-[#1E3A5F] text-slate-900 dark:text-white focus:outline-none focus:border-[#2563EB]"
+              >
+                <option value="doktorantura">Doktorantura (PhD / DSc)</option>
+                <option value="mustaqil_izlanuvchi">Mustaqil izlanuvchilik</option>
+                <option value="magistratura">Magistratura</option>
+                <option value="boshqa">Boshqa shakl</option>
+              </select>
+            </div>
+
+            {/* Ish joyi va lavozimi */}
+            <div>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                Ish joyi va lavozimi
+              </label>
+              <input
+                type="text"
+                value={formData.workplace}
+                onChange={(e) => setFormData({ ...formData, workplace: e.target.value })}
+                placeholder="Masalan: AQXI Agrobiologiya kafedrasi assistenti"
+                className="w-full text-xs px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-[#071426] border border-slate-200 dark:border-[#1E3A5F] text-slate-900 dark:text-white focus:outline-none focus:border-[#2563EB]"
+              />
+            </div>
+
+            {/* Boshqa OTMdan qatnashish */}
+            <div className="p-4 bg-blue-50/50 dark:bg-[#122A46] rounded-xl border border-blue-200/80 dark:border-[#1E3A5F]">
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.is_from_another_institution}
+                  onChange={(e) => setFormData({ ...formData, is_from_another_institution: e.target.checked })}
+                  className="w-4 h-4 text-[#2563EB] rounded border-slate-300 dark:border-[#1E3A5F] focus:ring-[#2563EB]"
+                />
+                <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                  Institutdan boshqa OTM/ITMdan qatnashmoqdaman
+                </span>
+              </label>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 pl-7">
+                Belgilansa: OTM rektoratidan berilgan rasmiy <strong>&quot;Aloqa xati&quot; (6-hujjat)</strong> yuklanishi talab etiladi.
+              </p>
+            </div>
+          </div>
+
+          <div className="pt-6 border-t border-slate-100 dark:border-[#1E3A5F] flex items-center justify-between">
+            <button
+              type="button"
+              onClick={() => setCurrentStep(1)}
+              className="px-5 py-2.5 rounded-xl text-xs font-bold border border-slate-200 dark:border-[#1E3A5F] text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-[#152E4D] inline-flex items-center gap-1.5"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              <span>Orqaga</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleProceedFromStep2}
+              className="px-6 py-2.5 rounded-xl text-xs font-bold bg-[#2563EB] hover:bg-[#1D4ED8] text-white transition shadow-sm inline-flex items-center gap-1.5"
+            >
+              <span>Keyingi</span>
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* =========================================================================
+          STEP 3: Ixtisoslik va Imtihon tanlash
+         ========================================================================= */}
+      {currentStep === 3 && (
+        <div className="bg-white dark:bg-[#0D223A] rounded-2xl shadow-sm border border-slate-200/90 dark:border-[#1E3A5F] p-6 sm:p-8 space-y-6">
+          <div className="border-b border-slate-100 dark:border-[#1E3A5F] pb-4">
+            <h2 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">
+              Ixtisoslik va Imtihonni tanlash
+            </h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              Topshiriladigan imtihon va OAK ixtisoslik shifrini belgilang
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {/* Imtihonni tanlang */}
+            <div>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                Ro&apos;yxatdan o&apos;tish uchun imtihon <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={selectedExamId}
+                onChange={(e) => handleExamChange(Number(e.target.value))}
+                className="w-full text-xs px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-[#071426] border border-slate-200 dark:border-[#1E3A5F] text-slate-900 dark:text-white focus:outline-none focus:border-[#2563EB]"
+              >
+                {examinations.map((exam) => (
+                  <option key={exam.id} value={exam.id}>
+                    {exam.title} ({exam.language.toUpperCase()}) — {exam.category}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* OAK Ixtisoslik shifri */}
+            <div>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                OAK Ixtisoslik shifri <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                value={formData.specialty_code}
+                onChange={(e) => setFormData({ ...formData, specialty_code: e.target.value })}
+                placeholder="06.01.05 - Seleksiya va urug'chilik"
+                className="w-full text-xs px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-[#071426] border border-slate-200 dark:border-[#1E3A5F] text-slate-900 dark:text-white focus:outline-none focus:border-[#2563EB]"
+              />
+            </div>
+
+            {/* Fan tarmog'i */}
+            <div>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                Ilmiy daraja beradigan fan tarmog&apos;i
+              </label>
+              <input
+                type="text"
+                value={formData.scientific_field}
+                onChange={(e) => setFormData({ ...formData, scientific_field: e.target.value })}
+                placeholder="Qishloq xo'jaligi fanlari"
+                className="w-full text-xs px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-[#071426] border border-slate-200 dark:border-[#1E3A5F] text-slate-900 dark:text-white focus:outline-none focus:border-[#2563EB]"
+              />
+            </div>
+
+            {/* Ilmiy rahbar */}
+            <div>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                Ilmiy rahbar (konsultant)
+              </label>
+              <input
+                type="text"
+                value={formData.scientific_supervisor}
+                onChange={(e) => setFormData({ ...formData, scientific_supervisor: e.target.value })}
+                placeholder="F.I.SH., ilmiy darajasi va unvoni"
+                className="w-full text-xs px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-[#071426] border border-slate-200 dark:border-[#1E3A5F] text-slate-900 dark:text-white focus:outline-none focus:border-[#2563EB]"
+              />
+            </div>
+
+            {/* Dissertatsiya mavzusi */}
+            <div>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1.5">
+                Dissertatsiya mavzusi
+              </label>
+              <textarea
+                rows={2}
+                value={formData.dissertation_topic}
+                onChange={(e) => setFormData({ ...formData, dissertation_topic: e.target.value })}
+                placeholder="OTM ilmiy kengashi tomonidan tasdiqlangan dissertatsiya mavzusi"
+                className="w-full text-xs px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-[#071426] border border-slate-200 dark:border-[#1E3A5F] text-slate-900 dark:text-white focus:outline-none focus:border-[#2563EB]"
+              />
+            </div>
+          </div>
+
+          <div className="pt-6 border-t border-slate-100 dark:border-[#1E3A5F] flex items-center justify-between">
+            <button
+              type="button"
+              onClick={() => setCurrentStep(2)}
+              className="px-5 py-2.5 rounded-xl text-xs font-bold border border-slate-200 dark:border-[#1E3A5F] text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-[#152E4D] inline-flex items-center gap-1.5"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              <span>Orqaga</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleProceedFromStep3}
+              disabled={loading}
+              className="px-6 py-2.5 rounded-xl text-xs font-bold bg-[#2563EB] hover:bg-[#1D4ED8] text-white transition shadow-sm inline-flex items-center gap-1.5"
+            >
+              <span>{loading ? 'Saqlanmoqda...' : 'Keyingi: Hujjatlar'}</span>
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* =========================================================================
+          STEP 4: Hujjatlarni yuklash (Talab qilinadigan 6 ta hujjat)
+         ========================================================================= */}
+      {currentStep === 4 && (
         <div className="space-y-6">
-          <div className="bg-white dark:bg-[#0F2036] rounded-2xl shadow-sm border border-slate-200 dark:border-[#263B55] p-6 space-y-3">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-[#263B55] pb-3">
+          <div className="bg-white dark:bg-[#0D223A] rounded-2xl shadow-sm border border-slate-200/90 dark:border-[#1E3A5F] p-6 space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-[#1E3A5F] pb-3">
               <div>
-                <h2 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">
-                  {t.documents.mandatory6}
+                <h2 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">
+                  Talab qilinadigan hujjatlarni yuklash
                 </h2>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed">
-                  Belgilangan tartibga muvofiq quyidagi 6 ta hujjat toifasining sifatli nusxasini PDF formatda biriktiring.
+                  Belgilangan tartib bo‘yicha quyidagi hujjatlarning PDF yoki sifatli skaner nusxalarini yuklang.
                 </p>
               </div>
 
-              {/* Progress counter pill */}
-              <div className="self-start sm:self-auto px-3.5 py-1.5 rounded-xl text-xs font-bold border shrink-0 bg-slate-50 dark:bg-[#11263E] border-slate-300 dark:border-[#263B55] text-slate-700 dark:text-slate-200">
+              <div className="px-3.5 py-1.5 rounded-xl text-xs font-bold border shrink-0 bg-slate-50 dark:bg-[#071426] border-slate-200 dark:border-[#1E3A5F] text-slate-700 dark:text-slate-300">
                 Yuklandi: <span className="text-[#2563EB] dark:text-[#3B82F6]">{uploadedMandatoryCount}</span> / {mandatoryDocs.length} ta majburiy
               </div>
             </div>
 
-            {/* Document 6 conditional notice */}
             <div className="p-3 bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/50 rounded-xl text-xs text-blue-900 dark:text-blue-300">
               {formData.is_from_another_institution ? (
-                <span>
-                  ✓ Siz boshqa muassasadan qatnashayotganingiz sababli, <strong>6-hujjat (Aloqa xati)</strong> majburiydir.
-                </span>
+                <span>✓ Siz boshqa muassasadan qatnashayotganingiz sababli, <strong>6-hujjat (Aloqa xati)</strong> majburiydir.</span>
               ) : (
-                <span>
-                  ℹ Siz institutning o&apos;zidan qatnashayotganingiz sababli, <strong>6-hujjat (Aloqa xati)</strong> talab etilmaydi va ixtiyoriy hisoblanadi.
-                </span>
+                <span>ℹ Siz institutning o&apos;zidan qatnashayotganingiz sababli, <strong>6-hujjat (Aloqa xati)</strong> talab etilmaydi.</span>
               )}
             </div>
           </div>
 
-          {/* Guaranteed 6 Document Upload Cards */}
+          {/* 6 Document Upload Cards */}
           <div className="space-y-4">
             {documentsToRender.map((docItem) => {
               const dt = docItem.documentType;
@@ -768,221 +749,125 @@ export const RegistrationFormWizard: React.FC<Props> = ({ initialExam, existingA
             })}
           </div>
 
-          {/* Navigation */}
           <div className="flex items-center justify-between pt-4">
             <button
               type="button"
-              onClick={() => setCurrentStep(1)}
-              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-[#162B45] border border-slate-300 dark:border-[#263B55] hover:bg-slate-50 dark:hover:bg-[#1c3554] transition"
+              onClick={() => setCurrentStep(3)}
+              className="px-5 py-2.5 rounded-xl text-xs font-bold border border-slate-200 dark:border-[#1E3A5F] text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-[#152E4D] inline-flex items-center gap-1.5"
             >
               <ChevronLeft className="w-4 h-4" />
-              {t.form.prev}
+              <span>Orqaga</span>
             </button>
 
             <button
               type="button"
-              onClick={() => setCurrentStep(3)}
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold bg-[#2563EB] hover:bg-[#1D4ED8] text-white transition shadow-sm"
+              onClick={() => setCurrentStep(5)}
+              className="px-6 py-2.5 rounded-xl text-xs font-bold bg-[#2563EB] hover:bg-[#1D4ED8] text-white transition shadow-sm inline-flex items-center gap-1.5"
             >
-              {t.form.next}: Ko&apos;rib chiqish
+              <span>Keyingi: Tasdiqlash</span>
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
         </div>
       )}
 
-      {/* STEP 3: Review & Submit */}
-      {currentStep === 3 && (
-        <div className="bg-white dark:bg-[#0F2036] rounded-2xl shadow-sm border border-slate-200 dark:border-[#263B55] p-6 sm:p-8 space-y-6">
-          <div className="border-b border-slate-100 dark:border-[#263B55] pb-4">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white tracking-tight">
+      {/* =========================================================================
+          STEP 5: Tasdiqlash va Yuborish (Screen 4 Completion)
+         ========================================================================= */}
+      {currentStep === 5 && (
+        <div className="bg-white dark:bg-[#0D223A] rounded-2xl shadow-sm border border-slate-200/90 dark:border-[#1E3A5F] p-6 sm:p-8 space-y-6">
+          <div className="border-b border-slate-100 dark:border-[#1E3A5F] pb-4">
+            <h2 className="text-lg font-black text-slate-900 dark:text-white tracking-tight">
               Arizani ko&apos;rib chiqish va tasdiqlash
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              Topshirishdan oldin barcha ma&apos;lumotlarning to&apos;g&apos;riligini va hujjatlar to&apos;liqligini tekshiring.
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              Arizani rasman topshirishdan oldin barcha maʼlumotlarni tekshiring
             </p>
           </div>
 
-          {/* Missing documents warning if not all uploaded */}
+          {/* Warning if mandatory docs missing */}
           {!allMandatoryUploaded && (
-            <div className="p-4 bg-amber-50 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-800 rounded-xl text-amber-900 dark:text-amber-200 text-xs sm:text-sm space-y-2">
+            <div className="p-4 bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 rounded-xl text-amber-900 dark:text-amber-200 text-xs space-y-2">
               <div className="font-bold flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 text-amber-700 dark:text-amber-400" />
-                Diqqat! Arizani topshirish uchun quyidagi majburiy hujjatlar yuklanishi shart:
+                <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                <span>Diqqat! Quyidagi majburiy hujjatlar yuklanmagan:</span>
               </div>
-              <ul className="list-disc pl-6 space-y-1">
+              <ul className="list-disc pl-5 space-y-0.5">
                 {mandatoryDocs
                   .filter((d) => !uploadedDocTypeIds.has(d.documentType.id))
                   .map((d) => (
-                    <li key={d.documentType.id} className="font-semibold text-red-700 dark:text-red-400">
+                    <li key={d.documentType.id} className="font-bold text-red-600 dark:text-red-400">
                       {d.documentType.sort_order}. {d.documentType.name_uz}
                     </li>
                   ))}
               </ul>
-              <div className="pt-2">
-                <button
-                  type="button"
-                  onClick={() => setCurrentStep(2)}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs transition"
-                >
-                  <Upload className="w-3.5 h-3.5" />
-                  Hujjatlarni yuklash bo&apos;limiga o&apos;tish
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => setCurrentStep(4)}
+                className="mt-2 px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs"
+              >
+                Hujjatlarni yuklashga qaytish
+              </button>
             </div>
           )}
 
-          {/* Summary Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
-            <div className="p-4 bg-slate-50 dark:bg-[#11263E]/60 rounded-xl border border-slate-200 dark:border-[#263B55] space-y-2">
-              <h4 className="font-semibold text-slate-800 dark:text-slate-200 text-xs uppercase tracking-wider mb-2">
-                Shaxsiy ma&apos;lumotlar
-              </h4>
-              <div><span className="text-slate-500 dark:text-slate-400">F.I.SH:</span> <strong className="text-slate-900 dark:text-white">{formData.last_name} {formData.first_name} {formData.middle_name}</strong></div>
+          {/* Summary */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div className="p-4 bg-slate-50 dark:bg-[#071426] rounded-xl border border-slate-200/80 dark:border-[#1E3A5F] space-y-1.5">
+              <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-2">
+                Shaxsiy maʼlumotlar
+              </div>
+              <div><span className="text-slate-500 dark:text-slate-400">F.I.SH:</span> <strong>{formData.last_name} {formData.first_name} {formData.middle_name}</strong></div>
+              <div><span className="text-slate-500 dark:text-slate-400">Tug‘ilgan sana:</span> {formData.birth_date}</div>
               <div><span className="text-slate-500 dark:text-slate-400">Jinsi:</span> {formData.gender === 'male' ? 'Erkak' : 'Ayol'}</div>
-              <div><span className="text-slate-500 dark:text-slate-400">JSHR:</span> {formData.jshr || '-'}</div>
               <div><span className="text-slate-500 dark:text-slate-400">Telefon:</span> {formData.phone}</div>
+              <div><span className="text-slate-500 dark:text-slate-400">Pasport:</span> {formData.passport_series_number}</div>
             </div>
 
-            <div className="p-4 bg-slate-50 dark:bg-[#11263E]/60 rounded-xl border border-slate-200 dark:border-[#263B55] space-y-2">
-              <h4 className="font-semibold text-slate-800 dark:text-slate-200 text-xs uppercase tracking-wider mb-2">
-                Ilmiy ma&apos;lumotlar
-              </h4>
-              <div><span className="text-slate-500 dark:text-slate-400">OTM / ITM:</span> <strong className="text-slate-900 dark:text-white">{formData.current_institution}</strong></div>
-              <div><span className="text-slate-500 dark:text-slate-400">Ta&apos;lim shakli:</span> {formData.education_form}</div>
-              <div><span className="text-slate-500 dark:text-slate-400">Ixtisoslik:</span> {formData.specialty_code}</div>
-              <div><span className="text-slate-500 dark:text-slate-400">Fan tarmog&apos;i:</span> {formData.scientific_field || '-'}</div>
-              <div><span className="text-slate-500 dark:text-slate-400">Ilmiy rahbar:</span> {formData.scientific_supervisor || '-'}</div>
-            </div>
-          </div>
-
-          {/* Uploaded Documents Status Checklist */}
-          <div className="p-4 bg-slate-50 dark:bg-[#11263E]/60 rounded-xl border border-slate-200 dark:border-[#263B55]">
-            <div className="flex items-center justify-between mb-3 border-b border-slate-200 dark:border-[#263B55] pb-2">
-              <h4 className="font-semibold text-slate-800 dark:text-slate-200 text-xs uppercase tracking-wider">
-                Yuklangan 6 ta hujjat holati
-              </h4>
-              <button
-                type="button"
-                onClick={() => setCurrentStep(2)}
-                className="text-xs font-semibold text-[#2563EB] dark:text-[#3B82F6] hover:underline"
-              >
-                Tahrirlash / Yuklash
-              </button>
-            </div>
-
-            <div className="space-y-2">
-              {documentsToRender.map((docItem) => {
-                const dt = docItem.documentType;
-                const uploaded = application?.documents?.find((d) => d.document_type.id === dt.id);
-
-                return (
-                  <div key={dt.id} className="flex items-center justify-between py-1.5 border-b border-slate-200/60 dark:border-[#263B55]/60 last:border-0 text-xs">
-                    <span className="text-slate-700 dark:text-slate-300 font-medium">
-                      {dt.sort_order}. {dt.name_uz}
-                    </span>
-                    {uploaded ? (
-                      <span className="text-emerald-700 dark:text-emerald-400 font-semibold flex items-center gap-1">
-                        <CheckCircle2 className="w-3.5 h-3.5" />
-                        Yuklangan ({uploaded.original_filename})
-                      </span>
-                    ) : docItem.isRequired ? (
-                      <span className="text-red-600 dark:text-red-400 font-bold bg-red-50 dark:bg-red-950/30 px-2 py-0.5 rounded border border-red-200 dark:border-red-900">
-                        Yuklanmagan (Majburiy)
-                      </span>
-                    ) : (
-                      <span className="text-slate-400 dark:text-slate-500">
-                        Talab etilmaydi
-                      </span>
-                    )}
-                  </div>
-                );
-              })}
+            <div className="p-4 bg-slate-50 dark:bg-[#071426] rounded-xl border border-slate-200/80 dark:border-[#1E3A5F] space-y-1.5">
+              <div className="text-[10px] uppercase font-bold text-slate-400 tracking-wider mb-2">
+                Taʼlim va Ilmiy maʼlumotlar
+              </div>
+              <div><span className="text-slate-500 dark:text-slate-400">OTM:</span> <strong>{formData.current_institution}</strong></div>
+              <div><span className="text-slate-500 dark:text-slate-400">Taʼlim shakli:</span> {formData.education_form}</div>
+              <div><span className="text-slate-500 dark:text-slate-400">Ixtisoslik:</span> <strong>{formData.specialty_code}</strong></div>
+              <div><span className="text-slate-500 dark:text-slate-400">Ilmiy rahbar:</span> {formData.scientific_supervisor}</div>
+              <div><span className="text-slate-500 dark:text-slate-400">Mavzu:</span> {formData.dissertation_topic}</div>
             </div>
           </div>
 
-          {/* Consent Checkbox */}
-          <div className="p-4 bg-blue-50/50 dark:bg-[#162B45]/50 rounded-xl border border-blue-200/80 dark:border-[#263B55]">
+          {/* Consent */}
+          <div className="p-4 bg-blue-50/50 dark:bg-[#122A46] rounded-xl border border-blue-200/80 dark:border-[#1E3A5F]">
             <label className="flex items-start gap-3 cursor-pointer">
               <input type="checkbox" defaultChecked className="w-4 h-4 text-[#2563EB] rounded mt-0.5" />
               <span className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
-                Men taqdim etilgan barcha ma&apos;lumotlar va hujjatlarning haqiqiyligini tasdiqlayman. Qasddan noto&apos;g&apos;ri ma&apos;lumot berish arizaning bekor qilinishiga sabab bo&apos;lishi to&apos;g&apos;risida ogohlantirildim.
+                Taqdim etilgan barcha ma&apos;lumotlar va yuklangan hujjatlarning haqiqiyligini tasdiqlayman.
               </span>
             </label>
           </div>
 
-          {/* Actions */}
-          <div className="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-[#263B55]">
+          <div className="pt-6 border-t border-slate-100 dark:border-[#1E3A5F] flex items-center justify-between">
             <button
               type="button"
-              onClick={() => setCurrentStep(2)}
-              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-[#162B45] border border-slate-300 dark:border-[#263B55] hover:bg-slate-50 dark:hover:bg-[#1c3554] transition"
+              onClick={() => setCurrentStep(4)}
+              className="px-5 py-2.5 rounded-xl text-xs font-bold border border-slate-200 dark:border-[#1E3A5F] text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-[#152E4D] inline-flex items-center gap-1.5"
             >
               <ChevronLeft className="w-4 h-4" />
-              {t.form.prev}
+              <span>Orqaga</span>
             </button>
 
             <button
               type="button"
               onClick={handleSubmitApplication}
               disabled={loading || !allMandatoryUploaded}
-              className={`inline-flex items-center gap-2 px-8 py-3 rounded-xl text-sm font-bold transition shadow-md ${
+              className={`px-7 py-3 rounded-xl text-xs font-bold transition shadow-sm inline-flex items-center gap-2 ${
                 allMandatoryUploaded
-                  ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
-                  : 'bg-slate-300 dark:bg-slate-700 text-slate-600 dark:text-slate-400 cursor-not-allowed'
+                  ? 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white shadow-[#2563EB]/25'
+                  : 'bg-slate-300 dark:bg-slate-700 text-slate-500 cursor-not-allowed'
               }`}
             >
               <Send className="w-4 h-4" />
-              {loading ? "Topshirilmoqda..." : allMandatoryUploaded ? t.form.submit : "Hujjatlarni yuklang"}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* STEP 4: Confirmation Page */}
-      {currentStep === 4 && application && (
-        <div className="bg-white dark:bg-[#0F2036] rounded-2xl shadow-sm border border-slate-200 dark:border-[#263B55] p-8 text-center space-y-6">
-          <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 flex items-center justify-center mx-auto">
-            <CheckCircle2 className="w-10 h-10" />
-          </div>
-
-          <div className="space-y-2">
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">
-              Arizangiz muvaffaqiyatli qabul qilindi!
-            </h2>
-            <p className="text-sm text-slate-600 dark:text-slate-400 max-w-lg mx-auto">
-              Sizning ro&apos;yxatdan o&apos;tish arizangiz komissiya tekshiruviga yuborildi. Holatni shaxsiy kabinetingiz orqali kuzatib borishingiz mumkin.
-            </p>
-          </div>
-
-          {/* Reference number box */}
-          <div className="p-4 bg-slate-50 dark:bg-[#11263E] rounded-xl border border-slate-200 dark:border-[#263B55] max-w-sm mx-auto">
-            <div className="text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-semibold">
-              Ariza raqami
-            </div>
-            <div className="text-2xl font-black text-[#2563EB] dark:text-[#3B82F6] tracking-wider mt-1">
-              {application.reference_number}
-            </div>
-            <div className="text-xs text-slate-400 dark:text-slate-500 mt-1">
-              Topshirilgan vaqti: {application.submitted_at ? new Date(application.submitted_at).toLocaleString() : 'Muvaffaqiyatli topshirildi'}
-            </div>
-          </div>
-
-          {/* Actions */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
-            <button
-              type="button"
-              onClick={() => router.push('/kabinet')}
-              className="w-full sm:w-auto px-6 py-2.5 rounded-xl text-sm font-semibold bg-[#2563EB] hover:bg-[#1D4ED8] text-white transition shadow-sm"
-            >
-              Shaxsiy kabinetga o&apos;tish
-            </button>
-            <button
-              type="button"
-              onClick={() => window.print()}
-              className="w-full sm:w-auto px-6 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 bg-white dark:bg-[#162B45] border border-slate-300 dark:border-[#263B55] hover:bg-slate-50 dark:hover:bg-[#1c3554] transition"
-            >
-              Arizani chop etish
+              <span>{loading ? 'Yuborilmoqda...' : 'Arizani topshirish'}</span>
             </button>
           </div>
         </div>

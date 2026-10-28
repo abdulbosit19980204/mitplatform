@@ -187,32 +187,59 @@ export default function CabinetPage() {
                   </tr>
                 ))
               ) : (
-                /* Fallback row matching Mockup 3 screenshot */
-                <tr className="hover:bg-slate-50/70 dark:hover:bg-[#162B45] transition">
-                  <td className="py-3.5 px-4 font-mono text-slate-400 text-[11px]">1</td>
-                  <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">
-                    Andijon QXI
-                  </td>
-                  <td className="py-3.5 px-4 text-slate-700 dark:text-slate-300">
-                    Agrotexnologiya
-                  </td>
-                  <td className="py-3.5 px-4">
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-[#10B981] border border-emerald-200 dark:border-emerald-800">
-                      Qabul qilingan
-                    </span>
-                  </td>
-                  <td className="py-3.5 px-4 text-slate-500 dark:text-slate-400">
-                    2026-07-10
-                  </td>
-                  <td className="py-3.5 px-4 text-right">
-                    <Link
-                      href="/ariza/yangi"
-                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold text-[#2563EB] dark:text-[#3B82F6] hover:underline"
-                    >
-                      Batafsil
-                    </Link>
-                  </td>
-                </tr>
+                /* Fallback rows matching Screen 3 in Reference Board */
+                <>
+                  <tr className="hover:bg-slate-50/70 dark:hover:bg-[#162B45] transition">
+                    <td className="py-3.5 px-4 font-mono text-slate-400 text-[11px]">1</td>
+                    <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">
+                      Andijon QXI
+                    </td>
+                    <td className="py-3.5 px-4 text-slate-700 dark:text-slate-300">
+                      Agrotexnologiya
+                    </td>
+                    <td className="py-3.5 px-4">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-[#10B981] border border-emerald-200 dark:border-emerald-800">
+                        Qabul qilingan
+                      </span>
+                    </td>
+                    <td className="py-3.5 px-4 text-slate-500 dark:text-slate-400">
+                      2025-07-10
+                    </td>
+                    <td className="py-3.5 px-4 text-right">
+                      <Link
+                        href="/ariza/yangi"
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold text-[#2563EB] dark:text-[#3B82F6] hover:underline"
+                      >
+                        Batafsil
+                      </Link>
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-slate-50/70 dark:hover:bg-[#162B45] transition">
+                    <td className="py-3.5 px-4 font-mono text-slate-400 text-[11px]">2</td>
+                    <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">
+                      Toshkent davlat agrar universiteti
+                    </td>
+                    <td className="py-3.5 px-4 text-slate-700 dark:text-slate-300">
+                      Agroiqtisodiyot
+                    </td>
+                    <td className="py-3.5 px-4">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 dark:bg-amber-950/60 text-[#F59E0B] border border-amber-200 dark:border-amber-800">
+                        Ko‘rib chiqilmoqda
+                      </span>
+                    </td>
+                    <td className="py-3.5 px-4 text-slate-500 dark:text-slate-400">
+                      2025-06-08
+                    </td>
+                    <td className="py-3.5 px-4 text-right">
+                      <Link
+                        href="/ariza/yangi"
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold text-[#2563EB] dark:text-[#3B82F6] hover:underline"
+                      >
+                        Batafsil
+                      </Link>
+                    </td>
+                  </tr>
+                </>
               )}
             </tbody>
           </table>

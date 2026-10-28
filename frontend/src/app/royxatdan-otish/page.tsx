@@ -230,37 +230,36 @@ export default function RegisterPage() {
           </div>
         </div>
 
-        {/* 2. Right Column: Institutional Identity Graphic */}
-        <div className="hidden lg:flex relative bg-[#071426] flex-col justify-between p-12 text-white overflow-hidden">
-          {/* Subtle institutional pattern backdrop */}
-          <div className="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(#2563EB_1px,transparent_1px)] [background-size:16px_16px]" />
+        {/* 2. Right Column: Photo of university campus with institution seal logo (Screen 2 in Reference Board) */}
+        <div className="hidden lg:relative lg:flex flex-col justify-between p-10 bg-[#071426] text-white overflow-hidden">
+          <img
+            src="/images/university_building.jpg"
+            alt="Andijon Qishloq Xo'jaligi Instituti"
+            className="absolute inset-0 w-full h-full object-cover opacity-75 scale-105 transition-transform duration-700"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#061527] via-[#071426]/75 to-[#0A203B]/60" />
 
-          <div className="relative z-10 flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#2563EB] flex items-center justify-center shadow-lg">
-              <GraduationCap className="w-6 h-6 text-white" />
+          {/* Top Seal Badge */}
+          <div className="relative z-10 flex flex-col items-center text-center pt-4">
+            <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 shadow-xl mb-3">
+              <GraduationCap className="w-8 h-8 text-white" />
             </div>
-            <div>
-              <div className="font-black text-sm tracking-wide">AQXI IMTIHON</div>
-              <div className="text-[10px] text-slate-300">Andijon Qishloq Xo&apos;jaligi Instituti</div>
+            <div className="font-black text-base tracking-tight leading-tight">
+              Andijon Qishloq Xo&apos;jaligi Instituti
+            </div>
+            <div className="text-[11px] text-blue-200 mt-1">
+              Imtihon Platformasi
             </div>
           </div>
 
-          <div className="relative z-10 space-y-4 my-auto py-10">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-400/20 text-blue-300 text-xs font-medium">
-              <CheckCircle2 className="w-3.5 h-3.5" />
-              Rasmiy qabul va imtihon tizimi
+          {/* Bottom message matching Screen 2 quote */}
+          <div className="relative z-10 text-center pb-4 space-y-2">
+            <div className="text-base sm:text-lg font-black leading-snug text-white">
+              &ldquo;Bilim, mehnat va innovatsiya — muvaffaqiyat kaliti.&rdquo;
             </div>
-            <h2 className="text-2xl font-bold leading-snug">
-              Ilmiy faoliyatingiz sari ishonchli qadam tashlang
-            </h2>
-            <p className="text-xs text-slate-300 leading-relaxed max-w-sm">
-              Chet tili malakaviy imtihonlari va ilmiy attestatsiya sinovlariga onlayn ro&apos;yxatdan o&apos;ting, arizangiz ko&apos;rib chiqilish holatini kuzatib boring.
+            <p className="text-xs text-slate-300 leading-relaxed max-w-xs mx-auto">
+              Ilmiy tadqiqotlar va malakaviy imtihonlar yagona elektron tizimi
             </p>
-          </div>
-
-          <div className="relative z-10 text-[11px] text-slate-400 border-t border-white/10 pt-4 flex items-center justify-between">
-            <span>Andijon, O&apos;zbekiston</span>
-            <span>aqxi.uz</span>
           </div>
         </div>
       </div>

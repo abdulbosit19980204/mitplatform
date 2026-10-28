@@ -195,38 +195,35 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* 2. Right Column: Photo of university campus with institution seal logo (Mockup 2 style) */}
-        <div className="hidden lg:relative lg:flex flex-col justify-between p-10 bg-[#0F2036] text-white overflow-hidden">
+        {/* 2. Right Column: Photo of university campus with institution seal logo (Screen 2 in Reference Board) */}
+        <div className="hidden lg:relative lg:flex flex-col justify-between p-10 bg-[#071426] text-white overflow-hidden">
           <img
             src="/images/university_building.jpg"
             alt="Andijon Qishloq Xo'jaligi Instituti"
-            className="absolute inset-0 w-full h-full object-cover opacity-60"
+            className="absolute inset-0 w-full h-full object-cover opacity-75 scale-105 transition-transform duration-700"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#071426] via-[#0F2036]/80 to-[#0F2036]/60" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#061527] via-[#071426]/75 to-[#0A203B]/60" />
 
           {/* Top Seal Badge */}
-          <div className="relative z-10 flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 shadow-lg">
-              <GraduationCap className="w-6 h-6 text-white" />
+          <div className="relative z-10 flex flex-col items-center text-center pt-4">
+            <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 shadow-xl mb-3">
+              <GraduationCap className="w-8 h-8 text-white" />
             </div>
-            <div>
-              <div className="font-black text-sm tracking-tight leading-tight">
-                Andijon Qishloq Xo&apos;jaligi Instituti
-              </div>
-              <div className="text-[11px] text-blue-200">
-                Rasmiy imtihon va qabul portali
-              </div>
+            <div className="font-black text-base tracking-tight leading-tight">
+              Andijon Qishloq Xo&apos;jaligi Instituti
+            </div>
+            <div className="text-[11px] text-blue-200 mt-1">
+              Imtihon Platformasi
             </div>
           </div>
 
-          {/* Bottom message */}
-          <div className="relative z-10 space-y-2">
-            <div className="text-lg font-black leading-snug">
-              Kelajagingizni biz bilan quring
+          {/* Bottom message matching Screen 2 quote */}
+          <div className="relative z-10 text-center pb-4 space-y-2">
+            <div className="text-base sm:text-lg font-black leading-snug text-white">
+              &ldquo;Bilim, mehnat va innovatsiya — muvaffaqiyat kaliti.&rdquo;
             </div>
-            <p className="text-xs text-slate-300 leading-relaxed max-w-sm">
-              Malakaviy imtihonlarga onlayn ro&apos;yxatdan o&apos;ting, arizangiz holatini
-              kuzating va rasmiy elektron ruxsatnomani qo&apos;lga kiriting.
+            <p className="text-xs text-slate-300 leading-relaxed max-w-xs mx-auto">
+              Ilmiy tadqiqotlar va malakaviy imtihonlar yagona elektron tizimi
             </p>
           </div>
         </div>

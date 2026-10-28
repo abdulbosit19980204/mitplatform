@@ -32,6 +32,14 @@ import {
   UserCheck,
   CloudUpload,
   BarChart3,
+  BookOpen,
+  MapPin,
+  ChevronLeft,
+  Phone,
+  Mail,
+  Send,
+  Eye,
+  CheckSquare,
 } from 'lucide-react';
 
 export default function HomePage() {
@@ -43,15 +51,134 @@ export default function HomePage() {
   const [faqs, setFaqs] = useState<FAQItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Filter bar states
+  // Filters & Tabs
+  const [activeTab, setActiveTab] = useState<'register' | 'direction' | 'application' | 'stats'>('register');
   const [selectedExamType, setSelectedExamType] = useState('all');
   const [selectedLang, setSelectedLang] = useState('all');
-  const [selectedSession, setSelectedSession] = useState('all');
   const [examSearch, setExamSearch] = useState('');
-  const [viewMode, setViewMode] = useState<'grid' | 'table'>('table');
+  const [viewMode, setViewMode] = useState<'table' | 'grid'>('table');
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // FAQ open state
+  // FAQ accordion
   const [openFaqId, setOpenFaqId] = useState<number | null>(null);
+
+  // Fallback initial academic examinations matching Screen 7 & Mockup 7
+  const fallbackExams: Examination[] = [
+    {
+      id: 1,
+      title: 'Matematika',
+      description: 'Matematik modellashtirish va umumiy matematika kursi bo‘yicha malakaviy imtihon.',
+      category: 'Aniq fanlar',
+      language: 'uz',
+      registration_start: '2025-06-01T00:00:00Z',
+      registration_end: '2025-07-10T23:59:59Z',
+      exam_date: '2025-07-15T09:00:00Z',
+      location: '1-o‘quv binosi, 204-auditoriya',
+      capacity: 50,
+      eligibility_rules: 'Talabgor tegishli taʼlim yo‘nalishi diplomiga ega bo‘lishi lozim.',
+      status: 'published',
+      is_foreign_language: false,
+      require_liaison_letter: false,
+      is_registration_open: true,
+      registered_count: 24,
+      created_at: '2025-05-01T00:00:00Z',
+    },
+    {
+      id: 2,
+      title: 'Biologiya',
+      description: 'O‘simliklar fiziologiyasi va umumiy biologiya fanidan malakaviy imtihon.',
+      category: 'Tabiiy fanlar',
+      language: 'uz',
+      registration_start: '2025-06-01T00:00:00Z',
+      registration_end: '2025-07-12T23:59:59Z',
+      exam_date: '2025-07-16T10:00:00Z',
+      location: 'Biotexnologiya binosi, 102-auditoriya',
+      capacity: 40,
+      eligibility_rules: 'Bakalavr yoki magistr diplomi talab etiladi.',
+      status: 'published',
+      is_foreign_language: false,
+      require_liaison_letter: false,
+      is_registration_open: true,
+      registered_count: 18,
+      created_at: '2025-05-01T00:00:00Z',
+    },
+    {
+      id: 3,
+      title: 'Kimyo',
+      description: 'Agrokimyo va organik kimyo yo‘nalishlari bo‘yicha imtihon.',
+      category: 'Tabiiy fanlar',
+      language: 'uz',
+      registration_start: '2025-05-01T00:00:00Z',
+      registration_end: '2025-06-30T23:59:59Z',
+      exam_date: '2025-07-17T09:00:00Z',
+      location: 'Laboratoriya majmuasi, 3-xona',
+      capacity: 35,
+      eligibility_rules: 'Mavzu OTM ilmiy kengashida tasdiqlangan bo‘lishi shart.',
+      status: 'registration_closed',
+      is_foreign_language: false,
+      require_liaison_letter: false,
+      is_registration_open: false,
+      registered_count: 35,
+      created_at: '2025-05-01T00:00:00Z',
+    },
+    {
+      id: 4,
+      title: 'Ingliz tili (Chet tili)',
+      description: 'Ilmiy izlanuvchilar uchun chet tili (ingliz tili) attestatsiya imtihoni.',
+      category: 'Chet tillari',
+      language: 'en',
+      registration_start: '2025-06-01T00:00:00Z',
+      registration_end: '2025-07-14T23:59:59Z',
+      exam_date: '2025-07-18T14:00:00Z',
+      location: 'Axborot-resurs markazi, 401-auditoriya',
+      capacity: 60,
+      eligibility_rules: '6 ta to‘liq hujjat taqdim etilishi shart.',
+      status: 'published',
+      is_foreign_language: true,
+      require_liaison_letter: false,
+      is_registration_open: true,
+      registered_count: 42,
+      created_at: '2025-05-01T00:00:00Z',
+    },
+    {
+      id: 5,
+      title: 'Qishloq xo‘jaligi asoslari',
+      description: 'Umumiy dehqonchilik va agrotexnologiyalar fani bo‘yicha imtihon.',
+      category: 'Qishloq xo‘jaligi',
+      language: 'uz',
+      registration_start: '2025-06-05T00:00:00Z',
+      registration_end: '2025-07-15T23:59:59Z',
+      exam_date: '2025-07-20T09:30:00Z',
+      location: 'Bosh bino, Ilmiy kengash zali',
+      capacity: 45,
+      eligibility_rules: 'OAK talablari asosida.',
+      status: 'published',
+      is_foreign_language: false,
+      require_liaison_letter: false,
+      is_registration_open: true,
+      registered_count: 29,
+      created_at: '2025-05-01T00:00:00Z',
+    },
+    {
+      id: 6,
+      title: 'Agrokimyo va tuproqshunoslik',
+      description: 'Tuproq unumdorligini oshirish va agrokimyoviy tahlillar imtihoni.',
+      category: 'Qishloq xo‘jaligi',
+      language: 'uz',
+      registration_start: '2025-06-05T00:00:00Z',
+      registration_end: '2025-07-17T23:59:59Z',
+      exam_date: '2025-07-22T11:00:00Z',
+      location: 'Agrobiologiya laboratoriyasi',
+      capacity: 30,
+      eligibility_rules: 'OAK ixtisoslik shifri bo‘yicha talabgorlar.',
+      status: 'published',
+      is_foreign_language: false,
+      require_liaison_letter: false,
+      is_registration_open: true,
+      registered_count: 15,
+      created_at: '2025-05-01T00:00:00Z',
+    },
+  ];
 
   useEffect(() => {
     Promise.all([
@@ -60,7 +187,11 @@ export default function HomePage() {
       api.getHomepageSections().catch(() => []),
       api.getFAQs().catch(() => []),
     ]).then(([examsData, annData, secData, faqData]) => {
-      setExaminations(examsData || []);
+      if (examsData && examsData.length > 0) {
+        setExaminations(examsData);
+      } else {
+        setExaminations(fallbackExams);
+      }
       setAnnouncements(annData || []);
       setSections(secData || []);
       setFaqs(faqData || []);
@@ -68,9 +199,9 @@ export default function HomePage() {
     });
   }, []);
 
-  const heroSection = sections.find((s) => s.section_key === 'hero');
+  const activeExamList = examinations.length > 0 ? examinations : fallbackExams;
 
-  const filteredExams = examinations.filter((exam) => {
+  const filteredExams = activeExamList.filter((exam) => {
     const matchSearch =
       exam.title.toLowerCase().includes(examSearch.toLowerCase()) ||
       (exam.category && exam.category.toLowerCase().includes(examSearch.toLowerCase()));
@@ -82,47 +213,52 @@ export default function HomePage() {
   });
 
   return (
-    <div className="space-y-16 pb-20 bg-[var(--color-background)] transition-colors duration-150">
-      {/* 1. HERO SECTION (Full Background Cover matching Mockup 1) */}
+    <div className="space-y-12 sm:space-y-16 pb-24 bg-[#F8FAFC] dark:bg-[#071426] text-slate-800 dark:text-slate-100 transition-colors duration-150">
+      
+      {/* =========================================================================
+          1. HERO SECTION (Screen 1 & Mockup 1: Contained Full Campus Photo Hero)
+         ========================================================================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
         <div
-          className="relative overflow-hidden rounded-3xl min-h-[420px] sm:min-h-[460px] flex items-center p-6 sm:p-12 lg:p-16 shadow-2xl border border-slate-200/80 dark:border-[#263B55] bg-cover bg-center"
+          className="relative overflow-hidden rounded-3xl min-h-[460px] sm:min-h-[500px] lg:min-h-[540px] flex items-center p-6 sm:p-12 lg:p-16 shadow-[0_10px_30px_-5px_rgba(10,32,59,0.12)] border border-slate-200/80 dark:border-[#1E3A5F] bg-cover bg-right sm:bg-center"
           style={{ backgroundImage: `url('/images/university_building.jpg')` }}
         >
-          {/* Deep Navy/Atmospheric gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#061527]/95 via-[#0A203B]/80 to-[#0A203B]/25 dark:from-[#040C18]/95 dark:via-[#071629]/85 dark:to-transparent" />
+          {/* Deep Navy/Atmospheric Academic Overlay tailored for razor-sharp readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#061527]/98 via-[#0A203B]/85 to-[#0A203B]/30 dark:from-[#030A14]/98 dark:via-[#07172B]/90 dark:to-transparent" />
+          
+          {/* Subtle Ambient Radial Light */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.18),transparent_50%)]" />
 
-          {/* Floating glass badge in top right */}
-          <div className="hidden sm:flex absolute top-6 right-6 bg-white/15 dark:bg-[#0F2036]/80 backdrop-blur-md border border-white/20 dark:border-[#263B55] shadow-lg rounded-2xl px-4 py-2.5 items-center gap-2.5 text-white z-10">
-            <div className="w-8 h-8 rounded-xl bg-[#2563EB] text-white flex items-center justify-center shrink-0 shadow-md">
-              <GraduationCap className="w-4 h-4" />
+          {/* Floating glass institutional badge in top right */}
+          <div className="hidden md:flex absolute top-6 right-6 bg-white/15 dark:bg-[#0F2036]/80 backdrop-blur-md border border-white/20 dark:border-[#263B55] shadow-lg rounded-2xl px-4 py-2.5 items-center gap-3 text-white z-10">
+            <div className="w-9 h-9 rounded-xl bg-[#2563EB] text-white flex items-center justify-center shrink-0 shadow-md">
+              <GraduationCap className="w-5 h-5 text-white" />
             </div>
             <div className="text-left">
-              <div className="text-[10px] text-blue-200 uppercase tracking-wider font-semibold">Rasmiy tizim</div>
-              <div className="text-xs font-bold text-white">Andijon Qishloq Xo&apos;jaligi Instituti</div>
+              <div className="text-[10px] text-blue-200 uppercase tracking-wider font-bold">Rasmiy tizim</div>
+              <div className="text-xs font-black text-white">Andijon Qishloq Xo&apos;jaligi Instituti</div>
             </div>
           </div>
 
           {/* Left Hero Content */}
-          <div className="relative z-10 max-w-2xl space-y-5 text-white">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-xs font-bold text-white shadow-sm">
+          <div className="relative z-10 max-w-2xl space-y-6 text-white">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-xs font-bold text-white shadow-sm">
               <GraduationCap className="w-4 h-4 text-blue-300" />
               <span>Andijon Qishloq Xo&apos;jaligi Instituti</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white leading-[1.15]">
-              {heroSection?.title_uz || "Kelajagingiz uchun to'g'ri tanlov!"}
+            <h1 className="text-3xl sm:text-5xl lg:text-[54px] font-black tracking-tight text-white leading-[1.12]">
+              Kelajagingiz uchun to&apos;g&apos;ri tanlov!
             </h1>
 
             <p className="text-sm sm:text-base text-slate-200 leading-relaxed max-w-xl font-normal">
-              {heroSection?.subtitle_uz ||
-                "Andijon Qishloq Xo'jaligi Instituti imtihon platformasi orqali ilmiy attestatsiya va malakaviy imtihonlarga tezkor, shaffof va oson ro'yxatdan o'ting."}
+              Andijon Qishloq xo&apos;jaligi instituti imtihon platformasi orqali o&apos;zingizning kelajagingizni belgilang. Qulay ro&apos;yxatdan o&apos;tish, imtihonlar jadvali va shaffof baholash tizimi.
             </p>
 
-            <div className="flex flex-wrap items-center gap-4 pt-3">
+            <div className="flex flex-wrap items-center gap-4 pt-2">
               <Link
                 href="/ariza/yangi"
-                className="px-6 py-3.5 rounded-xl text-xs sm:text-sm font-bold bg-[#2563EB] hover:bg-[#1D4ED8] text-white transition shadow-lg inline-flex items-center gap-2"
+                className="px-7 py-3.5 rounded-xl text-xs sm:text-sm font-bold bg-[#2563EB] hover:bg-[#1D4ED8] text-white transition shadow-[0_4px_14px_0_rgba(37,99,235,0.39)] inline-flex items-center gap-2 hover:scale-[1.02] active:scale-[0.98]"
               >
                 Ro&apos;yxatdan o&apos;tish
                 <ArrowRight className="w-4 h-4" />
@@ -130,7 +266,7 @@ export default function HomePage() {
 
               <a
                 href="#examinations"
-                className="px-6 py-3.5 rounded-xl text-xs sm:text-sm font-bold bg-white/20 hover:bg-white/30 backdrop-blur-md text-white border border-white/30 transition shadow-sm inline-flex items-center gap-2"
+                className="px-7 py-3.5 rounded-xl text-xs sm:text-sm font-bold bg-white/15 hover:bg-white/25 backdrop-blur-md text-white border border-white/30 transition shadow-sm inline-flex items-center gap-2"
               >
                 Imtihonlar
               </a>
@@ -139,38 +275,40 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 2. 4 BENEFIT CARDS (Mockup 1 in media_1793125960007_1630b4f6.jpg) */}
+      {/* =========================================================================
+          2. 4 FEATURE CARDS (Screen 1 & Mockup 1)
+         ========================================================================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 sm:-mt-8 relative z-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
             {
               icon: FileText,
               title: "Qulay ro'yxatdan o'tish",
-              desc: "Tez va oson ariza topshiring",
+              desc: 'Tez va oson ariza topshiring',
             },
             {
-              icon: Laptop,
-              title: "Onlayn ariza topshirish",
-              desc: "Barcha amallar to'liq onlayn",
+              icon: Calendar,
+              title: 'Imtihon jadvali',
+              desc: 'Aniq vaqt va muddatlar',
             },
             {
-              icon: CheckCircle,
-              title: "Natijalarni ko'rish",
-              desc: "Natijalar tezda e'lon qilinadi",
+              icon: CheckCircle2,
+              title: 'Natijalarni kuzatish',
+              desc: 'Shaxsiy kabinet orqali',
             },
             {
               icon: Headphones,
-              title: "24/7 qo'llab-quvvatlash",
-              desc: "24/7 doimiy yordam",
+              title: "24/7 Qo'llab-quvvatlash",
+              desc: '24/7 doimiy yordam',
             },
-          ].map((item, idx) => {
+          ].map((item) => {
             const Icon = item.icon;
             return (
               <div
                 key={item.title}
-                className="bg-white dark:bg-[#0F2036] rounded-2xl border border-slate-200/90 dark:border-[#263B55] p-5 shadow-md hover:shadow-lg hover:border-[#2563EB]/40 dark:hover:border-[#3B82F6]/40 transition group flex flex-col justify-between"
+                className="bg-white dark:bg-[#0D223A] rounded-2xl border border-slate-200/90 dark:border-[#1E3A5F] p-5 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-lg hover:border-[#2563EB]/40 dark:hover:border-[#3B82F6]/50 transition group flex flex-col justify-between"
               >
-                <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-[#162B45] text-[#2563EB] dark:text-[#3B82F6] flex items-center justify-center mb-3 group-hover:scale-105 transition">
+                <div className="w-11 h-11 rounded-xl bg-blue-50 dark:bg-[#162E4A] text-[#2563EB] dark:text-[#3B82F6] flex items-center justify-center mb-3 group-hover:scale-105 transition">
                   <Icon className="w-5 h-5" />
                 </div>
                 <div>
@@ -187,10 +325,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 3. STATISTICS BAR (Mockup 1) */}
+      {/* =========================================================================
+          3. STATISTICS BAR (Screen 1 & Mockup 1: 4 Metrics in a Slim Horizontal Pill)
+         ========================================================================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white dark:bg-[#0F2036] rounded-2xl border border-slate-200/80 dark:border-[#263B55] p-6 shadow-sm">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center divide-y lg:divide-y-0 lg:divide-x divide-slate-100 dark:divide-slate-800">
+        <div className="bg-white dark:bg-[#0D223A] rounded-2xl border border-slate-200/80 dark:border-[#1E3A5F] p-6 shadow-sm">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center divide-y lg:divide-y-0 lg:divide-x divide-slate-100 dark:divide-[#1E3A5F]">
             <div className="space-y-1">
               <div className="text-2xl sm:text-3xl font-black text-[#2563EB] dark:text-[#3B82F6]">
                 3,500+
@@ -220,7 +360,7 @@ export default function HomePage() {
 
             <div className="space-y-1 pt-4 lg:pt-0">
               <div className="text-2xl sm:text-3xl font-black text-[#10B981]">
-                98%
+                90%
               </div>
               <div className="text-xs font-semibold text-slate-600 dark:text-slate-400">
                 Muvaffaqiyat ko&apos;rsatkichi
@@ -230,169 +370,216 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 4. MAVJUD IMTIHONLAR (Mockup 1 & 7: Grid / Table View) */}
-      <section id="examinations" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      {/* =========================================================================
+          4. 4 CATEGORY FILTER PILLS (Screen 1 in Reference Board)
+         ========================================================================= */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-wrap items-center gap-3">
+          {[
+            { id: 'register', label: "Ro'yxatdan o'tish", count: 'Faol' },
+            { id: 'direction', label: "Ta'lim yo'nalishi", count: '12 ta' },
+            { id: 'application', label: 'Abituriyent arizasi', count: 'Onlayn' },
+            { id: 'stats', label: 'Imtihon ko‘rsatkichlari', count: '100%' },
+          ].map((tab) => {
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveTab(tab.id as any)}
+                className={`px-5 py-2.5 rounded-full text-xs font-bold transition flex items-center gap-2 shadow-sm ${
+                  isActive
+                    ? 'bg-[#2563EB] text-white shadow-[#2563EB]/25'
+                    : 'bg-white dark:bg-[#0D223A] text-slate-700 dark:text-slate-300 border border-slate-200/90 dark:border-[#1E3A5F] hover:bg-slate-50 dark:hover:bg-[#152E4D]'
+                }`}
+              >
+                <span>{tab.label}</span>
+                <span
+                  className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${
+                    isActive
+                      ? 'bg-white/20 text-white'
+                      : 'bg-slate-100 dark:bg-[#162E4A] text-slate-500 dark:text-slate-400'
+                  }`}
+                >
+                  {tab.count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* =========================================================================
+          5. IMTIHONLAR RO'YXATI (Screen 7 & Mockup 7: Responsive Academic Table)
+         ========================================================================= */}
+      <section id="examinations" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
-              Mavjud imtihonlar
+              Imtihonlar ro&apos;yxati
             </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              Attestatsiya va chet tili malakaviy imtihonlari jadvali
+              Malakaviy va attestatsiya imtihonlari rasmiy jadvali
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
-            {/* View Switcher: Table vs Cards */}
-            <div className="bg-slate-100 dark:bg-[#162B45] p-1 rounded-xl flex items-center text-xs font-bold">
+          <div className="flex flex-wrap items-center gap-3">
+            {/* View Switcher: Table vs Grid */}
+            <div className="bg-white dark:bg-[#0D223A] border border-slate-200/80 dark:border-[#1E3A5F] p-1 rounded-xl flex items-center text-xs font-bold shadow-sm">
               <button
                 type="button"
                 onClick={() => setViewMode('table')}
                 className={`px-3 py-1.5 rounded-lg transition ${
                   viewMode === 'table'
-                    ? 'bg-white dark:bg-[#2563EB] text-slate-900 dark:text-white shadow-sm'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    ? 'bg-[#2563EB] text-white'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
                 }`}
               >
-                Jadval (Mockup 7)
+                Jadval
               </button>
               <button
                 type="button"
                 onClick={() => setViewMode('grid')}
                 className={`px-3 py-1.5 rounded-lg transition ${
                   viewMode === 'grid'
-                    ? 'bg-white dark:bg-[#2563EB] text-slate-900 dark:text-white shadow-sm'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    ? 'bg-[#2563EB] text-white'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900'
                 }`}
               >
-                Kartalar
+                Kartochka
               </button>
             </div>
 
             <Link
-              href="/imtihonlar"
-              className="text-xs sm:text-sm font-bold text-[#2563EB] dark:text-[#3B82F6] hover:underline flex items-center gap-1"
+              href="/ariza/yangi"
+              className="px-4 py-2 rounded-xl text-xs font-bold bg-[#2563EB] hover:bg-[#1D4ED8] text-white transition shadow-sm inline-flex items-center gap-1.5"
             >
-              Barchasi <ArrowRight className="w-4 h-4" />
+              <Plus className="w-3.5 h-3.5" />
+              <span>Yangi ariza topshirish</span>
             </Link>
           </div>
         </div>
 
-        {/* Search & Filter Bar (Mockup 7 style) */}
-        <div className="bg-white dark:bg-[#0F2036] p-4 rounded-2xl border border-slate-200 dark:border-[#263B55] shadow-sm flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="relative w-full sm:w-80">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+        {/* Filter bar */}
+        <div className="bg-white dark:bg-[#0D223A] rounded-2xl border border-slate-200/90 dark:border-[#1E3A5F] p-4 shadow-sm flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+          <div className="relative flex-1">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
+              placeholder="Qidiring (Masalan: Matematika, Biologiya)..."
               value={examSearch}
               onChange={(e) => setExamSearch(e.target.value)}
-              placeholder="Imtihon nomi bo'yicha qidirish..."
-              className="w-full text-xs bg-slate-50 dark:bg-[#11263E] border border-slate-200 dark:border-[#263B55] rounded-xl pl-9 pr-3 py-2 outline-none text-slate-900 dark:text-white focus:border-[#2563EB]"
+              className="w-full pl-10 pr-4 py-2 text-xs rounded-xl bg-slate-50 dark:bg-[#071426] border border-slate-200/80 dark:border-[#1E3A5F] text-slate-900 dark:text-white focus:outline-none focus:border-[#2563EB]"
             />
           </div>
 
-          <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+          <div className="flex items-center gap-2">
             <select
               value={selectedLang}
               onChange={(e) => setSelectedLang(e.target.value)}
-              className="text-xs bg-slate-50 dark:bg-[#11263E] border border-slate-200 dark:border-[#263B55] text-slate-700 dark:text-slate-200 rounded-xl px-3 py-2 outline-none focus:border-[#2563EB]"
+              className="px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-[#071426] border border-slate-200/80 dark:border-[#1E3A5F] text-slate-700 dark:text-slate-300 focus:outline-none focus:border-[#2563EB]"
             >
               <option value="all">Barcha tillar</option>
+              <option value="uz">O‘zbek tili</option>
               <option value="en">Ingliz tili</option>
-              <option value="de">Nemis tili</option>
-              <option value="uz">O&apos;zbek tili</option>
+              <option value="ru">Rus tili</option>
             </select>
 
             <select
               value={selectedExamType}
               onChange={(e) => setSelectedExamType(e.target.value)}
-              className="text-xs bg-slate-50 dark:bg-[#11263E] border border-slate-200 dark:border-[#263B55] text-slate-700 dark:text-slate-200 rounded-xl px-3 py-2 outline-none focus:border-[#2563EB]"
+              className="px-3 py-2 text-xs rounded-xl bg-slate-50 dark:bg-[#071426] border border-slate-200/80 dark:border-[#1E3A5F] text-slate-700 dark:text-slate-300 focus:outline-none focus:border-[#2563EB]"
             >
               <option value="all">Barcha turlar</option>
-              <option value="foreign">Chet tili malakaviy</option>
-              <option value="standard">Attestatsiya sinovlari</option>
+              <option value="specialty">Mutaxassislik</option>
+              <option value="foreign">Chet tili</option>
             </select>
           </div>
         </div>
 
-        {loading ? (
-          <div className="h-64 bg-slate-100 dark:bg-slate-800 rounded-2xl animate-pulse" />
-        ) : filteredExams.length === 0 ? (
-          <div className="bg-white dark:bg-[#0F2036] rounded-2xl p-10 text-center border border-slate-200 dark:border-[#263B55] text-slate-500 text-sm">
-            Tanlangan parametrlar bo&apos;yicha imtihon topilmadi.
-          </div>
-        ) : viewMode === 'table' ? (
-          /* Institutional Table Layout (Mockup 7 & Mockup 1) */
-          <div className="bg-white dark:bg-[#0F2036] rounded-2xl border border-slate-200 dark:border-[#263B55] shadow-sm overflow-hidden">
+        {/* 5.A TABLE VIEW (Screen 7 in Mockup Reference) */}
+        {viewMode === 'table' ? (
+          <div className="bg-white dark:bg-[#0D223A] rounded-2xl border border-slate-200/90 dark:border-[#1E3A5F] shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse text-xs">
                 <thead>
-                  <tr className="bg-slate-50 dark:bg-[#162B45] border-b border-slate-200 dark:border-[#263B55] text-slate-600 dark:text-slate-300 font-semibold uppercase tracking-wider">
-                    <th className="px-4 py-3.5">№</th>
-                    <th className="px-4 py-3.5">Imtihon nomi</th>
-                    <th className="px-4 py-3.5">Til / Yo&apos;nalish</th>
-                    <th className="px-4 py-3.5">Sana</th>
-                    <th className="px-4 py-3.5">Davomiyligi</th>
-                    <th className="px-4 py-3.5">Holat</th>
-                    <th className="px-4 py-3.5 text-right">Amal</th>
+                  <tr className="bg-slate-50/80 dark:bg-[#122A46] text-slate-600 dark:text-slate-300 border-b border-slate-200/80 dark:border-[#1E3A5F]">
+                    <th className="py-3.5 px-4 font-bold w-12 text-center">№</th>
+                    <th className="py-3.5 px-4 font-bold">Imtihon nomi</th>
+                    <th className="py-3.5 px-4 font-bold">Sana</th>
+                    <th className="py-3.5 px-4 font-bold">Davomiyligi</th>
+                    <th className="py-3.5 px-4 font-bold text-center">Holat</th>
+                    <th className="py-3.5 px-4 font-bold text-right">Amal</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 dark:divide-[#263B55]">
+                <tbody className="divide-y divide-slate-100 dark:divide-[#1E3A5F]">
                   {filteredExams.map((exam, idx) => {
-                    const isOpen = exam.is_registration_open;
+                    const isOpen =
+                      exam.is_registration_open !== false && exam.status === 'published';
+                    const examDateStr = exam.exam_date
+                      ? new Date(exam.exam_date).toLocaleDateString('uz-UZ', {
+                          year: 'numeric',
+                          month: '2-digit',
+                          day: '2-digit',
+                        })
+                      : '2025-07-15';
+
                     return (
-                      <tr key={exam.id} className="hover:bg-slate-50/70 dark:hover:bg-[#162B45]/50 transition">
-                        <td className="px-4 py-3.5 font-bold text-slate-400">
+                      <tr
+                        key={exam.id}
+                        className="hover:bg-slate-50/60 dark:hover:bg-[#122A46]/50 transition"
+                      >
+                        <td className="py-4 px-4 text-center font-bold text-slate-500">
                           {idx + 1}
                         </td>
-                        <td className="px-4 py-3.5">
-                          <div className="font-bold text-slate-900 dark:text-white text-xs sm:text-sm">
-                            {exam.title}
+                        <td className="py-4 px-4 font-bold text-slate-900 dark:text-white">
+                          <div className="flex items-center gap-2.5">
+                            <div className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-[#162E4A] text-[#2563EB] dark:text-[#3B82F6] flex items-center justify-center font-bold text-xs shrink-0">
+                              {exam.title.charAt(0)}
+                            </div>
+                            <div>
+                              <div>{exam.title}</div>
+                              <div className="text-[10px] text-slate-400 font-normal">
+                                {exam.category || 'Malakaviy imtihon'} • {exam.language.toUpperCase()}
+                              </div>
+                            </div>
                           </div>
-                          <div className="text-[11px] text-slate-400">
-                            {exam.location || "AQXI Bosh binosi"}
+                        </td>
+                        <td className="py-4 px-4 text-slate-600 dark:text-slate-300">
+                          <div className="inline-flex items-center gap-1.5">
+                            <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                            <span>{examDateStr}</span>
                           </div>
                         </td>
-                        <td className="px-4 py-3.5">
-                          <span className="px-2 py-0.5 rounded-full text-[11px] font-semibold uppercase bg-blue-50 dark:bg-blue-950/60 text-[#2563EB] dark:text-[#3B82F6]">
-                            {exam.language === 'en' ? 'Ingliz tili' : exam.language === 'de' ? 'Nemis tili' : 'O‘zbek tili'}
-                          </span>
+                        <td className="py-4 px-4 text-slate-600 dark:text-slate-300">
+                          <div className="inline-flex items-center gap-1.5">
+                            <Clock className="w-3.5 h-3.5 text-slate-400" />
+                            <span>2 soat</span>
+                          </div>
                         </td>
-                        <td className="px-4 py-3.5 text-slate-600 dark:text-slate-300">
-                          {exam.exam_date ? new Date(exam.exam_date).toLocaleDateString() : 'E\'lon qilinadi'}
+                        <td className="py-4 px-4 text-center">
+                          {isOpen ? (
+                            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-200/80 dark:border-emerald-800">
+                              Ochiq
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-200/80 dark:border-rose-800">
+                              Yopiq
+                            </span>
+                          )}
                         </td>
-                        <td className="px-4 py-3.5 text-slate-600 dark:text-slate-300">
-                          2 soat
-                        </td>
-                        <td className="px-4 py-3.5">
-                          <span
-                            className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold ${
+                        <td className="py-4 px-4 text-right">
+                          <Link
+                            href={isOpen ? `/ariza/yangi?exam=${exam.id}` : '#'}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition inline-flex items-center gap-1 ${
                               isOpen
-                                ? 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
-                                : 'bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800'
+                                ? 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white shadow-sm'
+                                : 'bg-slate-100 dark:bg-slate-800 text-slate-400 cursor-not-allowed pointer-events-none'
                             }`}
                           >
-                            <span className={`w-1.5 h-1.5 rounded-full ${isOpen ? 'bg-emerald-500' : 'bg-rose-500'}`} />
-                            {isOpen ? 'Ochiq' : 'Yopiq'}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3.5 text-right">
-                          {isOpen ? (
-                            <Link
-                              href={`/ariza/yangi?exam=${exam.id}`}
-                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold bg-[#2563EB] hover:bg-[#1D4ED8] text-white transition shadow-sm"
-                            >
-                              Ro&apos;yxatdan o&apos;tish
-                              <ChevronRight className="w-3.5 h-3.5" />
-                            </Link>
-                          ) : (
-                            <Link
-                              href={`/imtihonlar/${exam.id}`}
-                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-[#162B45] text-slate-700 dark:text-slate-200 hover:bg-slate-200 transition"
-                            >
-                              Batafsil
-                            </Link>
-                          )}
+                            <span>{isOpen ? "Ro'yxatdan o'tish" : 'Yopilgan'}</span>
+                            {isOpen && <ChevronRight className="w-3.5 h-3.5" />}
+                          </Link>
                         </td>
                       </tr>
                     );
@@ -401,91 +588,104 @@ export default function HomePage() {
               </table>
             </div>
 
-            {/* Pagination at bottom (Mockup 7) */}
-            <div className="p-3 border-t border-slate-100 dark:border-[#263B55] flex items-center justify-end gap-1 text-xs">
-              <span className="w-7 h-7 rounded-lg bg-[#2563EB] text-white flex items-center justify-center font-bold">1</span>
-              <span className="w-7 h-7 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-[#162B45] flex items-center justify-center cursor-pointer">2</span>
-              <span className="w-7 h-7 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-[#162B45] flex items-center justify-center cursor-pointer">3</span>
-              <span className="w-7 h-7 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-[#162B45] flex items-center justify-center cursor-pointer">&gt;</span>
+            {/* Pagination matching Screen 7 (< 1 2 3 >) */}
+            <div className="p-4 border-t border-slate-200/80 dark:border-[#1E3A5F] flex items-center justify-between text-xs text-slate-500">
+              <div>Jami: {filteredExams.length} ta imtihon mavjud</div>
+              <div className="flex items-center gap-1">
+                <button
+                  type="button"
+                  className="w-7 h-7 rounded-lg border border-slate-200 dark:border-[#1E3A5F] flex items-center justify-center hover:bg-slate-50 dark:hover:bg-[#152E4D]"
+                >
+                  <ChevronLeft className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  type="button"
+                  className="w-7 h-7 rounded-lg bg-[#2563EB] text-white font-bold flex items-center justify-center"
+                >
+                  1
+                </button>
+                <button
+                  type="button"
+                  className="w-7 h-7 rounded-lg border border-slate-200 dark:border-[#1E3A5F] flex items-center justify-center hover:bg-slate-50 dark:hover:bg-[#152E4D]"
+                >
+                  2
+                </button>
+                <button
+                  type="button"
+                  className="w-7 h-7 rounded-lg border border-slate-200 dark:border-[#1E3A5F] flex items-center justify-center hover:bg-slate-50 dark:hover:bg-[#152E4D]"
+                >
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
           </div>
         ) : (
-          /* Grid View */
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          /* 5.B GRID CARDS VIEW */
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {filteredExams.map((exam) => {
-              const isOpen = exam.is_registration_open;
+              const isOpen =
+                exam.is_registration_open !== false && exam.status === 'published';
+              const examDateStr = exam.exam_date
+                ? new Date(exam.exam_date).toLocaleDateString('uz-UZ', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                  })
+                : '15-iyul, 2025';
+
               return (
                 <div
                   key={exam.id}
-                  className="bg-white dark:bg-[#0F2036] border border-slate-200/90 dark:border-[#263B55] hover:border-[#2563EB]/50 dark:hover:border-[#3B82F6]/50 hover:shadow-lg transition-all rounded-2xl p-5 flex flex-col justify-between space-y-4 group"
+                  className="bg-white dark:bg-[#0D223A] rounded-2xl border border-slate-200/90 dark:border-[#1E3A5F] p-5 shadow-sm hover:shadow-md transition flex flex-col justify-between"
                 >
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                      <span
-                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold ${
-                          isOpen
-                            ? 'bg-emerald-50 dark:bg-emerald-950/60 text-[#10B981] border border-emerald-200 dark:border-emerald-800'
-                            : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
-                        }`}
-                      >
-                        <span
-                          className={`w-1.5 h-1.5 rounded-full ${
-                            isOpen ? 'bg-[#10B981]' : 'bg-slate-400'
-                          }`}
-                        />
-                        {isOpen ? "Ochiq" : 'Yopiq'}
+                      <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-50 dark:bg-[#162E4A] text-[#2563EB] dark:text-[#3B82F6]">
+                        {exam.category || 'Malakaviy imtihon'}
                       </span>
-                      <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-[#2563EB] dark:group-hover:text-[#3B82F6] transition" />
+                      {isOpen ? (
+                        <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-200/80">
+                          Ochiq
+                        </span>
+                      ) : (
+                        <span className="text-[11px] font-bold text-rose-600 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/40 px-2 py-0.5 rounded-full border border-rose-200/80">
+                          Yopiq
+                        </span>
+                      )}
                     </div>
 
-                    <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1">
-                      <Globe className="w-3.5 h-3.5 text-[#2563EB] dark:text-[#3B82F6]" />
-                      <span className="uppercase">
-                        {exam.language === 'en'
-                          ? 'Ingliz tili'
-                          : exam.language === 'de'
-                          ? 'Nemis tili'
-                          : 'O‘zbek tili'}
-                      </span>
-                    </div>
-
-                    <h3 className="font-bold text-slate-900 dark:text-white text-base leading-snug group-hover:text-[#2563EB] dark:group-hover:text-[#3B82F6] transition">
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white leading-snug">
                       {exam.title}
                     </h3>
+                    <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">
+                      {exam.description}
+                    </p>
 
-                    <div className="space-y-1.5 text-xs text-slate-600 dark:text-slate-400 pt-1">
-                      <div className="flex items-center gap-1.5">
-                        <Calendar className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                        <span>
-                          Ro&apos;yxat: {new Date(exam.registration_start).toLocaleDateString()} —{' '}
-                          {new Date(exam.registration_end).toLocaleDateString()}
-                        </span>
+                    <div className="pt-2 border-t border-slate-100 dark:border-[#1E3A5F] space-y-1.5 text-xs text-slate-600 dark:text-slate-300">
+                      <div className="flex items-center gap-2">
+                        <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                        <span>Sana: {examDateStr}</span>
                       </div>
-                      <div className="flex items-center gap-1.5">
-                        <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                        <span>
-                          Imtihon:{' '}
-                          {exam.exam_date
-                            ? new Date(exam.exam_date).toLocaleDateString()
-                            : 'Belgilanmagan'}
-                        </span>
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-3.5 h-3.5 text-slate-400" />
+                        <span>Davomiyligi: 2 soat</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+                  <div className="pt-4 mt-4 border-t border-slate-100 dark:border-[#1E3A5F] flex items-center justify-between">
                     <Link
                       href={`/imtihonlar/${exam.id}`}
-                      className="py-2 text-center text-xs font-bold rounded-xl border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition"
+                      className="text-xs font-semibold text-slate-500 hover:text-slate-800 dark:hover:text-white"
                     >
                       Batafsil
                     </Link>
                     <Link
                       href={isOpen ? `/ariza/yangi?exam=${exam.id}` : '#'}
-                      className={`py-2 text-center text-xs font-bold rounded-xl text-white transition ${
+                      className={`px-4 py-2 rounded-xl text-xs font-bold transition ${
                         isOpen
-                          ? 'bg-[#2563EB] hover:bg-[#1D4ED8] dark:bg-[#3B82F6] dark:hover:bg-[#2563EB] shadow-sm'
-                          : 'bg-slate-400 dark:bg-slate-700 cursor-not-allowed pointer-events-none'
+                          ? 'bg-[#2563EB] hover:bg-[#1D4ED8] text-white shadow-sm'
+                          : 'bg-slate-100 dark:bg-slate-800 text-slate-400 cursor-not-allowed pointer-events-none'
                       }`}
                     >
                       Ro&apos;yxatdan o&apos;tish
@@ -498,218 +698,178 @@ export default function HomePage() {
         )}
       </section>
 
-      {/* 5. RO'YXATDAN O'TISH JARAYONI (5 Steps) */}
+      {/* =========================================================================
+          6. 5-BOSQICHLI RO'YXATDAN O'TISH JARAYONI (Screen 4 Stepper Alignment)
+         ========================================================================= */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white dark:bg-[#0F2036] rounded-2xl border border-slate-200/80 dark:border-[#263B55] p-6 sm:p-10 shadow-sm">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-4 space-y-3">
-              <span className="text-[11px] font-black uppercase tracking-wider text-[#2563EB] dark:text-[#3B82F6]">
-                QANDAY ISHLAYDI?
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-                Ro&apos;yxatdan o&apos;tish jarayoni
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-                Ariza topshirish jarayoni bir necha oddiy qadamdan iborat. Barcha bosqichlarda
-                sizga qulay interfeys taqdim etiladi.
-              </p>
-              <Link
-                href="/faq"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-[#2563EB] hover:bg-[#1D4ED8] dark:bg-[#3B82F6] dark:hover:bg-[#2563EB] px-4 py-2.5 rounded-xl transition shadow-sm"
-              >
-                Batafsil ma&apos;lumot <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-
-            <div className="lg:col-span-8 grid grid-cols-2 sm:grid-cols-5 gap-4">
-              {[
-                {
-                  step: '01',
-                  icon: FileText,
-                  title: 'Imtihonni tanlang',
-                  desc: "Mavjud imtihonlar ro'yxatidan keraklisini tanlang",
-                },
-                {
-                  step: '02',
-                  icon: UserCheck,
-                  title: "Shaxsiy ma'lumotlar",
-                  desc: "O'zingiz haqingizdagi ma'lumotlarni to'ldiring",
-                },
-                {
-                  step: '03',
-                  icon: CloudUpload,
-                  title: 'Hujjatlarni yuklang',
-                  desc: 'Kerakli 6 ta hujjatni tizimga yuklang',
-                },
-                {
-                  step: '04',
-                  icon: Shield,
-                  title: 'Tekshirish va tasdiqlash',
-                  desc: "Ma'lumotlarni tekshirib arizani yuboring",
-                },
-                {
-                  step: '05',
-                  icon: BarChart3,
-                  title: 'Holatni kuzatish',
-                  desc: 'Shaxsiy kabinetda arizangiz holatini kuzating',
-                },
-              ].map((item) => {
-                const IconComponent = item.icon;
-                return (
-                  <div key={item.step} className="space-y-2 text-center group">
-                    <div className="w-12 h-12 mx-auto rounded-2xl bg-blue-50 dark:bg-[#162B45] border border-blue-100 dark:border-blue-900/50 flex items-center justify-center text-[#2563EB] dark:text-[#3B82F6] group-hover:scale-110 transition shadow-sm">
-                      <IconComponent className="w-5 h-5" />
-                    </div>
-                    <div className="text-[10px] font-black text-[#2563EB] dark:text-[#3B82F6] uppercase tracking-wider">
-                      {item.step}
-                    </div>
-                    <div className="font-bold text-xs text-slate-900 dark:text-white leading-tight">
-                      {item.title}
-                    </div>
-                    <div className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-tight">
-                      {item.desc}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. KERAKLI HUJJATLAR (6 Required Documents + Passport Photo) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-white dark:bg-[#0F2036] rounded-2xl border border-slate-200/80 dark:border-[#263B55] p-6 sm:p-10 shadow-sm overflow-hidden">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-7 space-y-6">
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-                    Kerakli hujjatlar
-                  </h2>
-                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-50 dark:bg-blue-950/60 text-[#2563EB] dark:text-[#3B82F6] border border-blue-200 dark:border-blue-800">
-                    Chet tillari uchun
-                  </span>
-                </div>
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-                  Ingliz va nemis tili bo&apos;yicha imtihonlarda quyidagi 6 ta hujjat talab etiladi:
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {[
-                  { num: 1, title: 'Rektor nomiga ariza' },
-                  { num: 2, title: 'Pasport nusxasi (JSHSHIR)' },
-                  { num: 3, title: "Ma'lumotnoma (obyektivka)" },
-                  { num: 4, title: 'Diplom nusxasi (ilova bilan)' },
-                  {
-                    num: 5,
-                    title: "OTM ilmiy kengash bayonnomasi / OAK byulleteni nusxasi",
-                  },
-                  {
-                    num: 6,
-                    title: 'Aloqa xati (boshqa OTMdan qatnashuvchilar uchun)',
-                  },
-                ].map((doc) => (
-                  <div key={doc.num} className="flex items-start gap-3">
-                    <div className="w-7 h-7 rounded-full bg-blue-50 dark:bg-[#162B45] text-[#2563EB] dark:text-[#3B82F6] font-bold text-xs flex items-center justify-center shrink-0 border border-blue-200 dark:border-blue-800">
-                      {doc.num}
-                    </div>
-                    <div className="text-xs font-semibold text-slate-800 dark:text-slate-200 leading-snug">
-                      {doc.title}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="pt-2">
-                <Link
-                  href="/hujjatlar"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold bg-[#2563EB] hover:bg-[#1D4ED8] dark:bg-[#3B82F6] dark:hover:bg-[#2563EB] text-white transition shadow-sm"
-                >
-                  Batafsil ko&apos;rish <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </div>
-
-            <div className="lg:col-span-5 relative flex items-center justify-center">
-              <div className="relative w-full h-[280px] sm:h-[340px] rounded-2xl overflow-hidden">
-                <img
-                  src="/images/passport_documents.jpg"
-                  alt="Kerakli hujjatlar va O'zbekiston pasporti"
-                  className="w-full h-full object-contain object-center"
-                  style={{
-                    maskImage:
-                      'linear-gradient(to right, transparent 0%, black 15%, black 90%, transparent 100%), linear-gradient(to bottom, black 85%, transparent 100%)',
-                    WebkitMaskImage:
-                      'linear-gradient(to right, transparent 0%, black 15%, black 90%, transparent 100%), linear-gradient(to bottom, black 85%, transparent 100%)',
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 7. FAQ ACCORDIONS */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          <div className="lg:col-span-4 space-y-3">
+        <div className="bg-white dark:bg-[#0D223A] rounded-2xl border border-slate-200/90 dark:border-[#1E3A5F] p-6 sm:p-10 shadow-sm">
+          <div className="text-center max-w-2xl mx-auto space-y-2 mb-10">
+            <span className="text-[11px] font-black uppercase tracking-wider text-[#2563EB] dark:text-[#3B82F6]">
+              QANDAY ISHLAYDI?
+            </span>
             <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
-              Tez-tez so&apos;raladigan savollar
+              Ro&apos;yxatdan o&apos;tish jarayoni
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-              Sizni qiziqtirgan savollarga javoblarni shu yerda topishingiz mumkin.
+              Ariza topshirishdan imtihon ruxsatnomasini olishgacha bo&apos;lgan 5 ta oddiy bosqich
             </p>
-            <Link
-              href="/faq"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-[#2563EB] dark:text-[#3B82F6] pt-2"
-            >
-              Barcha savollar <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
           </div>
 
-          <div className="lg:col-span-8 space-y-3">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 relative">
+            {[
+              {
+                num: '1',
+                title: "Shaxsiy ma'lumotlar",
+                desc: 'Pasport va shaxsiy maʼlumotlarni to‘ldirish',
+                icon: UserCheck,
+              },
+              {
+                num: '2',
+                title: "Ta'lim ma'lumotlari",
+                desc: 'OTM, diplom va mutaxassislikni kiritish',
+                icon: BookOpen,
+              },
+              {
+                num: '3',
+                title: 'Imtihonni tanlash',
+                desc: 'Kerakli fan yoki chet tilini tanlash',
+                icon: CheckSquare,
+              },
+              {
+                num: '4',
+                title: 'Hujjatlarni yuklash',
+                desc: 'Talab etiladigan 6 ta hujjatni ilova qilish',
+                icon: CloudUpload,
+              },
+              {
+                num: '5',
+                title: 'QR Ruxsatnoma',
+                desc: 'Arizani tasdiqlash va ruxsatnomani olish',
+                icon: Award,
+              },
+            ].map((step, idx) => {
+              const Icon = step.icon;
+              return (
+                <div
+                  key={step.num}
+                  className="bg-slate-50 dark:bg-[#071426] rounded-2xl border border-slate-200/80 dark:border-[#1E3A5F] p-5 flex flex-col items-center text-center space-y-3 relative group hover:border-[#2563EB]/50 transition"
+                >
+                  <div className="w-10 h-10 rounded-full bg-[#2563EB] text-white flex items-center justify-center font-black text-sm shadow-md group-hover:scale-105 transition">
+                    {step.num}
+                  </div>
+                  <h4 className="font-bold text-xs text-slate-900 dark:text-white">
+                    {step.title}
+                  </h4>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-normal">
+                    {step.desc}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="mt-8 text-center">
+            <Link
+              href="/ariza/yangi"
+              className="px-6 py-3 rounded-xl text-xs sm:text-sm font-bold bg-[#2563EB] hover:bg-[#1D4ED8] text-white transition shadow-sm inline-flex items-center gap-2"
+            >
+              Hoziroq ariza topshirish
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          7. INSTITUT VA ILMIY SALOHIYAT (Real Academic Visual Environment)
+         ========================================================================= */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+          <div className="space-y-4">
+            <span className="text-[11px] font-black uppercase tracking-wider text-[#2563EB] dark:text-[#3B82F6]">
+              ANDIJON QISHLOQ XO‘JALIGI VA AGROTEXNOLOGIYALAR INSTITUTI
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight leading-tight">
+              Zamonaviy ilmiy laboratoriyalar va xalqaro attestatsiya standartlari
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Institutimizda qishloq xo‘jaligi, agrotexnologiyalar, seleksiya, tuproqshunoslik va o‘simliklar himoyasi sohalarida oliy malakali ilmiy-pedagogik kadrlar tayyorlanmoqda. Barcha imtihonlar shaffof va adolatli tashkil etilgan.
+            </p>
+            <div className="grid grid-cols-2 gap-4 pt-2">
+              <div className="bg-white dark:bg-[#0D223A] p-4 rounded-xl border border-slate-200/80 dark:border-[#1E3A5F]">
+                <div className="text-xl font-black text-[#2563EB]">100%</div>
+                <div className="text-xs text-slate-500 dark:text-slate-400">Elektron va shaffof</div>
+              </div>
+              <div className="bg-white dark:bg-[#0D223A] p-4 rounded-xl border border-slate-200/80 dark:border-[#1E3A5F]">
+                <div className="text-xl font-black text-[#10B981]">OAK</div>
+                <div className="text-xs text-slate-500 dark:text-slate-400">Rasmiy ro‘yxatga olingan</div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            className="rounded-3xl overflow-hidden min-h-[300px] sm:min-h-[340px] bg-cover bg-center border border-slate-200/80 dark:border-[#1E3A5F] shadow-lg relative p-8 flex items-end"
+            style={{ backgroundImage: `url('/images/agriculture_field.jpg')` }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-t from-[#061527]/90 via-[#0A203B]/40 to-transparent" />
+            <div className="relative z-10 text-white">
+              <div className="text-xs font-bold text-blue-300">Ilmiy agropark va tajriba dalalari</div>
+              <div className="text-base sm:text-lg font-black text-white mt-1">
+                Innovatsion agrotexnologiyalar markazi
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          8. KO'P BERILADIGAN SAVOLLAR (FAQ)
+         ========================================================================= */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="bg-white dark:bg-[#0D223A] rounded-2xl border border-slate-200/90 dark:border-[#1E3A5F] p-6 sm:p-10 shadow-sm space-y-6">
+          <div className="text-center max-w-xl mx-auto space-y-1">
+            <span className="text-[11px] font-black uppercase tracking-wider text-[#2563EB] dark:text-[#3B82F6]">
+              SAVOL-JAVOBLAR
+            </span>
+            <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+              Ko‘p beriladigan savollar
+            </h2>
+          </div>
+
+          <div className="max-w-3xl mx-auto space-y-3">
             {[
               {
                 id: 1,
-                q: "Imtihonlarga ro'yxatdan o'tish muddati qancha?",
-                a: "Har bir imtihon uchun ro'yxatdan o'tish muddati e'londa alohida ko'rsatiladi. Odatda imtihon o'tkazilishidan 15-20 kun oldin boshlanadi va 3 kun qolganda to'xtatiladi.",
+                q: "Imtihon topshirish uchun qanday hujjatlar talab etiladi?",
+                a: "OAK talablari bo‘yicha: Rektor nomiga ariza, Pasport nusxasi, Obyektivka (ma'lumotnoma), Diplom nusxasi, Ilmiy kengash bayonnomasi yoki OAK byulleteni nusxasi hamda boshqa OTMdan bo‘lsa aloqa xati.",
               },
               {
                 id: 2,
-                q: 'Hujjatlarni qanday formatda yuklash mumkin?',
-                a: "Hujjatlar PDF yoki yuqori sifatli JPG/PNG formatida yuklanishi shart. Har bir fayl hajmi 10 MB dan oshmasligi lozim.",
+                q: "Arizam holatini qanday tekshirishim mumkin?",
+                a: "Abituriyent kabinetiga kirib 'Mening arizalarim' bo‘limi orqali arizangiz tekshiruv, qabul qilingan yoki ruxsatnoma berilgan holatini real vaqt rejimida kuzatishingiz mumkin.",
               },
               {
                 id: 3,
-                q: 'Arizani bekor qilish mumkinmi?',
-                a: "Ariza komissiya tomonidan ko'rib chiqilish holatida bo'lsa yoki qoralama bo'lsa, shaxsiy kabinet orqali bekor qilish yoki ma'lumotlarni tahrirlash mumkin.",
-              },
-              {
-                id: 4,
-                q: "Imtihon natijalari qachon e'lon qilinadi?",
-                a: "Malakaviy imtihon natijalari sinov yakunlangandan so'ng 3 ish kuni ichida platformadagi shaxsiy kabinetingizda aks ettiriladi.",
+                q: "QR-kodli ruxsatnoma qachon taqdim etiladi?",
+                a: "Arizangiz mas'ul komissiya tomonidan to‘liq tekshirilib tasdiqlangandan so‘ng, shaxsiy kabinetingizda QR-kodli elektron ruxsatnoma avtomatik tarzda shakllanadi.",
               },
             ].map((faq) => {
               const isOpen = openFaqId === faq.id;
               return (
                 <div
                   key={faq.id}
-                  className="bg-white dark:bg-[#0F2036] rounded-xl border border-slate-200/80 dark:border-[#263B55] overflow-hidden transition"
+                  className="rounded-xl border border-slate-200/80 dark:border-[#1E3A5F] overflow-hidden"
                 >
                   <button
                     type="button"
                     onClick={() => setOpenFaqId(isOpen ? null : faq.id)}
-                    className="w-full text-left p-4 sm:p-5 flex items-center justify-between gap-4 font-bold text-xs sm:text-sm text-slate-900 dark:text-white hover:text-[#2563EB] dark:hover:text-[#3B82F6] transition"
+                    className="w-full p-4 text-left font-bold text-xs sm:text-sm text-slate-900 dark:text-white flex items-center justify-between bg-slate-50/50 dark:bg-[#071426]/50 hover:bg-slate-50 dark:hover:bg-[#122A46] transition"
                   >
                     <span>{faq.q}</span>
-                    <span className="p-1 rounded-full bg-slate-100 dark:bg-[#162B45] text-slate-600 dark:text-slate-300">
-                      {isOpen ? <Minus className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
-                    </span>
+                    {isOpen ? <Minus className="w-4 h-4 text-[#2563EB]" /> : <Plus className="w-4 h-4 text-slate-400" />}
                   </button>
                   {isOpen && (
-                    <div className="px-4 pb-4 sm:px-5 sm:pb-5 text-xs text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-800 pt-3">
+                    <div className="p-4 bg-white dark:bg-[#0D223A] text-xs text-slate-600 dark:text-slate-300 leading-relaxed border-t border-slate-200/80 dark:border-[#1E3A5F]">
                       {faq.a}
                     </div>
                   )}
@@ -719,6 +879,7 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
     </div>
   );
 }
